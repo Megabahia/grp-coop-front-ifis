@@ -1,0 +1,413 @@
+<div class="content-body">
+    <!-- users list start -->
+    <section class="ecommerce-details">
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <div class="card card-congratulations">
+                    <div class="card-body text-center">
+                        <img src="assets/images/elements/decore-right.png" class="congratulations-img-right"
+                            alt="card-img-right" />
+                        <div class="text-center">
+                            <br>
+                            <h1 class="mb-0 text-white">Felicidades {{usuario.persona.nombres}},</h1>
+                            <p class="card-text">
+                                Tienes <strong>{{cantidadMonedas}}</strong> super monedas acumuladas en tu cuenta SUPER
+                                MONEDAS
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-sm-12">
+                <div class="card card-statistics bg-primary">
+                    <div class="card-header border-bottom pb-1 pt-1">
+                        <h4 class="card-title">Resumen</h4>
+                    </div>
+                    <div class="card-body pt-1">
+                        <div class="row">
+                            <div class="col-xl-6 col-sm-6 col-12 mb-2 mb-sm-0">
+                                <div class="media">
+                                    <div class="avatar mr-2">
+                                        <div class="avatar-content bg-white text-primary">
+                                            <i data-feather='package' class="avatar-icon"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body my-auto">
+                                        <h1 class="font-weight-bolder mb-0">{{productos.cont}}</h1>
+                                        <p class="card-text font-small-3 mb-0">Premios disponibles</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-sm-6 col-12">
+                                <a href="mis-monedas.html">
+                                    <div class="media">
+                                        <div class="avatar bg-white mr-2">
+                                            <div class="avatar-content">
+                                                <i class="super-moneda-icon sm-size-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="media-body my-auto">
+                                            <h1 class="font-weight-bolder mb-0">${{cantidadMonedas}}</h1>
+                                            <p class="text-primary card-text font-small-3 mb-0">Super monedas
+                                                disponibles</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="mt-4 mb-2 text-center">
+                    <h4>Premios que puedes canjear</h4>
+                </div>
+                <div class="swiper-responsive-breakpoints swiper-container px-4 py-2" [swiper]="swiperResponsive">
+                    <div class="swiper-wrapper mb-2">
+                        <div class="swiper-slide" *ngFor="let producto of productos.info">
+                            <a (click)="obtenerProducto(producto._id)">
+                                <div class="item-heading">
+                                    <h5 class="text-truncate mb-0">{{ producto.nombre }}</h5>
+                                    <small class="text-body">by {{ producto.marca }}</small>
+                                </div>
+                                <div class="img-container mx-auto py-75">
+                                    <img width="100px" [src]="producto.imagen" class="img-fluid" alt="image" />
+
+                                </div>
+                                <div class="item-meta">
+
+                                    <p class="card-text text-secondary small mb-0">Precio Normal: ${{
+                                        producto.precioNormal }}</p>
+                                    <hr />
+                                    <h6 class="mt-1">Precio super monedas:</h6>
+                                    <h6 class="mt-1 text-info">
+                                        <div class="iso-moneda"></div>
+                                        {{ producto.precioSupermonedas }} super monedas + ${{ producto.efectivo }}
+                                    </h6>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Add Arrows -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" tabindex="-1" role="dialog" id="product-detail" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detalle de producto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row p-2">
+                            <div class="col-md-8">
+                                <div class="card plan-card border-primary">
+                                    <div class="card-body">
+                                        <div class="item-heading">
+                                            <h6 class="text-truncate mb-0 text-info">Apple Watch 6 series</h6>
+                                            <small class="text-body d-block">by Apple</small>
+                                        </div>
+                                        <div class="img-container w-50 mx-auto py-50">
+                                            <img src="assets/images/elements/apple-watch.png" class="img-fluid"
+                                                alt="image" />
+                                        </div>
+                                        <hr />
+                                        <div class="item-meta">
+                                            <p class="card-text text-secondary small mb-0">Precio normal: $300.00</p>
+                                            <h6 class="mt-1">Precio super monedas:</h6>
+                                            <h6 class="mt-1 text-info">
+                                                <div class="iso-moneda"></div>
+                                                100 super monedas + $90.00
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="mb-2">Donde aplica</h6>
+                                <h4 class="mb-2 text-primary">Mundo Mac</h4>
+                                <p class="card-text mb-0">Local: CC El Jardin (Av. Amazonas y República)</p>
+                                <p class="card-text mb-0">Ciudad: Quito</p>
+                                <p class="card-text mb-0">Vigencia: hasta 25-06-2021</p>
+                                <hr />
+                                <div class="text-center">
+                                    <button class="btn btn-primary" type="button" data-target="#buy" data-toggle="modal"
+                                        data-dismiss="modal" aria-label="Close">Comprar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" tabindex="-1" role="dialog" id="product-detail2" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detalle de producto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row p-2">
+                            <div class="col-md-8">
+                                <div class="card plan-card border-primary">
+                                    <div class="card-body">
+                                        <div class="item-heading">
+                                            <h6 class="text-truncate mb-0 text-info">Apple MacBook Pro - Silver</h6>
+                                            <small class="text-body d-block">by Apple</small>
+                                        </div>
+                                        <div class="img-container w-50 mx-auto py-50">
+                                            <img src="assets/images/elements/macbook-pro.png" class="img-fluid"
+                                                alt="image" />
+                                        </div>
+                                        <hr />
+                                        <div class="item-meta">
+                                            <p class="card-text text-secondary small mb-0">Precio normal: $300.00</p>
+                                            <h6 class="mt-1">Precio super monedas:</h6>
+                                            <h6 class="mt-1 text-info">
+                                                <div class="iso-moneda"></div>
+                                                100 super monedas + $90.00
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="mb-2">Donde aplica</h6>
+                                <h4 class="mb-2 text-primary">Mundo Mac</h4>
+                                <p class="card-text mb-0">Local: CC El Jardin (Av. Amazonas y República)</p>
+                                <p class="card-text mb-0">Ciudad: Quito</p>
+                                <p class="card-text mb-0">Vigencia: hasta 25-06-2021</p>
+                                <hr />
+                                <div class="text-center">
+                                    <button class="btn btn-primary" type="button" data-target="#buy2"
+                                        data-toggle="modal" data-dismiss="modal" aria-label="Close">Comprar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" tabindex="-1" role="dialog" id="product-detail3" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detalle de producto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row p-2">
+                            <div class="col-md-8">
+                                <div class="card plan-card border-primary">
+                                    <div class="card-body">
+                                        <div class="item-heading">
+                                            <h6 class="text-truncate mb-0 text-info">Apple HomePod (Space Grey)</h6>
+                                            <small class="text-body d-block">by Apple</small>
+                                        </div>
+                                        <div class="img-container w-50 mx-auto py-50">
+                                            <img src="assets/images/elements/homepod.png" class="img-fluid"
+                                                alt="image" />
+                                        </div>
+                                        <hr />
+                                        <div class="item-meta">
+                                            <p class="card-text text-secondary small mb-0">Precio normal: $300.00</p>
+                                            <h6 class="mt-1">Precio super monedas:</h6>
+                                            <h6 class="mt-1 text-info">
+                                                <div class="iso-moneda"></div>
+                                                100 super monedas + $90.00
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="mb-2">Donde aplica</h6>
+                                <h4 class="mb-2 text-primary">Mundo Mac</h4>
+                                <p class="card-text mb-0">Local: CC El Jardin (Av. Amazonas y República)</p>
+                                <p class="card-text mb-0">Ciudad: Quito</p>
+                                <p class="card-text mb-0">Vigencia: hasta 25-06-2021</p>
+                                <hr />
+                                <div class="text-center">
+                                    <button class="btn btn-primary" type="button" data-target="#buy3"
+                                        data-toggle="modal" data-dismiss="modal" aria-label="Close">Comprar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" tabindex="-1" role="dialog" id="buy" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Documento para canjear tu producto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row p-2">
+                            <div class="col-md-6">
+                                <div class="card plan-card border-primary">
+                                    <div class="card-body">
+                                        <div class="item-heading">
+                                            <h6 class="text-truncate mb-0 text-info">Apple Watch 6 series</h6>
+                                            <small class="text-body d-block">by Apple</small>
+                                        </div>
+                                        <div class="img-container w-50 mx-auto py-50">
+                                            <img src="assets/images/elements/apple-watch.png" class="img-fluid"
+                                                alt="image" />
+                                        </div>
+                                        <hr />
+                                        <div class="item-meta">
+                                            <p class="card-text text-secondary small mb-0">Precio normal: $300.00</p>
+                                            <h6 class="mt-1">Precio super monedas:</h6>
+                                            <h6 class="mt-1 text-info">
+                                                <div class="iso-moneda"></div>
+                                                100 super monedas + $90.00
+                                            </h6>
+                                        </div>
+                                        <div class="text-center mt-1">
+                                            <img src="assets/images/barras.jpeg" width="180">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="text-primary">Descarga o imprime este documento y acércate al local para que
+                                    puedas cajear tu producto.</p>
+                                <h4 class="mb-2 text-info">Mundo Mac</h4>
+                                <p class="card-text mb-0">Local: CC El Jardin (Av. Amazonas y República)</p>
+                                <p class="card-text mb-0">Ciudad: Quito</p>
+                                <p class="card-text mb-0">Vigencia: hasta 25-06-2021</p>
+                                <hr />
+                                <div class="text-center">
+                                    <small class="d-block">Código QR de promoción</small>
+                                    <img src="assets/images/qr.png" width="180" class="mb-2">
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-primary" type="button">Imprimir</button>
+                                    <button class="btn btn-info" type="button">Descargar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- users list ends -->
+</div>
+<ng-template #DetalleProducto let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Detalle de producto</h5>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div class="row p-2">
+            <div class="col-md-8">
+                <div class="card plan-card border-primary">
+                    <div class="card-body">
+                        <div class="item-heading">
+                            <h6 class="text-truncate mb-0 text-info">{{producto.nombre}}</h6>
+                            <small class="text-body d-block">by {{producto.marca}}</small>
+                        </div>
+                        <div class="img-container w-50 mx-auto py-50">
+                            <img width="200px" [src]="producto.imagen" class="img-fluid" alt="image" />
+                        </div>
+                        <hr />
+                        <div class="item-meta">
+                            <p class="card-text text-secondary small mb-0">Precio normal: ${{producto.precioNormal}}</p>
+                            <h6 class="mt-1">Precio super monedas:</h6>
+                            <h6 class="mt-1 text-info">
+                                <div class="iso-moneda"></div>
+                                {{ producto.precioSupermonedas }} super monedas + ${{ producto.efectivo }}
+                            </h6>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h6 class="mb-2">Donde aplica</h6>
+                <h4 class="mb-2 text-primary">{{producto.empresa}}</h4>
+                <p class="card-text mb-0">Local: {{producto.local}}</p>
+                <p class="card-text mb-0">Ciudad: {{producto.ciudad}}</p>
+                <p class="card-text mb-0">Vigencia: {{producto.vigencia}}</p>
+                <hr />
+                <div class="text-center">
+                    <button class="btn btn-primary" type="button" data-target="#buy" data-toggle="modal"
+                        data-dismiss="modal" aria-label="Close" (click)="comprarProducto()">Comprar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+    </div>
+</ng-template>
+<ng-template #CanjearProducto let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Detalle de producto</h5>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div class="row p-2">
+            <div class="col-md-6">
+                <div class="card plan-card border-primary">
+                    <div class="card-body">
+                        <div class="item-heading">
+                            <h6 class="text-truncate mb-0 text-info">{{producto.nombre}}</h6>
+                            <small class="text-body d-block">by {{producto.marca}}</small>
+                        </div>
+                        <div class="img-container w-50 mx-auto py-50">
+                            <img width="200px" [src]="producto.imagen" class="img-fluid" alt="image" />
+                        </div>
+                        <hr />
+                        <div class="item-meta">
+                            <p class="card-text text-secondary small mb-0">Precio normal: ${{producto.precioNormal}}</p>
+                            <h6 class="mt-1">Precio super monedas:</h6>
+                            <h6 class="mt-1 text-info">
+                                <div class="iso-moneda"></div>
+                                {{ producto.precioSupermonedas }} super monedas + ${{ producto.efectivo }}
+                            </h6>
+                            <div class="text-center mt-1">
+                                <img src="assets/images/barras.jpeg" width="180">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <p class="text-primary">Descarga o imprime este documento y acércate al local para que
+                    puedas cajear tu producto.</p>
+                <h4 class="mb-2 text-primary">{{producto.empresa}}</h4>
+                <p class="card-text mb-0">Local: {{producto.local}}</p>
+                <p class="card-text mb-0">Ciudad: {{producto.ciudad}}</p>
+                <p class="card-text mb-0">Vigencia: {{producto.vigencia}}</p>
+                <hr />
+                <hr />
+                <div class="text-center">
+                    <small class="d-block">Código QR de promoción</small>
+                    <img src="assets/images/qr.png" width="180" class="mb-2">
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary" type="button">Imprimir</button>
+                    <button class="btn btn-info" type="button">Descargar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+    </div>
+</ng-template>

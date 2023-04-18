@@ -1,0 +1,238 @@
+<div class="content-wrapper">
+  <div class="content-body">
+    <div class="card">
+      <h5 class="card-header">Crear subcategorías</h5>
+    </div>
+    <div class="card">
+      <div class="row m-75">
+        <div class="col-lg-12 col-xl-6">
+          <label>Mostrar</label>
+          <select class="form-control-sm">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+        <div class="col-lg-12 col-xl-6 text-right">
+          <button
+            class="btn btn-icon btn-primary"
+            type="button"
+            data-toggle="modal"
+            data-target="#addcampo"
+            (click)="crearSubcategoria('addcampo')"
+          >
+            <i data-feather="plus" class="mr-25"></i>
+            <span>Añadir</span>
+          </button>
+        </div>
+      </div>
+      <ng-template #contenido let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title">Mensaje</h4>
+          <button
+            type="button "
+            class="close"
+            aria-label="Close "
+            (click)="modal.dismiss('Cross click')"
+          >
+            <span aria-hidden="true ">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Confirma eliminar</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button " class="btn btn-light" (click)="cerrarModal()">
+            SI
+          </button>
+        </div>
+      </ng-template>
+      <ng-template #aviso let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title">Mensaje</h4>
+          <button
+            type="button "
+            class="close"
+            aria-label="Close "
+            (click)="modal.dismiss('Cross click')"
+          >
+            <span aria-hidden="true ">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div [innerHTML]="mensaje"></div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-light"
+            (click)="modal.dismiss('Cross click')"
+          >
+            Aceptar
+          </button>
+        </div>
+      </ng-template>
+      <div class="card-datatable table-responsive pt-0">
+        <table class="user-list-table table table-striped">
+          <thead class="thead-light">
+            <tr>
+              <th>
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="customCheck2"
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="customCheck2"
+                  ></label>
+                </div>
+              </th>
+              <th>Categoría padre</th>
+              <th>Nombre subcategoría</th>
+              <th>Código de subcategoría</th>
+              <th>Descripción</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody data-repeater-list="invoice">
+            <tr
+              data-repeater-item
+              *ngFor="let subcategoria of listaSubcategorias"
+            >
+              <td>
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="customCheck2"
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="customCheck2"
+                  ></label>
+                </div>
+              </td>
+              <td>{{ subcategoria.categoria }}</td>
+              <td>{{ subcategoria.nombre }}</td>
+              <td>{{ subcategoria.codigoSubCategoria }}</td>
+              <td>{{ subcategoria.descripcion }}</td>
+              <td>
+                <span
+                  class="text-capitalize badge {{
+                    subcategoria.estado == 'Activo'
+                      ? 'badge-light-success'
+                      : 'badge-secondary'
+                  }} badge-pill"
+                  >{{ subcategoria.estado }}</span
+                >
+              </td>
+              <td>
+                <a
+                  (click)="editarSubcategoria(subcategoria.id,'addcampo')"
+                  data-toggle="modal"
+                  data-target="#addcampo"
+                >
+                  <i data-feather="edit-2" [size]="24"></i>
+                </a>
+                <a
+                  (click)="abrirModal(contenido, subcategoria.id)"
+                  data-repeater-delete
+                >
+                  <i data-feather="trash" [size]="24"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ngb-pagination
+        #paginator
+        [collectionSize]="collectionSize"
+        [(page)]="page"
+        [(pageSize)]="pageSize"
+        [maxSize]="5"
+        [ellipses]="false"
+        [boundaryLinks]="true"
+      ></ngb-pagination>
+
+      <hr />
+    </div>
+  </div>
+</div>
+<!-- END: Content-->
+
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+
+<core-sidebar class="modal modal-slide-in sidebar-todo-modal fade" name="addcampo"
+  overlayClass="modal-backdrop">
+  <div class="slideout-content">
+    <!-- Modal to add new user starts-->
+    <div class="modalsd modal-slide-in sdfade new-user-modal" id="modals-slide-in">
+      <div class="modal-dialog">
+        <div class="modal-content pt-0">
+          <button type="button" class="close" data-dismiss="modal" (click)="cerrarModalCore('addcampo')" aria-label="Close">×</button>
+          <div class="modal-header mb-1">
+            <h5 class="modal-title" id="exampleModalLabel">Nueva subcategoría</h5>
+          </div>
+          <div class="modal-body flex-grow-1">
+            <form class="auth-login-form mt-2" [formGroup]="paramForm">
+                <div class="form-group">
+                    <label class="form-label" for="basic-icon-default-email">Seleccione categoría padre:</label>
+                    <select class="select2 form-control form-control-sm" name="categoria" formControlName="categoria" [(ngModel)]="subcategoria.categoria">
+                        <option value="" selected>- Seleccione categoría padre </option>
+                        <option *ngFor="let padre of categoriasPadre" value="{{padre.id}}">{{padre.nombre}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.categoria.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.categoria.errors.required">Selección del estado de la categoría es requerida</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basic-icon-default-fullname">Nombre de subcategoría:</label>
+                    <input type="text" class="form-control dt-full-name" id="basic-icon-default-fullname" name="nombre" formControlName="nombre" [(ngModel)]="subcategoria.nombre" />
+                    <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.nombre.errors.required">Nombre de la subcategoría es requerida</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basic-icon-default-fullname">Código de la subcategoría:</label>
+                    <input type="text" class="form-control dt-full-name" id="basic-icon-default-fullname" name="codigoSubCategoria" formControlName="codigoSubCategoria" [(ngModel)]="subcategoria.codigoSubCategoria" />
+                    <div *ngIf="submitted && f.codigoSubCategoria.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.codigoSubCategoria.errors.required">Código de la subcategoría es requerida</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basic-icon-default-fullname">Descripción:</label>
+                    <input type="text" class="form-control dt-full-name" id="basic-icon-default-fullname" name="descripcion" formControlName="descripcion" [(ngModel)]="subcategoria.descripcion" />
+                    <div *ngIf="submitted && f.descripcion.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.descripcion.errors.required">La descripción es requerida</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basic-icon-default-email">Estado:</label>
+                    <select class="select2 form-control form-control-sm" name="estado" formControlName="estado" [(ngModel)]="subcategoria.estado">
+                        <option value="" selected>- Seleccione - </option>
+                        <option *ngFor="let estado of estados" value="{{estado.valor}}">{{estado.valor}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.estado.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.estado.errors.required">Selección del estado de la categoría es requerida</div>
+                    </div>
+                </div>
+            </form>
+            <button class="btn btn-primary mr-1" aria-label="Close" (click)="guardarSubcategoria()">Guardar</button>
+            <button #dismissModal data-toggle="modal" data-target="#exito" data-dismiss="modal" style="display: none;"></button>
+            <button type="reset" class="btn btn-outline-secondary" (click)="cerrarModalCore('addcampo')" data-dismiss="modal">Cancelar</button>
+        </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal to add new user Ends-->
+  </div>
+
+</core-sidebar>
+

@@ -1,0 +1,66 @@
+<div class="content-wrapper">
+    <div class="content-header row">
+        <div class="col-12 mb-2">
+            <div class="row breadcrumbs-top">
+                <div class="col-12">
+                    <h2 class="content-header-title float-left mb-0">Compartir publicaciones</h2>
+                    <div class="breadcrumb-wrapper">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-primary" href="index.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-primary" href="mis-premios.html">Compartir publicaciones</a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-body">
+        <!-- users list start -->
+        <section class="app-user-list">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="text-primary d-block">Comparte publicaciones con tu círculo social, por cada publicación que compartas recibes 10 super monedas.</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-12" *ngFor="let publicacion of publicaciones">
+                    <div class="card card-developer-meetup">
+                        <div class="meetup-img-wrapper rounded-top text-center">
+                            <img [src]="publicacion.imagen" alt="Meeting Pic" height="170" />
+                        </div>
+                        <div class="card-body">
+                            <div class="meetup-header d-flex align-items-center">
+                                <div class="meetup-day">
+                                    <h6 class="mb-0">Jun</h6>
+                                    <h3 class="mb-0">24</h3>
+                                </div>
+                                <div class="my-auto">
+                                    <h4 class="card-title mb-25">{{publicacion.titulo}}</h4>
+                                    <p class="card-text mb-0">{{publicacion.subtitulo}}</p>
+                                </div>
+                            </div>
+                            <p>
+                                {{publicacion.descripcion}}
+                            </p>
+                        </div>
+                        <div class="card-footer text-center">
+
+                            <h6>Compartir</h6>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" shareButton="facebook" [url]="'https://www.facebook.com/'" class="btn btn-primary" (click)="compartirPublicacion(publicacion._id)"><i data-feather="facebook"></i></button>
+                                <button type="button" shareButton="twitter" [url]="'https://www.twitter.com/'" class="btn btn-primary"><i data-feather="twitter"></i></button>
+                                <button type="button" shareButton="whatsapp" class="btn btn-primary" data-target="#whatsapp" data-toggle="modal" (ngSubmit)="compartirPublicacion(publicacion._id)"><small>WhatsApp</small></button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+        <!-- users list ends -->
+    </div>
+</div>

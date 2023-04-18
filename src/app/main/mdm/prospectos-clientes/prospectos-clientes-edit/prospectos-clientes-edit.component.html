@@ -1,0 +1,437 @@
+<div class="content-wrapper">
+    <div class="content-body">
+      <!-- users edit start -->
+      <section class="app-user-edit">
+        <div class="card">
+          <div class="card-body">
+            <ul class="nav nav-pills" role="tablist">
+              <li class="nav-item">
+                <a
+                  class="nav-link d-flex align-items-center active"
+                  id="account-tab"
+                  data-toggle="tab"
+                  href="#account"
+                  aria-controls="account"
+                  role="tab"
+                  aria-selected="true"
+                >
+                  <!-- <i-feather class="edit-user" name="user"></i-feather> -->
+                  <span class="d-none d-sm-block">Editar cliente</span>
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <!-- Account Tab starts -->
+              <div
+                class="tab-pane active"
+                id="account"
+                aria-labelledby="account-tab"
+                role="tabpanel"
+              >
+                <!-- users edit media object start -->
+                <div class="media mb-2">
+                  <img
+                    src="{{
+                      urlImagen
+                        ? urlImagen
+                        : '/assets/images/avatars/avatar.png'
+                    }}"
+                    alt="users avatar"
+                    class="user-avatar users-avatar-shadow rounded mr-2 my-25 cursor-pointer"
+                    height="90"
+                    width="90"
+                  />
+                  <div class="media-body mt-50">
+                    <h4>Eleanor Aguilar</h4>
+                    <div class="col-12 d-flex mt-1 px-0">
+                      <label
+                        class="btn btn-primary mr-75 mb-0"
+                        for="change-picture"
+                      >
+                        <span class="d-none d-sm-block">Cambiar</span>
+                        <input
+                          class="form-control"
+                          type="file"
+                          id="change-picture"
+                          (change)="subirImagen($event)"
+                          hidden
+                          accept="image/png, image/jpeg, image/jpg"
+                        />
+                        <span class="d-block d-sm-none">
+                          <!-- <i-feather class="mr-0 edit-user" name="edit"></i-feather> -->
+                        </span>
+                      </label>
+                      <button
+                        class="btn btn-outline-secondary d-none d-sm-block"
+                        (click)="abrirModalEliminarImagen()"
+                      >
+                        Remover
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- users edit media object ends -->
+                <!-- users edit account form start -->
+                <form class="form-validate">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Nombres</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="nombres"
+                          [(ngModel)]="prospecto.nombres"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Apellidos</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="apellidos"
+                          [(ngModel)]="prospecto.apellidos"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Teléfono</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="telefono"
+                          [(ngModel)]="prospecto.telefono"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Número de WhatsApp</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="whatsapp"
+                          [(ngModel)]="prospecto.whatsapp"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Dirección de facebook</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="facebook"
+                          [(ngModel)]="prospecto.facebook"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Dirección de twitter</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="twitter"
+                          [(ngModel)]="prospecto.twitter"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Correo 1</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="correo1"
+                          [(ngModel)]="prospecto.correo1"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Correo 2</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="correo2"
+                          [(ngModel)]="prospecto.correo2"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Ciudad</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="ciudad"
+                          [(ngModel)]="prospecto.ciudad"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Canal</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="canal"
+                          [(ngModel)]="prospecto.canal"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Código producto</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="codigoProducto"
+                          [(ngModel)]="prospecto.codigoProducto"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Nombre del producto de interés</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="nombreProducto"
+                          [(ngModel)]="prospecto.nombreProducto"
+                          disabled
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="email">Precio</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          name="precio"
+                          [(ngModel)]="prospecto.precio"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="email">Tipo de precio</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          name="tipoPrecio"
+                          [(ngModel)]="prospecto.tipoPrecio"
+                          disabled
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Nombre del vendedor</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="nombreVendedor"
+                          [(ngModel)]="prospecto.nombreVendedor"
+                          disabled
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="name">Confirmación del prospecto</label>
+                        <select
+                          class="select2 form-control form-control-lg"
+                          name="confirmacionProspecto"
+                          [(ngModel)]="prospecto.confirmacionProspecto"
+                        >
+                          <option value="" selected>
+                            - Confirmación prospecto -
+                          </option>
+                          <option
+                            value="{{ prospe.valor }}"
+                            *ngFor="let prospe of confirmProspectoOpciones"
+                          >
+                            {{ prospe.nombre }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="col-12 d-flex flex-sm-row flex-column mt-2">
+                      <a
+                        (click)="actualizarProspecto()"
+                        class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
+                        >Guardar cambios</a
+                      >
+                      <button
+                        (click)="abrirModalEliminarProspecto()"
+                        class="btn btn-outline-secondary"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                <!-- users edit account form ends -->
+              </div>
+              <!-- Account Tab ends -->
+
+              <!-- Information Tab ends -->
+
+              <!-- Social Tab starts -->
+              <div
+                class="tab-pane"
+                id="social"
+                aria-labelledby="social-tab"
+                role="tabpanel"
+              >
+                <!-- users edit social form start -->
+                <form class="form-validate">
+                  <div class="row">
+                    <div class="col-lg-4 col-md-6 form-group">
+                      <label for="twitter-input">Twitter</label>
+                      <div class="input-group input-group-merge">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="basic-addon3">
+                            <i data-feather="twitter" class="font-medium-2"></i>
+                          </span>
+                        </div>
+                        <input
+                          id="twitter-input"
+                          type="text"
+                          class="form-control"
+                          value="https://www.twitter.com/adoptionism744"
+                          placeholder="https://www.twitter.com/"
+                          aria-describedby="basic-addon3"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 form-group">
+                      <label for="facebook-input">Facebook</label>
+                      <div class="input-group input-group-merge">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="basic-addon4">
+                            <i
+                              data-feather="facebook"
+                              class="font-medium-2"
+                            ></i>
+                          </span>
+                        </div>
+                        <input
+                          id="facebook-input"
+                          type="text"
+                          class="form-control"
+                          value="https://www.facebook.com/adoptionism664"
+                          placeholder="https://www.facebook.com/"
+                          aria-describedby="basic-addon4"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 form-group">
+                      <label for="instagram-input">Instagram</label>
+                      <div class="input-group input-group-merge">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="basic-addon5">
+                            <i
+                              data-feather="instagram"
+                              class="font-medium-2"
+                            ></i>
+                          </span>
+                        </div>
+                        <input
+                          id="instagram-input"
+                          type="text"
+                          class="form-control"
+                          value="https://www.instagram.com/adopt-ionism744"
+                          placeholder="https://www.instagram.com/"
+                          aria-describedby="basic-addon5"
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-12 d-flex flex-sm-row flex-column mt-2">
+                      <a class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1"
+                        >Guardar cambios</a
+                      >
+                      <button type="reset" class="btn btn-outline-secondary">
+                        Resetear
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                <!-- users edit social form ends -->
+              </div>
+              <!-- Social Tab ends -->
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- users edit ends -->
+    </div>
+</div>
+
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<ng-template #eliminarImagenMdl let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Mensaje</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>¿Desea eliminar esta imagen?</div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="eliminarImagen()">
+      Si
+    </button>
+  </div>
+</ng-template>
+<ng-template #eliminarProspectoMdl let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Mensaje</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>¿Desea eliminar este cliente?</div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="eliminarProspecto()">
+      Si
+    </button>
+  </div>
+</ng-template>

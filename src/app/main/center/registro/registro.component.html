@@ -1,0 +1,113 @@
+<div class="auth-wrapper auth-v2">
+    <div class="auth-inner row m-0">
+        <!-- Brand logo-->
+        <a class="brand-logo" href="javascript:void(0);">
+            <img src="{{ coreConfig.app.appLogoImage }}" alt="brand-logo" width="250" />
+        </a>
+        <!-- /Brand logo-->
+        <!-- Left Text-->
+        <div class="d-none d-lg-flex col-lg-8 align-items-center p-5">
+            <div class="d-block">
+                <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+                    <img [src]="
+                  coreConfig.layout.skin === 'dark'
+                    ? 'assets/images/pages/login-v2.svg'
+                    : 'assets/images/pages/login-v2.svg'
+                " alt="Super monedas" />
+                </div>
+
+            </div>
+        </div>
+        <!-- /Left Text-->
+        <!-- Login-->
+        <div class="d-flex col-lg-4 align-items-center auth-bg px-2 p-lg-5">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
+                <h2 class="card-title font-weight-bold mb-1">Registro</h2>
+                <p class="card-text mb-2">Crea una cuenta, es gratis</p>
+
+                <ngb-alert [type]="'danger'" [dismissible]="false" *ngIf="error">
+                    <div class="alert-body">
+                        <p>{{ error }}</p>
+                    </div>
+                </ngb-alert>
+
+                <form class="auth-login-form mt-2" [formGroup]="registerForm" (ngSubmit)="registrarUsuario()">
+                    <div class="form-group">
+                        <label class="form-label" for="login-correo">Correo</label>
+                        <input type="text" formControlName="correo" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.correo.errors }" placeholder="admin@demo.com" aria-describedby="login-correo" autofocus="" tabindex="1" />
+                        <div *ngIf="submitted && f.correo.errors" class="invalid-feedback">
+                            <div *ngIf="f.correo.errors.required">Correo es requerido</div>
+                            <div *ngIf="f.correo.errors.email">Debe ingresar una dirección de correo válida</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="d-flex justify-content-between">
+                            <label for="login-password">Contraseña</label>
+                        </div>
+                        <div class="input-group input-group-merge form-password-toggle">
+                            <input [type]="passwordTextType ? 'text' : 'password'" formControlName="password" class="form-control form-control-merge" [ngClass]="{ 'is-invalid error': submitted && f.password.errors }" placeholder="············" aria-describedby="login-password" tabindex="2"
+                                (change)="compararPassword()" />
+                            <div class="input-group-append">
+                                <span class="input-group-text cursor-pointer"><i class="feather font-small-4" [ngClass]="{
+                      'icon-eye-off': passwordTextType,
+                      'icon-eye': !passwordTextType
+                    }" (click)="togglePasswordTextType()"></i></span>
+                            </div>
+                        </div>
+                        <div *ngIf="submitted && f.password.errors" class="invalid-feedback" [ngClass]="{ 'd-block': submitted && f.password.errors }">
+                            <div *ngIf="f.password.errors.required">Contraseña es requerida</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="d-flex justify-content-between">
+                            <label for="login-confirmPassword">Repita contraseña</label>
+                        </div>
+                        <div class="input-group input-group-merge">
+                            <input [type]="confirmPasswordTextType ? 'text' : 'password'" formControlName="confirmPassword" class="form-control form-control-merge" [ngClass]="{ 'is-invalid error': submitted && f.confirmPassword.errors }" placeholder="············" aria-describedby="login-confirmPassword"
+                                tabindex="2" (change)="compararPassword()" />
+                            <div class="input-group-append">
+                                <span class="input-group-text cursor-pointer"><i class="feather font-small-4" [ngClass]="{
+          'icon-eye-off': confirmPasswordTextType,
+          'icon-eye': !confirmPasswordTextType
+        }" (click)="toggleConfirmPasswordTextType()"></i></span>
+                            </div>
+                        </div>
+                        <div *ngIf="submitted && f.confirmPassword.errors" class="invalid-feedback" [ngClass]="{ 'd-block': submitted && f.confirmPassword.errors }">
+                            <div *ngIf="f.confirmPassword.errors.required">Contraseña es requerida</div>
+                        </div>
+                        <div *ngIf="submitted && !passwordSimilar" class="invalid-feedback" [ngClass]="{ 'd-block': submitted && !passwordSimilar }">
+                            <div *ngIf="!passwordSimilar">Las contraseñas no coinciden</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="d-flex justify-content-center">
+                            <ngx-recaptcha2 [(ngModel)]="captcha" [ngModelOptions]="{standalone: true}" [siteKey]=" siteKey"
+                                            (success)="captchaValidado($event) ">
+                            </ngx-recaptcha2>
+
+                        </div>
+                        <div *ngIf="submitted && !captcha" style="display: block;" class="invalid-feedback">
+                            <div>Captcha requerido</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" id="remember-me" formControlName="terminos" type="checkbox" tabindex="3" />
+                            <label class="custom-control-label" for="remember-me"><span>Aceptar</span><a class="text-primary" routerLink="/grp/login"><span>&nbsp;términos y condiciones</span></a></label>
+                            <div *ngIf="submitted && f.terminos.errors" class="invalid-feedback" [ngClass]="{ 'd-block': submitted && f.terminos.errors }">
+                                <div *ngIf="f.terminos.errors">Acepte los términos y condiciones para continuar</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button [disabled]="loading" class="btn btn-primary btn-block" tabindex="4" rippleEffect>
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>Registrarme
+                    </button>
+                </form>
+                <p class="text-center mt-2">
+                    <span>¿Ya tienes una cuenta?</span><a class="text-primary" routerLink="/grp/login"><span>&nbsp;Inicia sesión</span></a>
+                </p>
+            </div>
+        </div>
+        <!-- /Login-->
+    </div>
+</div>

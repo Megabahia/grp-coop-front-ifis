@@ -1,0 +1,261 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <!-- users list start -->
+        <section class="app-user-list">
+            <!-- users filter start -->
+            <div class="card">
+                <h5 class="card-header">Filtros de búsqueda</h5>
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"># de días</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="0" data-toggle="tooltip" data-placement="top" title="valor numérico ejemplo: 1 días">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">a</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="0" data-toggle="tooltip" data-placement="top" title="valor numérico ejemplo: 1 días">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <input type="text" class="form-control form-control-sm" placeholder="Categoría" [(ngModel)]="categoria">
+                        </div>
+
+                        <div class="col-md-3">
+                            <input type="text" class="form-control form-control-sm" placeholder="Subcategoría" [(ngModel)]="subcategoria">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary" (click)="obtenerListaProductos()"><i data-feather='search'></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-datatable table-responsive pt-0">
+                    <div class="row m-75">
+                        <div class="col-lg-12 col-xl-6">
+                            <label>Mostrar</label>
+                            <select class="form-control-sm" [(ngModel)]="pageSize" (change)="obtenerListaProductos()">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+
+                        </div>
+                        <div class="col-lg-12 col-xl-6 text-right">
+                            <button class="btn btn-success" type="button" (click)="exportarExcel()">
+                    Exportar a excel
+                </button>
+                        </div>
+                    </div>
+                    <table class="user-list-table table table-striped">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                        <label class="custom-control-label" for="customCheck2"></label>
+                                    </div>
+                                </th>
+                                <th>Código de barra</th>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Subcategoría</th>
+                                <th># de días de refil</th>
+                                <th>Variable de refil</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let producto of listaProductos">
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                        <label class="custom-control-label" for="customCheck2"></label>
+                                    </div>
+                                </td>
+                                <td>{{producto.codigoBarras}}</td>
+                                <td>{{producto.nombre}}</td>
+                                <td>{{producto.categoria}}</td>
+                                <td>{{producto.subCategoria}}</td>
+                                <td>{{producto.refil}}</td>
+                                <td>{{producto.variableRefil}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ngb-pagination #paginator [collectionSize]="collectionSize " [(page)]="page " [(pageSize)]="pageSize " [maxSize]="5 " [ellipses]="false " [boundaryLinks]="true "></ngb-pagination>
+
+                <div class="modal fade" id="verfactura" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="card invoice-preview-card">
+                                <!-- Header starts -->
+                                <div class="card-body invoice-padding pb-0">
+                                    <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
+                                        <div>
+                                            <div class="logo-wrapper">
+                                                <h3 class="text-primary invoice-logo">LOGO</h3>
+                                            </div>
+                                            <p class="card-text mb-25">Oficina 149, conoco pichincha</p>
+                                            <p class="card-text mb-25">Quito, Ecuador</p>
+                                            <p class="card-text mb-0">(876) 543 2198</p>
+                                        </div>
+                                        <div class="invoice-number-date mt-md-0 mt-2">
+                                            <div class="d-flex align-items-center justify-content-md-end mb-1">
+                                                <h4 class="invoice-title mr-1">Factura</h4>
+                                                <div class="input-group input-group-merge invoice-edit-input-group">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">
+                                                            <i data-feather="hash"></i>
+                                                        </div>
+                                                    </div>
+                                                    <input type="text" class="form-control invoice-edit-input" placeholder="53634" disabled />
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-1">
+                                                <span class="title mr-1">Fecha:</span>
+                                                <input type="text" class="form-control invoice-edit-input date-picker" value="12-04-2021" disabled />
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Header ends -->
+
+                                <hr class="invoice-spacing" />
+
+                                <!-- Address and Contact starts -->
+                                <div class="card-body invoice-padding pt-0">
+                                    <h4 class="invoice-title mb-2">Datos para la factura</h4>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <label>Tipo de identificación</label>
+                                            <select class="form-control" disabled>
+                                <option>- Seleccione -</option>
+                                <option>Cédula</option>
+                                <option selected>RUC</option>
+                                <option>Pasaporte</option>
+                                </select>
+                                        </div>
+                                        <div class="col-4">
+                                            <label>Identificación</label>
+                                            <input class="form-control" type="text" value="1819451159001" disabled>
+                                        </div>
+                                        <div class="col-4">
+                                            <label>Razón social</label>
+                                            <input class="form-control" type="text" value="Jaime Paucar" disabled>
+                                        </div>
+                                        <div class="col-4">
+                                            <label>Dirección</label>
+                                            <input class="form-control" type="text" value="Benalcazar y Pedro Avila" disabled>
+                                        </div>
+                                        <div class="col-4">
+                                            <label>Teléfono</label>
+                                            <input class="form-control" type="text" value="099238848" disabled>
+                                        </div>
+                                        <div class="col-4">
+                                            <label>Correo</label>
+                                            <input class="form-control" type="text" placeholder="tucorreo@empresa.com" value="jymjja@gmail.com" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Address and Contact ends -->
+                                <hr class="invoice-spacing" />
+                                <!-- Product Details starts -->
+                                <div class="card-body invoice-padding">
+                                    <form class="source-item">
+                                        <div data-repeater-list="group-a">
+                                            <div class="repeater-wrapper" data-repeater-item>
+                                                <div class="row">
+                                                    <div class="col-12 d-flex product-details-border position-relative pr-0">
+                                                        <div class="row w-100 pr-lg-0 pr-1 py-2">
+                                                            <div class="col-lg-5 col-12 mb-lg-0 mb-2 mt-lg-0 mt-2">
+                                                                <p class="card-text col-title mb-md-50 mb-0">Artículo/Producto</p>
+                                                                <input class="form-control" type="text" value="Mouse Inalambrico" disabled>
+                                                                <textarea class="form-control mt-2" rows="2" disabled>Información adicional</textarea>
+                                                            </div>
+                                                            <div class="col-lg-3 col-12 my-lg-0 my-2">
+                                                                <p class="card-text col-title mb-md-50 mb-0">Valor unitario</p>
+                                                                <input type="text" class="form-control" value="24" placeholder="24" disabled />
+                                                                <div class="mt-2">
+                                                                    <span>Descuento:</span>
+                                                                    <span class="discount">0%</span>
+                                                                    <span class="tax-1 ml-50" data-toggle="tooltip" data-placement="top" title="Tax 1">0%</span>
+                                                                    <span class="tax-2 ml-50" data-toggle="tooltip" data-placement="top" title="Tax 2">0%</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                                <p class="card-text col-title mb-md-50 mb-0">Cantidad</p>
+                                                                <input type="number" class="form-control" value="1" placeholder="1" disabled />
+                                                            </div>
+                                                            <div class="col-lg-2 col-12 mt-lg-0 mt-2">
+                                                                <p class="card-text col-title mb-md-50 mb-0">Precio</p>
+                                                                <input type="text" class="form-control" value="24" placeholder="24" disabled />
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <!-- Product Details ends -->
+                                <hr class="invoice-spacing" />
+                                <!-- Invoice Total starts -->
+                                <div class="card-body invoice-padding">
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <label for="salesperson" class="form-label">Persona de ventas:</label>
+                                            <input type="text" class="form-control" id="salesperson" placeholder="Nombre vendedor" value="Jaime Paucar" disabled />
+                                        </div>
+                                        <div class="col-md-5 text-right">
+                                            <div class="invoice-total-wrapper">
+                                                <div class="invoice-total-item">
+                                                    <p class="invoice-total-title">Subtotal: $1800</p>
+                                                </div>
+                                                <div class="invoice-total-item">
+                                                    <p class="invoice-total-title">Descuento: $28</p>
+                                                </div>
+                                                <div class="invoice-total-item">
+                                                    <p class="invoice-total-title">IVA 12%: $21</p>
+                                                </div>
+                                                <hr class="my-50" />
+                                                <div class="invoice-total-item">
+                                                    <p class="invoice-total-title text-primary font-weight-bold">Total: $1690</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Invoice Total ends -->
+
+                                <hr class="invoice-spacing mt-0" />
+
+                                <div class="row p-2">
+                                    <div class="col-12">
+                                        <button type="reset" class="btn btn-outline-secondary waves-effect" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+        </section>
+        <!-- users list ends -->
+    </div>
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>

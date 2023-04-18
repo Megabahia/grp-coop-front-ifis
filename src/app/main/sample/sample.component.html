@@ -1,0 +1,78 @@
+<div class="content-wrapper">
+    <div class="content-header row">
+    </div>
+    <div class="content-body">
+        <!-- Error page-->
+        <div class="misc-wrapper">
+            <div class="misc-inner p-2 p-sm-5">
+                <div class="text-center">
+                    <a href="javascript:void(0);">
+                        <img src="{{ coreConfig.app.appLogoImage }}" alt="brand-logo" width="250" />
+                        <h2 class="brand-text text-primary ml-1 mt-1">Bienvenido a Super Monedas</h2>
+                    </a>
+                </div>
+                <div class="w-100 mt-2">
+                    <p class="mb-2">Con sólo registrarte te acabas de <b>ganar 60 super monedas</b> con las que puedes canjear los siguientes productos. Completa tu registro para que puedas cajear tus productos.
+                    </p>
+                </div>
+                <div class="text-center">
+                    <a class="btn btn-primary mb-2 btn-sm-block" href="completar-perfil.html">Completar perfil</a>
+                </div>
+            </div>
+            <div class="card">
+
+                <div class="card-body">
+                    <div class="mt-4 mb-2 text-center">
+                        <h4>Premios que puedes canjear</h4>
+                    </div>
+                    <div class="swiper-responsive-breakpoints swiper-container px-4 py-2" [swiper]="swiperResponsive">
+                        <div class="swiper-wrapper mb-2">
+                            <div class="swiper-slide" *ngFor="let relatedProduct of relatedProducts">
+                                <a (click)="modalOpenVC(modalVC)">
+                                    <div class="item-heading">
+                                        <h5 class="text-truncate mb-0">{{ relatedProduct.name }}</h5>
+                                        <small class="text-body">by {{ relatedProduct.brand }}</small>
+                                    </div>
+                                    <div class="img-container mx-auto py-75">
+                                        <img [src]="relatedProduct.image" class="img-fluid" alt="image" />
+                                    </div>
+                                    <div class="item-meta">
+
+                                        <p class="card-text text-secondary small mb-0">${{ relatedProduct.price }}</p>
+                                        <hr/>
+                                        <h6 class="mt-1">Precio super monedas:</h6>
+                                        <h6 class="mt-1 text-info">
+                                            <div class="iso-moneda"></div>
+                                            100 super monedas + $90.00 </h6>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Add Arrows -->
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / Error page-->
+    </div>
+</div>
+<ng-template #modalVC let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Vertically Centered</h5>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <p>
+            Croissant jelly-o halvah chocolate sesame snaps. Brownie caramels candy canes chocolate cake marshmallow icing lollipop I love. Gummies macaroon donut caramels biscuit topping danish.
+        </p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modal.close('Accept click')" rippleEffect>
+Accept
+</button>
+    </div>
+</ng-template>

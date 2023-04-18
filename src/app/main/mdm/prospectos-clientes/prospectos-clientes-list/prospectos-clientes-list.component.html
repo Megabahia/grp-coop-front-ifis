@@ -1,0 +1,452 @@
+<div class="content-wrapper">
+  <div class="content-body" *ngIf="vista == 'lista'">
+    <!-- users list start -->
+    <section class="app-user-list">
+      <!-- users filter start -->
+      <div class="card">
+        <h5 class="card-header">Filtros de búsqueda</h5>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <select class="select2 form-control form-control-sm" [(ngModel)]="canalLista"
+                (change)="obtenerListaProspectos()">
+                <option value="" selected>- Canal -</option>
+                <option value="{{ canalOp.valor }}" *ngFor="let canalOp of canalOpciones">
+                  {{ canalOp.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <input type="text" mwlFlatpickr [(ngModel)]="fecha" (input)="obtenerListaProspectos()" [altInput]="true"
+                class="form-control form-control-sm flatpickr-basic flatpickr-input"
+                placeholder="- Periodo de finalización -" />
+            </div>
+            <div class="col-md-3">
+              <select class="select2 form-control form-control-sm" [(ngModel)]="vendedor"
+                (change)="obtenerListaProspectos()">
+                <option value="" selected>- Vendedor -</option>
+                <option value="{{ vend.id }}" *ngFor="let vend of vendedorOpciones">
+                  {{ vend.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <select class="select2 form-control form-control-sm" [(ngModel)]="confirmProspectoLista"
+                (change)="obtenerListaProspectos()">
+                <option value="" selected>- Confirmación prospecto -</option>
+                <option value="{{ prospe.valor }}" *ngFor="let prospe of confirmProspectoOpciones">
+                  {{ prospe.nombre }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- users filter end -->
+      <!-- list section start -->
+      <div class="card">
+        <div class="row m-75">
+          <div class="col-lg-12 col-xl-4">
+            <label>Mostrar</label>
+            <select class="form-control-sm" [(ngModel)]="pageSize" (change)="obtenerListaProspectos()">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+          <div class="col-lg-12 col-xl-8 text-right">
+            <button class="btn btn-success" tabindex="0" aria-controls="DataTables_Table_0" type="button"
+              data-toggle="modal" data-target="#modals-slide-in">
+              Exportar a excel
+            </button>
+            <button class="btn btn-primary" tabindex="0" aria-controls="DataTables_Table_0" type="button"
+              data-toggle="modal" data-target="#modals-slide-in" (click)="toggleSidebar('actualizar-credito')">
+              Añadir prospecto
+            </button>
+          </div>
+        </div>
+        <div class="card-datatable table-responsive pt-0">
+          <table class="user-list-table table">
+            <thead class="thead-light">
+              <tr>
+                <th>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                    <label class="custom-control-label" for="customCheck2"></label>
+                  </div>
+                </th>
+                <th>Fecha de creación</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>WhatsApp</th>
+                <th>Correo</th>
+                <th>Ciudad</th>
+                <th>Código de producto</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let elem of lista">
+                <td>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="customCheck{{ elem.id }}" />
+                    <label class="custom-control-label" for="customCheck{{ elem.id }}"></label>
+                  </div>
+                </td>
+                <td>{{ transformarFecha(elem.created_at) }}</td>
+                <td>
+                  <div class="d-flex justify-content-left align-items-center">
+                    <a class="user-name text-truncate mb-0">
+                      <span class="font-weight-bold">{{
+                        elem.nombres
+                        }}</span></a>
+                  </div>
+                </td>
+                <td>{{ elem.apellidos }}</td>
+                <td>{{ elem.whatsapp }}</td>
+                <td>{{ elem.correo1 ? elem.correo1 : elem.correo2 }}</td>
+                <td>{{ elem.ciudad }}</td>
+                <td>{{ elem.codigoProducto }}</td>
+                <td>
+                  <a (click)="editarProspecto(elem.id)">
+                    <i data-feather="edit" [size]="24"></i>
+                  </a>
+                  <a (click)="eliminarProspecto(elem.id)">
+                    <i data-feather="trash" [size]="24"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ngb-pagination #paginator [collectionSize]="collectionSize" [(page)]="page" [(pageSize)]="pageSize"
+          [maxSize]="5" [ellipses]="false" [boundaryLinks]="true">
+        </ngb-pagination>
+
+
+      </div>
+      <!-- list section end -->
+    </section>
+    <!-- users list ends -->
+  </div>
+</div>
+<core-sidebar class="modal modal-slide-in sidebar-todo-modal fade" name="actualizar-credito"
+  overlayClass="modal-backdrop">
+  <div class="slideout-content">
+    <!-- Modal to add new user starts-->
+    <div class="modalsd modal-slide-in sdfade new-user-modal" id="modals-slide-in">
+      <div class="modal-dialog">
+        <div class="modal-content pt-0">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+          <div class="modal-header mb-1">
+            <h5 class="modal-title" id="exampleModalLabel">Nuevo prospecto</h5>
+          </div>
+          <div class="modal-body flex-grow-1">
+            <form class="auth-login-form mt-2" [formGroup]="pospectoForm">
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-fullname">Nombres:</label>
+                <input type="text" class="form-control dt-full-name" id="basic-icon-default-fullname" name="nombres"
+                  formControlName="nombres" [(ngModel)]="nombres" />
+                <div *ngIf="submitted && f.nombres.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.nombres.errors.required">Nombres requeridos
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-uname">Apellidos:</label>
+                <input type="text" id="basic-icon-default-uname" class="form-control dt-uname" name="apellidos"
+                  formControlName="apellidos" [(ngModel)]="apellidos" />
+                <div *ngIf="submitted && f.apellidos.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.apellidos.errors.required">Apellidos requeridos
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-uname">Identificación:</label>
+                <input type="text" id="basic-icon-default-uname" class="form-control dt-uname" name="identificacion"
+                  formControlName="identificacion" [(ngModel)]="identificacion" />
+                <div *ngIf="submitted && f.identificacion.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.identificacion.errors.required">Identificación requerida
+                  </div>
+                  <div *ngIf="f.identificacion.errors.pattern">Solo se aceptan números
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-uname">Teléfono:</label>
+                <input type="text" id="basic-icon-default-uname" class="form-control dt-uname" name="telefono"
+                  formControlName="telefono" [(ngModel)]="telefono" />
+                <div *ngIf="submitted && f.telefono.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.telefono.errors.required">Teléfono requerido
+                  </div>
+                  <div *ngIf="f.telefono.errors.pattern">Solo se aceptan números
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Tipo de
+                  cliente:</label>
+                <select class="select2 form-control" name="tipoCliente" formControlName="tipoCliente"
+                  [(ngModel)]="tipoCliente">
+                  <option value="" selected>- Tipo de cliente -</option>
+                  <option value="{{tipoCli.valor}}" *ngFor="let tipoCli of tipoClienteOpciones">
+                    {{tipoCli.nombre}}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f.tipoCliente.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.tipoCliente.errors.required">Tipo de cliente requerido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Número de
+                  WhatsApp:</label>
+                <input type="text" id="basic-icon-default-email" class="form-control dt-email" name="whatsapp"
+                  formControlName="whatsapp" [(ngModel)]="whatsapp" />
+                <div *ngIf="submitted && f.whatsapp.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.whatsapp.errors.required">Teléfono requerido
+                  </div>
+                  <div *ngIf="f.whatsapp.errors.pattern">Solo se aceptan números
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Dirección
+                  Facebook:</label>
+                <input type="text" id="basic-icon-default-email" class="form-control dt-email" name="facebook"
+                  formControlName="facebook" [(ngModel)]="facebook" />
+                <div *ngIf="submitted && f.facebook.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.facebook.errors.required">Facebook requerido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Dirección
+                  Twitter:</label>
+                <input type="text" id="basic-icon-default-email" class="form-control dt-email" name="twitter"
+                  formControlName="twitter" [(ngModel)]="twitter" />
+                <div *ngIf="submitted && f.twitter.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.twitter.errors.required">Twitter requerido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Dirección
+                  Instagram:</label>
+                <input type="text" id="basic-icon-default-email" class="form-control dt-email" name="instagram"
+                  formControlName="instagram" [(ngModel)]="instagram" />
+                <div *ngIf="submitted && f.instagram.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.instagram.errors.required">Instagram requerido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Correo 1:</label>
+                <input type="text" id="basic-icon-default-email" class="form-control dt-email" name="correo1"
+                  formControlName="correo1" [(ngModel)]="correo1" />
+                <div *ngIf="submitted && f.correo1.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.correo1.errors.required">Correo1 requerido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Correo 2:</label>
+                <input type="text" id="basic-icon-default-email" class="form-control dt-email" name="correo2"
+                  formControlName="correo2" [(ngModel)]="correo2" />
+                <div *ngIf="submitted && f.correo2.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.correo2.errors.required">Correo2 requerido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="username">País</label>
+                <select class="form-control select2" name="pais" formControlName="pais" [(ngModel)]="pais"
+                  (change)="obtenerProvincias()">
+                  <option value="" selected>- Seleccionar -</option>
+                  <option value="{{paisesOp.valor}}" *ngFor="let paisesOp of paisOpciones">
+                    {{paisesOp.nombre}}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f.pais.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.pais.errors.required">Pais es requerido</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="username">Provincia</label>
+                <select class="form-control select2" name="provincia" formControlName="provincia"
+                  [(ngModel)]="provincia" (change)="obtenerCiudad()">
+                  <option value="" selected>- Seleccionar -</option>
+                  <option value="{{provinciasOP.valor}}" *ngFor="let provinciasOP of provinciaOpciones">
+                    {{provinciasOP.nombre}}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f.provincia.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.provincia.errors.required">Provincia es requerida</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="username">Ciudad</label>
+                <select class="form-control select2" name="ciudad" formControlName="ciudad" [(ngModel)]="ciudad">
+                  <option value="" selected>- Seleccionar -</option>
+                  <option value="{{ciudadesOp.valor}}" *ngFor="let ciudadesOp of ciudadOpciones">
+                    {{ciudadesOp.nombre}}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f.ciudad.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.ciudad.errors.required">Ciudad es requerida</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Canal:</label>
+                <select class="select2 form-control form-control-sm" name="canal" formControlName="canal"
+                  [(ngModel)]="canal">
+                  <option value="" selected>- Canal -</option>
+                  <option value="{{canalOp.valor}}" *ngFor="let canalOp of canalOpciones">
+                    {{canalOp.nombre}}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f.canal.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.canal.errors.required">Canal requerido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Código de
+                  producto:</label>
+                <input type="text" id="basic-icon-default-email" class="form-control dt-email" name="codigoProducto"
+                  formControlName="codigoProducto" [(ngModel)]="codigoProducto" />
+                <div *ngIf="submitted && f.codigoProducto.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.codigoProducto.errors.required">Código de producto requerido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Nombre del producto
+                  de interés:</label>
+                <input type="text" id="basic-icon-default-email" class="form-control dt-email" name="nombreProducto"
+                  formControlName="nombreProducto" [(ngModel)]="nombreProducto" />
+                <div *ngIf="submitted && f.nombreProducto.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.nombreProducto.errors.required">Nombre del producto requerido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="customFile">Subir foto</label>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="customFile" (change)="guardarImagen($event)" />
+                  <label class="custom-file-label" for="customFile">Seleccionar
+                    foto</label>
+                </div>
+                <!-- <div *ngIf="submitted && !imagen" class="invalid-feedback" style="display: block;">
+                                  <div *ngIf="!imagen">Imagen requerida
+                                  </div>
+                              </div> -->
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Precio:</label>
+                <input type="text" id="basic-icon-default-email" class="form-control dt-email" name="precio"
+                  formControlName="precio" [(ngModel)]="precio" />
+                <div *ngIf="submitted && f.precio.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.precio.errors.required">Precio del producto requerido
+                  </div>
+                  <div *ngIf="f.precio.errors.pattern">Solo se aceptan números decimales
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Tipo de
+                  precio:</label>
+                <select class="select2 form-control form-control-lg" name="tipoPrecio" formControlName="tipoPrecio"
+                  [(ngModel)]="tipoPrecio">
+                  <option value="" selected>- Tipo de precio -</option>
+                  <option value="{{tipoPre.valor}}" *ngFor="let tipoPre of tipoPrecioOpciones">
+                    {{tipoPre.nombre}}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f.tipoPrecio.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.tipoPrecio.errors.required">Tipo del Precio requerido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Nombre del
+                  vendedor:</label>
+                <input type="text" id="basic-icon-default-email" class="form-control dt-email" name="nombreVendedor"
+                  formControlName="nombreVendedor" [(ngModel)]="nombreVendedor" disabled />
+                <div *ngIf="submitted && f.nombreVendedor.errors" class="invalid-feedback" style="display: block;">
+                  <div *ngIf="f.nombreVendedor.errors.required">Nombre requerido
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="basic-icon-default-email">Confirmación del
+                  prospecto:</label>
+                <select class="select2 form-control form-control-lg" name="confirmacionProspecto"
+                  formControlName="confirmacionProspecto" [(ngModel)]="confirmacionProspecto">
+                  <option value="" selected>- Confirmación prospecto -</option>
+                  <option value="{{prospe.valor}}" *ngFor="let prospe of confirmProspectoOpciones">
+                    {{prospe.nombre}}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f.confirmacionProspecto.errors" class="invalid-feedback"
+                  style="display: block;">
+                  <div *ngIf="f.confirmacionProspecto.errors.required">Confirmación del prospecto requerida
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn btn-primary mr-1" data-toggle="modal" aria-label="Close" (click)="crearProspecto()">
+                <span *ngIf="cargando" class="spinner-border spinner-border-sm"></span>Guardar</button>
+              <button #dismissModal data-toggle="modal" data-target="#exito" data-dismiss="modal"
+                style="display: none;"></button>
+
+              <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal to add new user Ends-->
+  </div>
+
+</core-sidebar>
+<app-prospectos-clientes-edit *ngIf="vista == 'editar'" [idUsuario]="idUsuario"
+  [confirmProspectoOpciones]="confirmProspectoOpciones"></app-prospectos-clientes-edit>
+
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+<ng-template #mensajeModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Mensaje</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div [innerHTML]="mensaje"></div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="cerrarModal()">
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+<ng-template #eliminarProspectoMdl let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Mensaje</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>¿Desea eliminar este prospecto?</div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="eliminarProspectoModal()">
+      Si
+    </button>
+  </div>
+</ng-template>

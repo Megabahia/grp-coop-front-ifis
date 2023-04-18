@@ -1,0 +1,377 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <div class="card">
+            <h5 class="card-header">Crear producto</h5>
+            <div class="card-body">
+                <form class="auth-login-form mt-2" [formGroup]="productoForm">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="categoria">Categoría</label>
+                                <select class="form-control select2" name="categoria" formControlName="categoria" (change)="obtenerListaSubcategorias()" [(ngModel)]="producto.categoria">
+                                    <option value="" selected>- Seleccionar -</option>
+                                    <option *ngFor="let categoriasOp of categoriasOpciones" value="{{categoriasOp.id}}">{{categoriasOp.nombre}}</option>
+
+                                </select>
+                                <div *ngIf="submittedProductoForm && fp.categoria.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.categoria.errors.required">Categoría es requerida
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="subCategoria">Subcategoría</label>
+                                <select class="form-control select2" name="subCategoria" formControlName="subCategoria" [(ngModel)]="producto.subCategoria">
+                                    <option value="" selected>- Seleccionar -</option>
+                                <option *ngFor="let subcategoriasOp of subcategoriasOpciones" value="{{subcategoriasOp.id}}">{{subcategoriasOp.nombre}}</option>
+
+                            </select>
+                                <div *ngIf="submittedProductoForm && fp.subCategoria.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.subCategoria.errors.required">Subcategoría es requerida
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Código de barras</label>
+                                <input type="text" class="form-control" name="codigoBarras" formControlName="codigoBarras" [(ngModel)]="producto.codigoBarras">
+                                <div *ngIf="submittedProductoForm && fp.codigoBarras.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.codigoBarras.errors.required">Código de barras es requeridos
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha de Elaboración </label>
+                                <input class="form-control invoice-edit-input date-picker" mwlFlatpickr type="text" formControlName="fechaElaboracion" [(ngModel)]="producto.fechaElaboracion">
+                                <div *ngIf="submittedProductoForm && fp.fechaElaboracion.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.fechaElaboracion.errors.required">Fecha de Elaboración es requerido
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Stock</label>
+                                <input type="text" class="form-control" name="stock" formControlName="stock" [(ngModel)]="producto.stock">
+                                <div *ngIf="submittedProductoForm && fp.stock.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.stock.errors.required">Stock es requerido</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Costo de compra</label>
+                                <input type="text" class="form-control" formControlName="costoCompra" [(ngModel)]="producto.costoCompra">
+                                <div *ngIf="submittedProductoForm && fp.costoCompra.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.costoCompra.errors.required">Costo de compra es requerido</div>
+                                    <div *ngIf="fp.costoCompra.errors.pattern">Precio de venta B es requerido</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Precio de venta A</label>
+                                <input type="text" class="form-control" formControlName="precioVentaA" [(ngModel)]="producto.precioVentaA">
+                                <div *ngIf="submittedProductoForm && fp.precioVentaA.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.precioVentaA.errors.required">Precio de venta A es requerido</div>
+                                    <div *ngIf="fp.precioVentaA.errors.pattern">Precio de venta B es requerido</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Precio de venta B</label>
+                                <input type="text" class="form-control" formControlName="precioVentaB" [(ngModel)]="producto.precioVentaB">
+                                <div *ngIf="submittedProductoForm && fp.precioVentaB.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.precioVentaB.errors.required">Precio de venta B es requerido</div>
+                                    <div *ngIf="fp.precioVentaB.errors.pattern">Solo se aceptan números decimales</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Precio de venta C</label>
+                                <input type="text" class="form-control" formControlName="precioVentaC" [(ngModel)]="producto.precioVentaC">
+                                <div *ngIf="submittedProductoForm && fp.precioVentaC.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.precioVentaC.errors.required">Precio de venta C es requerido</div>
+                                    <div *ngIf="fp.precioVentaC.errors.pattern">Solo se aceptan números decimales</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Precio de venta D</label>
+                                <input type="text" class="form-control" formControlName="precioVentaD" [(ngModel)]="producto.precioVentaD">
+                                <div *ngIf="submittedProductoForm && fp.precioVentaD.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.precioVentaD.errors.required">Precio de venta D es requerido</div>
+                                    <div *ngIf="fp.precioVentaD.errors.pattern">Solo se aceptan números decimales</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Nombre completo</label>
+                                <input type="text" class="form-control" formControlName="nombre" [(ngModel)]="producto.nombre">
+                                <div *ngIf="submittedProductoForm && fp.nombre.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.nombre.errors.required">Nombre completo es requerido
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Descripción</label>
+                                <input type="text" class="form-control" formControlName="descripcion" [(ngModel)]="producto.descripcion">
+                                <div *ngIf="submittedProductoForm && fp.descripcion.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.descripcion.errors.required">Descripción es requerido
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Refil</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" placeholder="valor numérico" formControlName="refil" [(ngModel)]="producto.refil" />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="basic-addon2">Días</span>
+                                    </div>
+                                </div>
+                                <div *ngIf="submittedProductoForm && fp.refil.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.refil.errors.required">Refil es requerido
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha de Caducidad</label>
+                                <input class="form-control invoice-edit-input date-picker" mwlFlatpickr type="text" formControlName="fechaCaducidad" [(ngModel)]="producto.fechaCaducidad">
+                                <div *ngIf="submittedProductoForm && fp.fechaCaducidad.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.fechaCaducidad.errors.required">Fecha de Caducidad es requerido
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Precio de venta E</label>
+                                <input type="text" class="form-control" formControlName="precioVentaE" [(ngModel)]="producto.precioVentaE">
+                                <div *ngIf="submittedProductoForm && fp.precioVentaE.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.precioVentaE.errors.required">Precio de venta E es requerido</div>
+                                    <div *ngIf="fp.precioVentaE.errors.pattern">Solo se aceptan números decimales</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Precio de venta por bultos</label>
+                                <input type="text" class="form-control" formControlName="precioVentaBultos" [(ngModel)]="producto.precioVentaBultos">
+                                <div *ngIf="submittedProductoForm && fp.precioVentaBultos.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.precioVentaBultos.errors.required">Precio de venta por bultos</div>
+                                    <div *ngIf="fp.precioVentaBultos.errors.pattern">Solo se aceptan números decimales</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="parametrizacion">Alerta de abastecimiento</label>
+                                <select class="form-control select2" name="parametrizacion" formControlName="parametrizacion" [(ngModel)]="producto.parametrizacion">
+                                    <option value="" selected>- Seleccionar -</option>
+                                    <option *ngFor="let abastecimientoOp of abastecimientoOpciones" value="{{abastecimientoOp._id}}">{{abastecimientoOp.nombre}}</option>
+                                </select>
+                                <div *ngIf="submittedProductoForm && fp.parametrizacion.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.parametrizacion.errors.required">Alerta de abastecimiento es requerida</div>
+                                    <div *ngIf="fp.parametrizacion.errors.minLength">Alerta de abastecimiento es requerida</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Variable de Refil</label>
+                                <input type="text" class="form-control" formControlName="variableRefil" [(ngModel)]="producto.variableRefil">
+                                <div *ngIf="submittedProductoForm && fp.variableRefil.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.variableRefil.errors.required">Variable de Refil es requerida
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Estado</label>
+                                <select class="form-control" formControlName="estado" [(ngModel)]="producto.estado">
+                                    <option value="" >- Seleccione - </option>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                </select>
+                                <div *ngIf="submittedProductoForm && fp.estado.errors" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="fp.estado.errors.required">Estado es requerido
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <p class="card-text">
+                                Imágenes del producto
+                            </p>
+
+                            <div class="dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
+
+                                <ngx-dropzone-label>
+                                    <div class="dz-message">
+                                        <h2>Cargar imágenes</h2>
+                                    </div>
+                                </ngx-dropzone-label>
+                                <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of archivos" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                </ngx-dropzone-image-preview>
+                            </div>
+                            <button id="clear-dropzone" class="btn btn-secondary btn-sm mt-1" (click)="removeAll()">
+                                <i data-feather="trash" [size]="24"></i>
+                            <span class="align-middle">Limpiar imágenes</span>
+                        </button>
+                            <div *ngFor="let img of imagenes" class="div-imagenes-productos">
+                                <a (click)="eliminarImagenModal(img.id)">
+                                    <img class="eliminar-imagen" width="100%" height="200px" [src]="img.imagen">
+                                    <img class="fondo-eliminar-imagen" width="100%" height="200px" src="/assets/images/borrar_imagen.png">
+                                </a>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+        <div class="card">
+            <div class="row m-75">
+                <div class="col-lg-12 col-xl-6">
+                    <h5>Ficha técnica del producto</h5>
+                </div>
+                <div class="col-lg-12 col-xl-6 text-right">
+                    <button class="btn btn-icon btn-primary" type="button" data-toggle="modal" data-target="#addcampo" (click)="crearFichaTecnica('addcampo')">
+                        <i data-feather="plus" [size]="24"></i>
+                    <span>Añadir</span>
+                </button>
+
+                </div>
+            </div>
+            <div class="card-datatable table-responsive pt-0">
+                <table class="user-list-table table table-striped">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre del atributo</th>
+                            <th>Valor</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody data-repeater-list="invoice">
+                        <tr data-repeater-item *ngFor="let ficha of fichaTecnicaLista">
+                            <td>{{ficha.codigo}}</td>
+                            <td>{{ficha.nombreAtributo}}</td>
+                            <td>{{ficha.valor}}</td>
+                            <td>
+                                <a data-toggle="modal" data-target="#addcampo" (click)="editarFichaTecnica(ficha.id,'addcampo')">
+                                    <i data-feather="edit-2" [size]="24"></i>
+                                </a>
+                                <a data-repeater-delete (click)="abrirModal(contenido,ficha.id)">
+                                    <i data-feather="trash" [size]="24"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr/>
+            <div class="row p-2">
+                <div class="col-12">
+                    <a (click)="guardarProducto()" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-float waves-light">Guardar</a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<ng-template #contenido let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Mensaje</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss( 'Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <p>Confirma eliminar</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="cerrarModal()">SI</button>
+    </div>
+</ng-template>
+<ng-template #eliminarImagenMdl let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Mensaje</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss( 'Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <p>Confirma eliminar</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="eliminarImagen()">SI</button>
+    </div>
+</ng-template>
+<ng-template #aviso let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Mensaje</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss( 'Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div [innerHTML]="mensaje"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="cerrarModalMensaje()">Cerrar</button>
+    </div>
+</ng-template>
+
+<core-sidebar class="modal modal-slide-in sidebar-todo-modal fade" name="addcampo"
+  overlayClass="modal-backdrop">
+  <div class="slideout-content">
+    <!-- Modal to add new user starts-->
+    <div class="modalsd modal-slide-in sdfade new-user-modal" id="modals-slide-in">
+      <div class="modal-dialog">
+        <div class="modal-content pt-0">
+          <button type="button" class="close" data-dismiss="modal"
+          (click)="cerrarModalCore('addcampo')"
+           aria-label="Close">×</button>
+          <div class="modal-header mb-1">
+            <h5 class="modal-title" id="exampleModalLabel">Nueva ficha tecnica</h5>
+          </div>
+          <div class="modal-body flex-grow-1">
+            <form class="auth-login-form mt-2" [formGroup]="fichaTecnicaForm">
+                <div class="modal-body flex-grow-1">
+                    <div class="form-group">
+                        <label class="form-label">Código:</label>
+                        <input type="text" class="form-control" name="codigo" formControlName="codigo" [(ngModel)]="fichaTecnica.codigo" />
+                        <div *ngIf="submittedFichaTecnicaForm && fft.codigo.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="fft.codigo.errors.required">Código es requerido
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nombre del atributo:</label>
+                        <input type="text" class="form-control" formControlName="nombreAtributo" [(ngModel)]="fichaTecnica.nombreAtributo" />
+                        <div *ngIf="submittedFichaTecnicaForm && fft.nombreAtributo.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="fft.nombreAtributo.errors.required">Nombres son requeridos
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Valor:</label>
+                        <input type="text" class="form-control" formControlName="valor" [(ngModel)]="fichaTecnica.valor" />
+                        <div *ngIf="submittedFichaTecnicaForm && fft.valor.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="fft.valor.errors.required">Valor es requerido
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mr-1" aria-label="Close" (click)="guardarFichaTecnica()">Guardar</button>
+                    <button #dismissModal data-toggle="modal" data-target="#exito" data-dismiss="modal" style="display: none;"></button>
+                    <button type="reset" class="btn btn-outline-secondary" (click)="cerrarModalCore('addcampo')" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal to add new user Ends-->
+  </div>
+</core-sidebar>
+
+
+
+

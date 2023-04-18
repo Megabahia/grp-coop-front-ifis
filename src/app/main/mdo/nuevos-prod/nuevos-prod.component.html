@@ -1,0 +1,503 @@
+<div class="content-body">
+  <!-- users list start -->
+  <section class="app-user-list">
+    <!-- users filter start -->
+    <div class="card">
+      <h5 class="card-header">Filtros de búsqueda</h5>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i data-feather='calendar'></i></span>
+                </div>
+                <input type="text" mwlFlatpickr mode="range" [(ngModel)]="fecha"
+                  class="form-control form-control-sm flatpickr-basic flatpickr-input"
+                  placeholder="- Periodo de finalización -">
+                <!-- <input type="text" class="form-control form-control-sm flatpickr-range flatpickr-input" placeholder="- Rango de fechas"> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <select class="form-control form-control-sm" [(ngModel)]="tipoCliente">
+                <option value="" selected>- Tipo de cliente - </option>
+                <option value="cliente">Cliente</option>
+                <option value="negocio">Negocio</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <input type="text" class="form-control form-control-sm" placeholder="Identificación"
+                [(ngModel)]="identificacion">
+            </div>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-primary" (click)="obtenerListaPredicciones()">
+              <!--  <i-feather name='search' class="edit-user"></i-feather> -->
+
+              <i data-feather="search" class="edit-user" [size]="24"></i>
+            </button>
+          </div>
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row m-75">
+        <div class="col-md-12 text-right">
+          <button class="btn btn-success waves-effect waves-float waves-light" tabindex="0"
+            aria-controls="DataTables_Table_0" type="button" data-toggle="modal" data-target="#modals-slide-in">
+            Exportar a Excel
+          </button>
+        </div>
+      </div>
+      <div class="card-datatable table-responsive pt-0">
+
+        <table class="user-list-table table table-striped">
+          <thead class="thead-light">
+            <tr>
+              <th>Código</th>
+              <th>Fecha de predicción</th>
+              <th>Nombre cliente</th>
+              <th>Apellido cliente</th>
+              <th>Identificación</th>
+              <th># contacto</th>
+              <th>Correo</th>
+              <th>Fecha última compra</th>
+              <th>Monto última compra</th>
+              <th>Últimos productos adquiridos</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let prediccion of listaPredicciones">
+              <td>{{prediccion.id}}</td>
+              <td>{{prediccion.fechaPredicciones}}</td>
+              <td>{{prediccion.nombres}}</td>
+              <td>{{prediccion.apellidos}}</td>
+              <td>{{prediccion.identificacion}}</td>
+              <td>{{prediccion.telefono}}</td>
+              <td>{{prediccion.correo}}</td>
+              <td>{{transformarFecha(prediccion.created_at)}}</td>
+              <td>${{prediccion.total}}</td>
+              <td>
+                <a (click)="obtenerUltimosProductos(prediccion.id)" class="avatar bg-info"
+                  data-target="#productos-detail" data-toggle="modal">
+                  <div class="avatar-content" data-toggle="tooltip" data-placement="top" title="Ver productos">
+                    <i data-feather='shopping-bag' class="edit-user"></i>
+                  </div>
+                </a>
+              </td>
+              <td>
+                <a (click)="obtenerProductosPrediccion(prediccion.id)" class="avatar bg-primary"
+                  data-target="#client-detail" data-toggle="modal">
+                  <div class="avatar-content" data-toggle="tooltip" data-placement="top" title="Ver predicciones">
+                    <i data-feather='eye' class="edit-user"></i>
+                  </div>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ngb-pagination #paginator [collectionSize]="collectionSize " [(page)]="page " [(pageSize)]="pageSize "
+        [maxSize]="5 " [ellipses]="false " [boundaryLinks]="true "></ngb-pagination>
+
+      <div class="modal" tabindex="-1" role="dialog" id="client-detail" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Predicciones para nuevos productos</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" *ngIf="tipoClienteModal == 'cliente'">
+              <div class="row p-2">
+                <div class="col-xl-6 col-lg-12 d-flex flex-column justify-content-between border-container-lg">
+                  <div class="user-avatar-section">
+                    <div class="d-flex justify-content-start">
+                      <img class="img-fluid rounded" src="{{prediccion.cliente.imagen}}" width="80" />
+                      <div class="d-flex flex-column ml-1">
+                        <div class="user-info mb-1">
+                          <h4 class="mb-0">{{prediccion.cliente.nombreCompleto}}</h4>
+                          <span class="card-text d-block">Correo: {{prediccion.cliente.correo}}</span>
+                          <span class="card-text d-block">Identificación: {{prediccion.cliente.cedula}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-xl-6 col-lg-12 mt-2 mt-xl-0">
+                  <div class="user-info-wrapper">
+                    <div class="d-flex flex-wrap my-50">
+                      <div class="user-info-title">
+                        <i-feather name="check" class="edit-user"></i-feather>
+                        <span class="card-text user-info-title font-weight-bold mb-0">Estado: </span>
+                      </div>
+                      <p
+                        class="card-text mb-0 {{prediccion.cliente.estado =='Inactivo'? 'text-danger' : 'text-success' }} ml-1">
+                        {{prediccion.cliente.estado}}</p>
+                    </div>
+                    <div class="d-flex flex-wrap my-50">
+                      <div class="user-info-title">
+                        <i-feather name="flag" class="edit-user"></i-feather>
+                        <span class="card-text user-info-title font-weight-bold mb-0">País: </span>
+                      </div>
+                      <p class="card-text mb-0 ml-1"> {{prediccion.cliente.paisNacimiento}}</p>
+                    </div>
+                    <div class="d-flex flex-wrap my-50" *ngFor="let datoVirt of prediccion.cliente.datosVirtuales">
+                      <div class="user-info-title">
+                        <i-feather name="{{datoVirt.icono}}" class="edit-user">
+                        </i-feather>
+                        <span class="card-text user-info-title font-weight-bold mb-0">{{datoVirt.tipoContacto}}:</span>
+                      </div>
+                      <p class="card-text mb-0 ml-1">{{datoVirt.informacion}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row bg-light p-2 mt-1 mb-1">
+                <div class="col-md-4">
+                  <div class="d-flex">
+                    <div class="color-box bg-light-primary">
+                      <i-feather name="dollar-sign" class="edit-user"></i-feather>
+                    </div>
+                    <div class="ml-1">
+                      <small>Valor de últmos productos comprados</small>
+                      <h5 class="mb-0">${{prediccion.ultimoTotal}}</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex">
+                    <div class="color-box bg-light-primary">
+                      <i-feather name="dollar-sign" class="text-primary edit-user"></i-feather>
+                    </div>
+                    <div class="ml-1">
+                      <small>Compras mensuales</small>
+                      <h5 class="mb-0">${{prediccion.comprasMensuales}}</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex">
+                    <div class="color-box bg-light-success">
+                      <i-feather name="trending-up" class="text-success edit-user"></i-feather>
+                    </div>
+                    <div class="ml-1">
+                      <small>Promedio anual de compras</small>
+                      <h5 class="mb-0">${{prediccion.comprasAnuales}}</h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row p-2" *ngFor="let producto of prediccion.productos; let i = index">
+                <div class="col-md-12">
+                  <h5 class="mb-2">Producto {{i+1}} comprado</h5>
+                  <div class="card plan-card border-primary">
+                    <div class="card-body">
+                      <div class="item-heading">
+                        <h6 class="text-truncate mb-0 text-info">{{producto.articulo}}</h6>
+                        <!-- <small class="text-body d-block">by Apple</small> -->
+
+                      </div>
+                      <div class="img-container w-50 mx-auto py-50">
+                        <img src="{{producto.imagen}}" class="img-fluid" alt="image" />
+                      </div>
+                      <div class="item-meta">
+                        <p class="card-text mb-0">Código: {{producto.codigo}}</p>
+                        <p class="card-text mb-0">Cantidad: {{producto.cantidad}}</p>
+                        <p class="card-text mb-0">Categoría de producto: {{producto.categoria}}</p>
+                        <p class="card-text text-info mb-0 font-weight-bold">Total: ${{producto.precio}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <h5 class="mb-2">Productos que ofrecer</h5>
+                </div>
+                <div class="col-md-4" *ngFor="let prediccion of producto.predicciones">
+                  <div class="card plan-card border-secondary">
+                    <div class="card-body">
+                      <div class="item-heading">
+                        <h6 class="text-truncate mb-0">{{prediccion.nombre}}</h6>
+                        <!-- <small class="text-body">by Apple</small> -->
+                      </div>
+                      <div class="img-container w-50 mx-auto py-50">
+                        <img src="{{prediccion.imagen}}" class="img-fluid" alt="image" />
+                      </div>
+                      <hr />
+                      <div class="item-meta">
+                        <small class="card-text mb-0 text-primary">Código: {{prediccion.codigoBarras}}</small>
+                        <p class="card-text mb-0">Precio normal: ${{prediccion.precioVentaA}}</p>
+                        <p class="card-text mb-0 font-weight-bold text-info">Precio oferta:
+                          ${{prediccion.precioVentaA}}
+                        </p>
+                        <p class="card-text mb-0 font-weight-bold text-info">Precio oferta:
+                          ${{prediccion.precioVentaB}}
+                        </p>
+                        <p class="card-text mb-0 font-weight-bold text-info">Precio oferta:
+                          ${{prediccion.precioVentaC}}
+                        </p>
+                        <p class="card-text mb-0 font-weight-bold text-info">Precio oferta:
+                          ${{prediccion.precioVentaD}}
+                        </p>
+                        <p class="card-text mb-0 font-weight-bold text-info">Precio oferta:
+                          ${{prediccion.precioVentaE}}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-body" *ngIf="tipoClienteModal == 'negocio'">
+              <div class="row p-2">
+                <div class="col-xl-6 col-lg-12 d-flex flex-column justify-content-between border-container-lg">
+                  <div class="user-avatar-section">
+                    <div class="d-flex justify-content-start">
+                      <img class="img-fluid rounded" src="{{prediccion.negocio.imagen}}" width="80" />
+                      <div class="d-flex flex-column ml-1">
+                        <div class="user-info mb-1">
+                          <h4 class="mb-0">{{prediccion.negocio.nombreComercial}}</h4>
+                          <span class="card-text d-block">Correo: {{prediccion.negocio.correoPersonal}}</span>
+                          <span class="card-text d-block">Identificación: {{prediccion.negocio.ruc}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-xl-6 col-lg-12 mt-2 mt-xl-0">
+                  <div class="user-info-wrapper">
+
+                    <div class="d-flex flex-wrap my-50">
+                      <div class="user-info-title">
+                        <i-feather name="check" class="edit-user"></i-feather>
+                        <span class="card-text user-info-title font-weight-bold mb-0">Estado: </span>
+                      </div>
+                      <p
+                        class="card-text mb-0 {{prediccion.negocio.estado =='Inactivo'? 'text-danger' : 'text-success' }} ml-1">
+                        {{prediccion.negocio.estado}}</p>
+                    </div>
+                    <div class="d-flex flex-wrap my-50">
+                      <div class="user-info-title">
+                        <i-feather name="flag" class="edit-user"></i-feather>
+                        <span class="card-text user-info-title font-weight-bold mb-0">País: </span>
+                      </div>
+                      <p class="card-text mb-0 ml-1"> {{prediccion.negocio.paisOrigen}}</p>
+                    </div>
+                    <div class="d-flex flex-wrap my-50">
+                      <div class="user-info-title">
+                        <i-feather name="phone" class="edit-user"></i-feather>
+                        <span class="card-text user-info-title font-weight-bold mb-0">Contacto: </span>
+                      </div>
+                      <p class="card-text mb-0 ml-1"> (123) 456-7890</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row bg-light p-2 mt-1 mb-1">
+                <div class="col-md-4">
+                  <div class="d-flex">
+                    <div class="color-box bg-light-primary">
+                      <i-feather name="dollar-sign" class="edit-user"></i-feather>
+                    </div>
+                    <div class="ml-1">
+                      <small>Valor de últmos productos comprados</small>
+                      <h5 class="mb-0">${{prediccion.ultimoTotal}}</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex">
+                    <div class="color-box bg-light-primary">
+                      <i-feather name="dollar-sign" class="text-primary edit-user"></i-feather>
+                    </div>
+                    <div class="ml-1">
+                      <small>Compras mensuales</small>
+                      <h5 class="mb-0">${{prediccion.comprasMensuales}}</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex">
+                    <div class="color-box bg-light-success">
+                      <i-feather name="trending-up" class="text-success edit-user"></i-feather>
+                    </div>
+                    <div class="ml-1">
+                      <small>Promedio anual de compras</small>
+                      <h5 class="mb-0">${{prediccion.comprasAnuales}}</h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row p-2" *ngFor="let producto of prediccion.productos; let i = index">
+                <div class="col-md-12">
+                  <h5 class="mb-2">Producto {{i+1}} comprado</h5>
+                  <div class="card plan-card border-primary">
+                    <div class="card-body">
+                      <div class="item-heading">
+                        <h6 class="text-truncate mb-0 text-info">{{producto.articulo}}</h6>
+                        <!-- <small class="text-body d-block">by Apple</small> -->
+
+                      </div>
+                      <div class="img-container w-50 mx-auto py-50">
+                        <img src="{{producto.imagen}}" class="img-fluid" alt="image" />
+                      </div>
+                      <div class="item-meta">
+                        <p class="card-text mb-0">Código: {{producto.codigo}}</p>
+                        <p class="card-text mb-0">Cantidad: {{producto.cantidad}}</p>
+                        <p class="card-text mb-0">Categoría de producto: {{producto.categoria}}</p>
+                        <p class="card-text text-info mb-0 font-weight-bold">Total: ${{producto.precio}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <h5 class="mb-2">Productos que ofrecer</h5>
+                </div>
+                <div class="col-md-4" *ngFor="let prediccion of producto.predicciones">
+                  <div class="card plan-card border-secondary">
+                    <div class="card-body">
+                      <div class="item-heading">
+                        <h6 class="text-truncate mb-0">{{prediccion.nombre}}</h6>
+                        <!-- <small class="text-body">by Apple</small> -->
+                      </div>
+                      <div class="img-container w-50 mx-auto py-50">
+                        <img src="{{prediccion.imagen}}" class="img-fluid" alt="image" />
+                      </div>
+                      <hr />
+                      <div class="item-meta">
+                        <small class="card-text mb-0 text-primary">Código: {{prediccion.codigoBarras}}</small>
+                        <p class="card-text mb-0">Precio normal: ${{prediccion.precioVentaA}}</p>
+                        <p class="card-text mb-0 font-weight-bold text-info">Precio oferta:
+                          ${{prediccion.precioVentaA}}
+                        </p>
+                        <p class="card-text mb-0 font-weight-bold text-info">Precio oferta:
+                          ${{prediccion.precioVentaB}}
+                        </p>
+                        <p class="card-text mb-0 font-weight-bold text-info">Precio oferta:
+                          ${{prediccion.precioVentaC}}
+                        </p>
+                        <p class="card-text mb-0 font-weight-bold text-info">Precio oferta:
+                          ${{prediccion.precioVentaD}}
+                        </p>
+                        <p class="card-text mb-0 font-weight-bold text-info">Precio oferta:
+                          ${{prediccion.precioVentaE}}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal" tabindex="-1" role="dialog" id="productos-detail" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Detalle productos comprados</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+
+
+              <div class="row p-2">
+                <div class="col-md-12 mb-1">
+                  <h5 class="text-info">Fecha de compra: 12/06/2021</h5>
+                </div>
+                <div class="col-md-4" *ngFor="let producto of ultimosProductos">
+                  <div class="card plan-card border-secondary">
+                    <div class="card-body">
+                      <div class="item-heading">
+                        <h6 class="text-truncate mb-0">{{producto.articulo}}</h6>
+                      </div>
+                      <div class="img-container w-50 mx-auto py-50">
+                        <img src="{{producto.imagen}}" class="img-fluid" alt="image" />
+                      </div>
+                      <hr />
+                      <div class="item-meta">
+                        <p class="card-text mb-0">Código: {{producto.codigo}}</p>
+                        <p class="card-text mb-0">Cantidad: {{producto.cantidad}}</p>
+                        <p class="card-text text-primary mb-0 font-weight-bold">Total: ${{producto.precio}}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <!-- <div class="col-md-4">
+                                          <div class="card plan-card border-secondary">
+                                              <div class="card-body">
+                                                  <div class="item-heading">
+                                                      <h6 class="text-truncate mb-0">Magic Mouse 2 Black</h6>
+                                                      <small class="text-body">by Apple</small>
+                                                  </div>
+                                                  <div class="img-container w-50 mx-auto py-50">
+                                                      <img src="assets/images/elements/magic-mouse.png" class="img-fluid" alt="image" />
+                                                  </div>
+                                                  <hr/>
+                                                  <div class="item-meta">
+                                                      <p class="card-text mb-0">Código: 66466</p>
+                                                      <p class="card-text mb-0">Cantidad: 1</p>
+                                                      <p class="card-text text-primary mb-0 font-weight-bold">Total: $90.00</p>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                          <div class="card plan-card border-secondary">
+                                              <div class="card-body">
+                                                  <div class="item-heading">
+                                                      <h6 class="text-truncate mb-0">Apple MacBook Pro - Silver</h6>
+                                                      <small class="text-body">by Apple</small>
+                                                  </div>
+                                                  <div class="img-container w-50 mx-auto py-50">
+                                                      <img src="assets/images/elements/macbook-pro.png" class="img-fluid" alt="image" />
+                                                  </div>
+                                                  <hr/>
+                                                  <div class="item-meta">
+                                                      <p class="card-text mb-0">Código: 885666</p>
+                                                      <p class="card-text mb-0">Cantidad: 2</p>
+                                                      <p class="card-text text-primary mb-0 font-weight-bold">Total: $4200.00</p>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <hr />
+    </div>
+
+    <hr />
+
+  </section>
+  <!-- users list ends -->
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>

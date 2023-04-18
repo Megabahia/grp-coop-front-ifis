@@ -1,0 +1,490 @@
+<div class="content-wrapper">
+    <div class="content-header row">
+        <div class="col-12 mb-2">
+            <div class="row breadcrumbs-top">
+                <div class="col-12">
+                    <h2 class="content-header-title float-left mb-0">Solicitud de créditos empleados</h2>
+                    <div class="breadcrumb-wrapper">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-primary" href="index.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-primary" href="mis-premios.html">Solicitud de
+                                    créditos empleados</a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-body">
+        <!-- users list start -->
+        <section class="app-user-list">
+            <div class="card card-company-table">
+                <div class="row m-75">
+                    <div class="col-lg-12 col-xl-6">
+                        <label>Mostrar</label>
+                        <select class="form-control-sm">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+
+                    </div>
+                    <!--div class="col-lg-12 col-xl-6 text-right">
+                     <button class="btn btn-primary waves-effect waves-float waves-light" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-toggle="modal" data-target="#add-solicitud">
+                     Crear nuevo
+                   </button>
+                 </div-->
+                </div>
+                <div class="card-datatable table-responsive pt-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Fecha de solicitud de crédito</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Cédula</th>
+                                <th>Celular</th>
+                                <th>Empresa donde labora RUC</th>
+                                <th>Empresa donde labora nombre</th>
+                                <th>Detalle del crédito</th>
+                                <th>Casa comercial</th>
+                                <th>Logo casa comercial</th>
+                                <th>Concepto</th>
+                                <th>Nota de pedido</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let credito of listaCreditos">
+                                <td>{{credito.fechaAprobado}}</td>
+                                <td>{{credito.nombres}}</td>
+                                <td>{{credito.apellidos}}</td>
+                                <td>{{credito.identificacion}}</td>
+                                <td>{{credito.telefono}}</td>
+                                <td><a href="javascript:void(0)" class="text-info font-weight-bold" data-toggle="modal"
+                                        data-target="#detalle_empresa">{{credito.ruc}}</a></td>
+                                <td><a href="javascript:void(0)" class="text-info font-weight-bold" data-toggle="modal"
+                                        data-target="#detalle_empresa">{{credito.empresa_trabaja}}</a></td>
+                                <td><a href="javascript:void(0)" class="text-info font-weight-bold" data-toggle="modal"
+                                        data-target="#detalle"
+                                        (click)="obtenerDetalles(credito._id)">{{credito._id}}</a></td>
+                                <td>{{credito.empresa_comercial}}</td>
+                                <td><img src="{{credito.imagen}}" width="100"></td>
+                                <td>{{credito.concepto}}</td>
+                                <td>2234</td>
+                                <td>
+                                    <div
+                                        class="badge {{credito.estado == 'Rechazado' ? 'badge-light-danger': 'badge-light-success' }}">
+                                        {{credito.estado}}</div>
+
+                                </td>
+                                <td class="d-flex">
+                                    <a href="javascript:void(0)" class="avatar bg-info mr-1" data-target="#gestionar"
+                                        data-toggle="modal" (click)="toggleSidebar('actualizar-credito',credito._id)">
+                                        <div class="avatar-content" data-toggle="tooltip" data-placement="bottom"
+                                            title="" data-original-title="Aprobar/Rechazar">
+                                            <i data-feather='check-circle'></i>
+                                        </div>
+                                    </a>
+
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <ngb-pagination #paginator [collectionSize]="collectionSize" [(page)]="page" [(pageSize)]="page_size"
+                    [maxSize]="5" [ellipses]="false" [boundaryLinks]="true"></ngb-pagination>
+                <div class="modal modal-slide-in new-user-modal fade" id="gestionar">
+                    <div class="modal-dialog">
+                        <div class="modal-content pt-0">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                            <div class="modal-header mb-1">
+                                <h5 class="modal-title" id="exampleModalLabel">Gestión de solicitud de crédito</h5>
+                            </div>
+                            <div class="modal-body flex-grow-1">
+                                <div class="form-group">
+                                    <label>¿Desea tomar la solicitud de cliente?</label>
+                                    <select class="form-control select2">
+                                        <option>- Seleccione -</option>
+                                        <option>SI</option>
+                                        <option>NO</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Estado de la solicitud</label>
+                                    <select class="form-control select2">
+                                        <option>- Seleccione -</option>
+                                        <option>Aprobado</option>
+                                        <option>Rechazado</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Observaciones:</label>
+                                    <textarea class="form-control" rows="4"
+                                        placeholder="Detallar productos..."></textarea>
+                                </div>
+
+                                <button class="btn btn-primary mr-1" data-toggle="modal" data-target="#exito"
+                                    data-dismiss="modal" aria-label="Close">Guardar</button>
+                                <button type="reset" class="btn btn-outline-secondary"
+                                    data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal modal-slide-in new-user-modal fade" id="factura">
+                    <div class="modal-dialog modal-slide-xl">
+                        <div class="modal-content pt-0">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                            <div class="modal-header mb-1">
+                                <h5 class="modal-title" id="exampleModalLabel">Nueva solicitud</h5>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card invoice-preview-card">
+                                    <!-- Header starts -->
+                                    <div class="card-body invoice-padding pb-0">
+                                        <div
+                                            class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
+                                            <div>
+                                                <div class="logo-wrapper">
+                                                    <h3 class="text-primary invoice-logo">LOGO</h3>
+                                                </div>
+                                                <p class="card-text mb-25">Oficina 149, conoco pichincha</p>
+                                                <p class="card-text mb-25">Quito, Ecuador</p>
+                                                <p class="card-text mb-0">(876) 543 2198</p>
+                                            </div>
+                                            <div class="invoice-number-date mt-md-0 mt-2">
+                                                <div class="d-flex align-items-center justify-content-md-end mb-1">
+                                                    <h4 class="invoice-title">Factura</h4>
+                                                    <div class="input-group input-group-merge invoice-edit-input-group">
+                                                        <div class="input-group-prepend">
+                                                            <div class="input-group-text">
+                                                                <i data-feather="hash"></i>
+                                                            </div>
+                                                        </div>
+                                                        <input type="text" class="form-control invoice-edit-input"
+                                                            placeholder="53634" disabled />
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <span class="title">Fecha:</span>
+                                                    <input type="text"
+                                                        class="form-control invoice-edit-input date-picker" />
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Header ends -->
+
+                                    <hr class="invoice-spacing" />
+
+                                    <!-- Address and Contact starts -->
+                                    <div class="card-body invoice-padding pt-0">
+                                        <h4 class="invoice-title mb-2">Datos para la factura</h4>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label>Tipo de identificación</label>
+                                                <select class="form-control">
+                                                    <option>- Seleccione -</option>
+                                                    <option>Cédula</option>
+                                                    <option>RUC</option>
+                                                    <option>Pasaporte</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-4">
+                                                <label>Identificación</label>
+                                                <input class="form-control" type="text">
+                                            </div>
+                                            <div class="col-4">
+                                                <label>Razón social</label>
+                                                <input class="form-control" type="text">
+                                            </div>
+                                            <div class="col-4">
+                                                <label>Dirección</label>
+                                                <input class="form-control" type="text">
+                                            </div>
+                                            <div class="col-4">
+                                                <label>Teléfono</label>
+                                                <input class="form-control" type="text">
+                                            </div>
+                                            <div class="col-4">
+                                                <label>Correo</label>
+                                                <input class="form-control" type="text"
+                                                    placeholder="tucorreo@empresa.com">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Address and Contact ends -->
+                                    <hr class="invoice-spacing" />
+                                    <!-- Product Details starts -->
+                                    <div class="card-body invoice-padding">
+                                        <form class="source-item">
+                                            <div data-repeater-list="group-a">
+                                                <div class="repeater-wrapper" data-repeater-item>
+                                                    <div class="row">
+                                                        <div
+                                                            class="col-12 d-flex product-details-border position-relative pr-0">
+                                                            <div class="row w-100 pr-lg-0 pr-1 py-2">
+                                                                <div class="col-lg-5 col-12 mb-lg-0 mb-2 mt-lg-0 mt-2">
+                                                                    <p class="card-text col-title mb-md-50 mb-0">
+                                                                        Artículo/Producto</p>
+                                                                    <input class="form-control" type="text">
+                                                                    <textarea class="form-control mt-2"
+                                                                        rows="1">Información adicional</textarea>
+                                                                </div>
+                                                                <div class="col-lg-3 col-12 my-lg-0 my-2">
+                                                                    <p class="card-text col-title mb-md-2 mb-0">Valor
+                                                                        unitario</p>
+                                                                    <input type="text" class="form-control" value="24"
+                                                                        placeholder="24" />
+                                                                    <div class="mt-2">
+                                                                        <span>Descuento:</span>
+                                                                        <span class="discount">0%</span>
+                                                                        <span class="tax-1 ml-50" data-toggle="tooltip"
+                                                                            data-placement="top" title="Tax 1">0%</span>
+                                                                        <span class="tax-2 ml-50" data-toggle="tooltip"
+                                                                            data-placement="top" title="Tax 2">0%</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                                    <p class="card-text col-title mb-md-2 mb-0">Cantidad
+                                                                    </p>
+                                                                    <input type="number" class="form-control" value="1"
+                                                                        placeholder="1" />
+                                                                </div>
+                                                                <div class="col-lg-2 col-12 mt-lg-0 mt-2">
+                                                                    <p class="card-text col-title mb-md-50 mb-0">Precio
+                                                                    </p>
+                                                                    <p class="card-text mb-0">$24.00</p>
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                class="d-flex flex-column align-items-center justify-content-between border-left invoice-product-actions py-50 px-25">
+                                                                <i data-feather="x" class="cursor-pointer font-medium-3"
+                                                                    data-repeater-delete></i>
+                                                                <div class="dropdown">
+                                                                    <i class="cursor-pointer more-options-dropdown mr-0"
+                                                                        data-feather="settings" id="dropdownMenuButton"
+                                                                        role="button" data-toggle="dropdown"
+                                                                        aria-haspopup="true" aria-expanded="false">
+                                                                    </i>
+                                                                    <div class="dropdown-menu dropdown-menu-right item-options-menu p-50"
+                                                                        aria-labelledby="dropdownMenuButton">
+                                                                        <div class="form-group">
+                                                                            <label for="discount-input"
+                                                                                class="form-label">Discount(%)</label>
+                                                                            <input type="number" class="form-control"
+                                                                                id="discount-input" />
+                                                                        </div>
+                                                                        <div class="form-row mt-50">
+                                                                            <div class="form-group col-md-12">
+                                                                                <label for="tax-1-input"
+                                                                                    class="form-label">Impuestos</label>
+                                                                                <select name="tax-1-input"
+                                                                                    id="tax-1-input"
+                                                                                    class="form-control tax-select">
+                                                                                    <option value="10%" selected>12%
+                                                                                    </option>
+                                                                                    <option value="0%">0%</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="dropdown-divider my-1"></div>
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <button type="button"
+                                                                                class="btn btn-outline-primary btn-apply-changes">Aplicar</button>
+                                                                            <button type="button"
+                                                                                class="btn btn-outline-secondary">Cancelar</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-1">
+                                                <div class="col-12 px-0">
+                                                    <button type="button" class="btn btn-primary btn-sm btn-add-new"
+                                                        data-repeater-create>
+                                                        <i data-feather="plus" class="mr-25"></i>
+                                                        <span class="align-middle">Añadir producto</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- Product Details ends -->
+                                    <hr class="invoice-spacing" />
+                                    <!-- Invoice Total starts -->
+                                    <div class="card-body invoice-padding">
+                                        <div class="row invoice-sales-total-wrapper">
+                                            <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <label for="salesperson" class="form-label">Persona de
+                                                        ventas:</label>
+                                                    <input type="text" class="form-control ml-50" id="salesperson"
+                                                        placeholder="Nombre vendedor" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
+                                                <div class="invoice-total-wrapper">
+                                                    <div class="invoice-total-item">
+                                                        <p class="invoice-total-title">Subtotal:</p>
+                                                        <p class="invoice-total-amount">$1800</p>
+                                                    </div>
+                                                    <div class="invoice-total-item">
+                                                        <p class="invoice-total-title">Descuento:</p>
+                                                        <p class="invoice-total-amount">$28</p>
+                                                    </div>
+                                                    <div class="invoice-total-item">
+                                                        <p class="invoice-total-title">IVA 12%:</p>
+                                                        <p class="invoice-total-amount">$21</p>
+                                                    </div>
+                                                    <hr class="my-50" />
+                                                    <div class="invoice-total-item">
+                                                        <p class="invoice-total-title">Total:</p>
+                                                        <p class="invoice-total-amount">$1690</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Invoice Total ends -->
+
+                                    <hr class="invoice-spacing mt-0" />
+
+                                    <div class="row p-2">
+                                        <div class="col-12">
+                                            <button class="btn btn-primary mr-1 waves-effect waves-float waves-light"
+                                                type="button" data-toggle="modal" data-target="#enviar"
+                                                data-dismiss="modal" aria-label="Close">Guardar y enviar
+                                                factura</button>
+                                            <button class="btn btn-info mr-1 waves-effect waves-float waves-light"
+                                                type="button" data-toggle="modal" data-target="#exito"
+                                                data-dismiss="modal" aria-label="Close">Guardar factura</button>
+                                            <button type="reset" class="btn btn-outline-secondary waves-effect"
+                                                data-dismiss="modal" aria-label="Close">Cancelar</button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- list section end -->
+        </section>
+        <!-- users list ends -->
+    </div>
+</div>
+<core-sidebar class="modal modal-slide-in sidebar-todo-modal fade" name="actualizar-credito"
+    overlayClass="modal-backdrop">
+    <div class="slideout-content">
+        <!-- Modal to add new user starts-->
+        <div class="modalsd modal-slide-in sdfade new-user-modal" id="modals-slide-in">
+            <div class="modal-dialog">
+                <form class="add-new-user modal-content pt-0" [formGroup]="actualizarCreditoForm">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        (click)="toggleSidebar('actualizar-credito','')">
+                        ×
+                    </button>
+                    <div class="modal-header mb-1">
+                        <h5 class="modal-title" id="exampleModalLabel">Gestión de solicitud de crédito</h5>
+                    </div>
+                    <div class="modal-body flex-grow-1">
+                        <div class="form-group">
+                            <label>¿Desea tomar la solicitud de cliente?</label>
+                            <select class="form-control select2" name="tomarSolicitud" formControlName="tomarSolicitud"
+                                [(ngModel)]="actualizarCredito.tomarSolicitud">
+                                <option value="">- Seleccione -</option>
+                                <option>Si</option>
+                                <option>No</option>
+                            </select>
+                            <div *ngIf="submitted && tForm.tomarSolicitud.errors" class="invalid-feedback"
+                                style="display: block;">
+                                <div *ngIf="tForm.tomarSolicitud.errors.required">Requerido
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Estado de la solicitud</label>
+                            <select class="form-control select2" name="estado" formControlName="estado"
+                                [(ngModel)]="actualizarCredito.estado">
+                                <option value="">- Seleccione -</option>
+                                <option>Aprobado</option>
+                                <option>Preaprobado</option>
+                                <option>Rechazado</option>
+                            </select>
+                            <div *ngIf="submitted && tForm.estado.errors" class="invalid-feedback"
+                                style="display: block;">
+                                <div *ngIf="tForm.estado.errors.required">Requerido
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Observaciones:</label>
+                            <textarea class="form-control" rows="4" name="concepto" formControlName="concepto"
+                                placeholder="Detallar productos..." [(ngModel)]="actualizarCredito.concepto"></textarea>
+                            <div *ngIf="submitted && tForm.concepto.errors" class="invalid-feedback"
+                                style="display: block;">
+                                <div *ngIf="tForm.concepto.errors.required">Requerido
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary mr-1" (click)="actualizarSolicitudCredito()">Guardar</button>
+                        <button class="btn btn-outline-secondary" (click)="cerrarModal()"
+                            data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Modal to add new user Ends-->
+    </div>
+
+</core-sidebar>
+<ng-template #mensajeModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Mensaje</h5>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div [innerHTML]="mensaje"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="cerrarModal()">Cerrar</button>
+    </div>
+</ng-template>
+<ng-template #detalleCreditoMdl let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Detalle del crédito</h5>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div [innerHTML]="mensaje"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="cerrarModal()">Cerrar</button>
+    </div>
+</ng-template>

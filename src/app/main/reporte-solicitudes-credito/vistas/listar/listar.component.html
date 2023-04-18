@@ -1,0 +1,103 @@
+<div class="content-wrapper">
+    <div class="content-header row">
+        <div class="col-12 mb-2">
+            <div class="row breadcrumbs-top">
+                <div class="col-12">
+                    <h2 class="content-header-title float-left mb-0">Reporte Solicitud de créditos</h2>
+                    <div class="breadcrumb-wrapper">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-primary" href="index.html">Inicio</a>
+                            </li>
+<!--                            <li class="breadcrumb-item"><a class="text-primary" href="mis-premios.html">Solicitud de-->
+<!--                                créditos autónomos</a>-->
+<!--                            </li>-->
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-body">
+        <!-- users list start -->
+        <section class="app-user-list">
+            <div class="card card-company-table">
+                <div class="row m-75">
+                    <div class="col-lg-12 col-xl-6">
+                        <label>Mostrar</label>
+                        <select class="form-control-sm">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+
+                    </div>
+                    <!--div class="col-lg-12 col-xl-6 text-right">
+                     <button class="btn btn-primary waves-effect waves-float waves-light" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-toggle="modal" data-target="#add-solicitud">
+                     Crear nuevo
+                   </button>
+                 </div-->
+                </div>
+                <div class="card-datatable table-responsive pt-0">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Fecha de solicitud</th>
+                            <th>Ruc Empresa</th>
+                            <th>Nombre Empresa</th>
+                            <th>Logo</th>
+                            <th>Canal de crédito</th>
+                            <th>Identificacion</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Valor</th>
+                            <th>Plazo del crédito</th>
+                            <th>Interes</th>
+                            <th>Estado</th>
+                            <th>Reporte Buró de Crédito</th>
+                            <th>Calificación de Buró de Crédito</th>
+                            <th>Buro Validado</th>
+                            <th>Cédula de Identidad</th>
+                            <th>RUC</th>
+                            <th>Roles de Pago</th>
+                            <th>Plantilla IESS</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr *ngFor="let credito of listaCreditos">
+                            <td>{{transformarFecha(credito.created_at)}}</td>
+                            <td>{{credito.rucComercial}}</td>
+                            <td>{{credito.nombreComercial}}</td>
+                            <td><img [src]="credito.imagenComercial" width="80"></td>
+                            <td>{{credito.canal}}</td>
+                            <td>{{credito.numeroIdentificacion}}</td>
+                            <td>{{credito.nombres}}</td>
+                            <td>{{credito.apellidos}}</td>
+                            <td>{{credito.monto}}</td>
+                            <td>{{credito.plazo}} meses</td>
+                            <td>{{credito.interes}}</td>
+                            <td>
+                                <div class="badge badge-light-success">{{credito.estado}}</div>
+                            </td>
+                            <td><a href="{{credito.reporteBuro}}" target="_blank">Link</a></td>
+                            <td>{{credito.calificacionBuro}}</td>
+                            <td>{{credito.buroValido}}</td>
+                            <td><a href="{{credito.identificacion}}" target="_blank">Link</a></td>
+                            <td><a href="{{credito.ruc}}" target="_blank">Link</a></td>
+                            <td><a href="{{credito.rolesPago}}" target="_blank">Link</a></td>
+                            <td><a href="{{credito.panillaIESS}}" target="_blank">Link</a></td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <ngb-pagination #paginator [collectionSize]="collectionSize" [(page)]="page" [(pageSize)]="page_size"
+                                [maxSize]="5" [ellipses]="false" [boundaryLinks]="true"></ngb-pagination>
+
+            </div>
+            <!-- list section end -->
+        </section>
+        <!-- users list ends -->
+    </div>
+</div>

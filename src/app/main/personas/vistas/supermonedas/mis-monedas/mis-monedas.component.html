@@ -1,0 +1,222 @@
+<div class="content-wrapper">
+    <div class="content-header row">
+        <div class="col-12 mb-2">
+            <div class="row breadcrumbs-top">
+                <div class="col-12">
+                    <h2 class="content-header-title float-left mb-0">Mis super monedas</h2>
+                    <div class="breadcrumb-wrapper">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-primary" href="index.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-primary" href="mis-premios.html">mis monedas</a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-body">
+        <!-- users list start -->
+        <section class="user-list">
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card earnings-card">
+                        <div class="card-body">
+                            <h6>Saldo super monedas</h6>
+                            <hr />
+                            <h2 class="mt-1">
+                                <div class="iso-moneda"></div> {{cantidadMonedas}}
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-company-table">
+                <div class="card-datatable table-responsive pt-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Empresa</th>
+                                <th>Transacción</th>
+                                <th>Super Monedas</th>
+                                <th>Fecha</th>
+                                <th>Monedas disponibles</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let moneda of monedas">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar rounded">
+                                            <div class="avatar-content">
+                                                <img src="assets/images/icons/toolbox.svg" alt="Toolbar svg" />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="font-weight-bolder">{{moneda.empresa}}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{moneda.tipo}}</td>
+                                <td class="text-nowrap">
+                                    <div class="d-flex flex-column">
+                                        <span class="font-weight-bolder mb-25">{{moneda.credito ?
+                                            '+' + moneda.credito: '-' + moneda.debito}}</span>
+                                    </div>
+                                </td>
+                                <td>{{transformarFecha(moneda.created_at)}}</td>
+                                <td>
+                                    <div class="iso-moneda"></div> {{moneda.saldo}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="modal" tabindex="-1" role="dialog" id="client-detail"
+                        aria-labelledby="myLargeModalLabel">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Detalle de producto</h5>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close">×</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row p-2">
+                                        <div class="col-md-8">
+                                            <div class="card plan-card border-primary">
+                                                <div class="card-body">
+                                                    <div class="item-heading">
+                                                        <h6 class="text-truncate mb-0 text-info">Apple Watch 6 series
+                                                        </h6>
+                                                        <small class="text-body d-block">by Apple</small>
+                                                    </div>
+                                                    <div class="img-container w-50 mx-auto py-50">
+                                                        <img src="assets/images/elements/apple-watch.png"
+                                                            class="img-fluid" alt="image" />
+                                                    </div>
+                                                    <hr />
+                                                    <div class="item-meta">
+                                                        <p class="card-text mb-0 text-info">Cantidad monedas:
+                                                            <span>1200.00</span>
+                                                        </p>
+                                                        <p class="card-text mb-0">Efectivo: <b>$200.00</b></p>
+                                                        <p class="card-text mb-0">Vigencia de oferta hasta: 25-06-2021
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5 class="mb-2">Donde aplica</h5>
+                                            <p class="card-text mb-0">Local: CC El Jardin (Av. Amazonas y República)</p>
+                                            <p class="card-text mb-0">Ciudad: Quito</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal" tabindex="-1" role="dialog" id="kfc" aria-labelledby="myLargeModalLabel">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Detalle de producto</h5>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close">×</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row p-2">
+                                        <div class="col-md-8">
+                                            <div class="card plan-card border-primary">
+                                                <div class="card-body">
+                                                    <div class="item-heading">
+                                                        <h6 class="text-truncate mb-0 text-info">Festín Ideal</h6>
+                                                        <small class="text-body d-block">8 presas + 1 Pop Corn mediano +
+                                                            2 papas fritas grandes + 6 cinnabon bites + 1 gaseosa de
+                                                            1L</small>
+                                                    </div>
+                                                    <div class="img-container w-50 mx-auto py-50">
+                                                        <img src="assets/images/kfc.png" class="img-fluid"
+                                                            alt="image" />
+                                                    </div>
+                                                    <hr />
+                                                    <div class="item-meta">
+                                                        <p class="card-text mb-0 text-info">Cantidad monedas:
+                                                            <span>30</span>
+                                                        </p>
+                                                        <p class="card-text mb-0">Efectivo: <b>$5.00</b></p>
+                                                        <p class="card-text mb-0">Vigencia de oferta hasta: 25-06-2021
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5 class="mb-2">Donde aplica</h5>
+                                            <p class="card-text mb-0">Local: CC El Jardin (Av. Amazonas y República)</p>
+                                            <p class="card-text mb-0">Ciudad: Quito</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal" tabindex="-1" role="dialog" id="camiseta" aria-labelledby="myLargeModalLabel">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Detalle de producto</h5>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close">×</button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row p-2">
+                                        <div class="col-md-8">
+                                            <div class="card plan-card border-primary">
+                                                <div class="card-body">
+                                                    <div class="item-heading">
+                                                        <h6 class="text-truncate mb-0 text-info">Camiseta Básica
+                                                            Estampada H&O Trybu</h6>
+                                                    </div>
+                                                    <div class="img-container w-50 mx-auto py-50">
+                                                        <img src="assets/images/camiseta.jpeg" class="img-fluid"
+                                                            alt="image" />
+                                                    </div>
+                                                    <hr />
+                                                    <div class="item-meta">
+                                                        <p class="card-text mb-0 text-info">Cantidad monedas:
+                                                            <span>40</span>
+                                                        </p>
+                                                        <p class="card-text mb-0">Efectivo: <b>$8.00</b></p>
+                                                        <p class="card-text mb-0">Vigencia de oferta hasta: 25-06-2021
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h5 class="mb-2">Donde aplica</h5>
+                                            <p class="card-text mb-0">Local: CC El Jardin (Av. Amazonas y República)</p>
+                                            <p class="card-text mb-0">Ciudad: Quito</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ngb-pagination #paginator [collectionSize]="collectionSize" [(page)]="page" [(pageSize)]="page_size"
+                    [maxSize]="5" [ellipses]="false" [boundaryLinks]="true"></ngb-pagination>
+            </div>
+            <!-- list section end -->
+        </section>
+        <!-- users list ends -->
+    </div>
+</div>

@@ -1,0 +1,160 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <div class="card">
+            <h5 class="card-header">Crear categorías</h5>
+        </div>
+        <div class="card">
+            <div class="row m-75">
+                <div class="col-lg-12 col-xl-6">
+                    <label>Mostrar</label>
+                    <select class="form-control-sm" [(ngModel)]="pageSize" (change)="obtenerListaCategorias()">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+
+                </div>
+                <div class="col-lg-12 col-xl-6 text-right">
+                    <button class="btn btn-icon btn-primary" type="button" data-toggle="modal" data-target="#addcampo" (click)="crearCategoria('addcampo')">
+                <i data-feather="plus" class="mr-25"></i>
+                <span>Añadir</span>
+            </button>
+
+                </div>
+            </div>
+            <ng-template #contenido let-modal>
+                <div class="modal-header ">
+                    <h4 class="modal-title ">Mensaje</h4>
+                    <button type="button " class="close " aria-label="Close " (click)="modal.dismiss( 'Cross click') ">
+                    <span aria-hidden="true ">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body ">
+                    <p>Confirma eliminar</p>
+                </div>
+                <div class="modal-footer ">
+                    <button type="button " class="btn btn-light " (click)="cerrarModal()">SI</button>
+                </div>
+            </ng-template>
+            <ng-template #aviso let-modal>
+                <div class="modal-header ">
+                    <h4 class="modal-title ">Mensaje</h4>
+                    <button type="button " class="close " aria-label="Close " (click)="modal.dismiss( 'Cross click') ">
+                    <span aria-hidden="true ">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div [innerHTML]="mensaje"></div>
+                </div>
+                <div class="modal-footer ">
+                    <button type="button" class="btn btn-light" (click)="modal.dismiss( 'Cross click')">Aceptar</button>
+                </div>
+            </ng-template>
+            <div class="card-datatable table-responsive pt-0">
+                <table class="user-list-table table table-striped">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                    <label class="custom-control-label" for="customCheck2"></label>
+                                </div>
+                            </th>
+                            <th>Nombre categoría</th>
+                            <th>Código de la categoría</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody data-repeater-list="invoice">
+                        <tr data-repeater-item *ngFor="let categoria of listaCategorias">
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                    <label class="custom-control-label" for="customCheck2"></label>
+                                </div>
+                            </td>
+                            <td>{{categoria.nombre}}</td>
+                            <td>{{categoria.codigoCategoria}}</td>
+                            <td>{{categoria.descripcion}}</td>
+                            <td>
+                                <span class="text-capitalize badge {{categoria.estado=='Activo' ? 'badge-light-success': 'badge-secondary' }} badge-pill">{{categoria.estado}}</span>
+                            </td>
+                            <td>
+                                <a (click)="editarCategoria(categoria.id,'addcampo')" data-toggle="modal" data-target="#addcampo">
+                                    <i data-feather="edit-2" [size]="24"></i>
+                                </a>
+                                <a (click)="abrirModal(contenido, categoria.id)" data-repeater-delete>
+                                    <i data-feather="trash" [size]="24"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ngb-pagination #paginator [collectionSize]="collectionSize " [(page)]="page " [(pageSize)]="pageSize " [maxSize]="5 " [ellipses]="false " [boundaryLinks]="true "></ngb-pagination>
+
+            <hr/>
+        </div>
+    </div>
+</div>
+<core-sidebar class="modal modal-slide-in sidebar-todo-modal fade" name="addcampo"
+  overlayClass="modal-backdrop">
+  <div class="slideout-content">
+    <!-- Modal to add new user starts-->
+    <div class="modalsd modal-slide-in sdfade new-user-modal" id="modals-slide-in">
+      <div class="modal-dialog">
+        <div class="modal-content pt-0">
+          <button type="button" class="close" data-dismiss="modal"
+          (click)="cerrarModalCore('addcampo')"
+           aria-label="Close">×</button>
+          <div class="modal-header mb-1">
+            <h5 class="modal-title" id="exampleModalLabel">Nueva categoría</h5>
+          </div>
+          <div class="modal-body flex-grow-1">
+            <form class="auth-login-form mt-2" [formGroup]="paramForm">
+                <div class="form-group">
+                    <label class="form-label" for="basic-icon-default-fullname">Nombre de categoría:</label>
+                    <input type="text" class="form-control dt-full-name" id="basic-icon-default-fullname" name="nombre" formControlName="nombre" [(ngModel)]="categoria.nombre" />
+                    <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.nombre.errors.required">Nombre de la categoría es requerido</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basic-icon-default-fullname">Código de categoría:</label>
+                    <input type="text" class="form-control dt-full-name" id="basic-icon-default-fullname" name="codigoCategoria" formControlName="codigoCategoria" [(ngModel)]="categoria.codigoCategoria" />
+                    <div *ngIf="submitted && f.codigoCategoria.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.codigoCategoria.errors.required">Código de la categoría es requerido</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basic-icon-default-fullname">Descripción:</label>
+                    <input type="text" class="form-control dt-full-name" id="basic-icon-default-fullname" name="descripcion" formControlName="descripcion" [(ngModel)]="categoria.descripcion" />
+                    <div *ngIf="submitted && f.descripcion.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.descripcion.errors.required">La descripción es requerida</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basic-icon-default-email">Estado:</label>
+                    <select class="select2 form-control form-control-sm" name="estado" formControlName="estado" [(ngModel)]="categoria.estado">
+                        <option value="" selected>- Seleccione - </option>
+                        <option *ngFor="let estado of estados" value="{{estado.valor}}">{{estado.valor}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.estado.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.estado.errors.required">Selección del estado de la categoría es requerida</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary mr-1" aria-label="Close" (click)="guardarCategoria()">Guardar</button>
+                <!-- <button #dismissModal data-toggle="modal" data-target="#exito" data-dismiss="modal" style="display: none;"></button> -->
+                <button type="reset" class="btn btn-outline-secondary" (click)="cerrarModalCore('addcampo')" data-dismiss="modal">Cancelar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal to add new user Ends-->
+  </div>
+</core-sidebar>

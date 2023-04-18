@@ -1,0 +1,260 @@
+<div class="content-body">
+  <!-- users list start -->
+  <section class="app-user-list">
+    <!-- users filter start -->
+    <div class="card">
+      <h5 class="card-header">Filtros de búsqueda</h5>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4">
+            <input class="form-control" mwlFlatpickr type="text" [(ngModel)]="inicio" (input)="obtenerTransacciones()">
+          </div>
+          <div class="col-md-4">
+            <input class="form-control" mwlFlatpickr type="text" [(ngModel)]="fin" (input)="obtenerTransacciones()">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div
+        class="card-header d-flex justify-content-between align-items-sm-center align-items-start flex-sm-row flex-column">
+        <div class="header-left">
+          <h5>Gráfica de transacciones</h5>
+        </div>
+        <div class="header-right d-flex align-items-center mt-sm-0 mt-1">
+          <small><i data-feather="calendar"></i>
+            rango: <b>21-03-2021 / 21-04-2021</b></small>
+        </div>
+      </div>
+      <div class="card-body">
+        <canvas baseChart height="70vh" [colors]="barChartColors " [datasets]="barChartData " [labels]="barChartLabels "
+          [options]="barChartOptions " [plugins]="barChartPlugins " [legend]="barChartLegend "
+          [chartType]="barChartType ">
+        </canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-datatable table-responsive pt-0">
+        <div class="row m-75">
+          <div class="col-lg-12 col-xl-6">
+            <label>Mostrar</label>
+            <select class="form-control-sm" [(ngModel)]="pageSize" (change)="obtenerTransacciones()">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+
+          </div>
+        </div>
+        <table class="user-list-table table">
+          <thead class="thead-light">
+            <tr>
+              <th>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                  <label class="custom-control-label" for="customCheck2"></label>
+                </div>
+              </th>
+              <th>Fecha de compra</th>
+              <th>Canal de compra</th>
+              <th># productos comprados</th>
+              <th>Monto</th>
+              <th>Factura</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let transaccion  of listaTransacciones">
+              <td>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                  <label class="custom-control-label" for="customCheck2"></label>
+                </div>
+              </td>
+              <td>{{transformarFecha(transaccion.created_at)}}</td>
+              <td>{{transaccion.canal}} </td>
+              <td>{{transaccion.numeroProductosComprados}} </td>
+              <td> ${{transaccion.total}} </td>
+              <td>
+                <a (click)="obtenerTransaccion(transaccion.id)" data-toggle="modal"
+                  data-target="#verfactura">factura-{{transaccion.numeroFactura}}</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <ngb-pagination #paginator [collectionSize]="collectionSize" [(page)]="page" [(pageSize)]="pageSize"
+        [maxSize]="5 " [ellipses]="false " [boundaryLinks]="true "></ngb-pagination>
+
+      <div class="modal fade" id="verfactura" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="card invoice-preview-card">
+              <!-- Header starts -->
+              <div class="card-body invoice-padding pb-0">
+                <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
+                  <div>
+                    <div class="logo-wrapper">
+                      <h3 class="text-primary invoice-logo">LOGO</h3>
+                    </div>
+                    <p class="card-text mb-25">Oficina 149, conoco pichincha</p>
+                    <p class="card-text mb-25">Quito, Ecuador</p>
+                    <p class="card-text mb-0">(876) 543 2198</p>
+                  </div>
+                  <div class="invoice-number-date mt-md-0 mt-2">
+                    <div class="d-flex align-items-center justify-content-md-end mb-1">
+                      <h4 class="invoice-title mr-1">Factura</h4>
+                      <div class="input-group input-group-merge invoice-edit-input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">
+                            <i data-feather name="hash" class="edit-user"></i>
+                          </div>
+                        </div>
+                        <input type="text" class="form-control invoice-edit-input"
+                          placeholder="{{transaccion.numeroFactura}}" disabled />
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-1">
+                      <span class="title mr-1">Fecha:</span>
+                      <input type="text" class="form-control invoice-edit-input date-picker"
+                        value="{{transformarFecha(transaccion.created_at)}}" disabled />
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <!-- Header ends -->
+
+              <hr class="invoice-spacing" />
+
+              <!-- Address and Contact starts -->
+              <div class="card-body invoice-padding pt-0">
+                <h4 class="invoice-title mb-2">Datos para la factura</h4>
+                <div class="row">
+                  <div class="col-4">
+                    <label>Tipo de identificación</label>
+                    <input class="form-control" type="text" value="{{transaccion.tipoIdentificacion}}" disabled>
+
+                  </div>
+                  <div class="col-4">
+                    <label>Identificación</label>
+                    <input class="form-control" type="text" value="{{transaccion.identificacion}}" disabled>
+                  </div>
+                  <div class="col-4">
+                    <label>Razón social</label>
+                    <input class="form-control" type="text" value="{{transaccion.razonSocial}}" disabled>
+                  </div>
+                  <div class="col-4">
+                    <label>Dirección</label>
+                    <input class="form-control" type="text" value="{{transaccion.direccion}}" disabled>
+                  </div>
+                  <div class="col-4">
+                    <label>Teléfono</label>
+                    <input class="form-control" type="text" value="{{transaccion.telefono}}" disabled>
+                  </div>
+                  <div class="col-4">
+                    <label>Correo</label>
+                    <input class="form-control" type="text" value="{{transaccion.correo}}" disabled>
+                  </div>
+                </div>
+              </div>
+              <!-- Address and Contact ends -->
+              <hr class="invoice-spacing" />
+              <!-- Product Details starts -->
+              <div class="card-body invoice-padding">
+                <form class="source-item">
+                  <div data-repeater-list="group-a" *ngFor="let detalle of transaccion.detalles">
+                    <div class="repeater-wrapper" data-repeater-item>
+                      <div class="row">
+                        <div class="col-12 d-flex product-details-border position-relative pr-0">
+                          <div class="row w-100 pr-lg-0 pr-1 py-2">
+                            <div class="col-lg-5 col-12 mb-lg-0 mb-2 mt-lg-0 mt-2">
+                              <p class="card-text col-title mb-md-50 mb-0">Artículo/Producto</p>
+                              <input class="form-control" type="text" value="{{detalle.articulo}}" disabled>
+                              <textarea class="form-control mt-2" rows="2"
+                                disabled>{{detalle.informacionAdicional}}</textarea>
+                            </div>
+                            <div class="col-lg-3 col-12 my-lg-0 my-2">
+                              <p class="card-text col-title mb-md-50 mb-0">Valor unitario</p>
+                              <input type="text" class="form-control" value="{{detalle.valorUnitario}}" disabled />
+                              <div class="mt-2">
+                                <span>Descuento:</span>
+                                <span class="discount">{{detalle.descuento}}%</span>
+                              </div>
+                            </div>
+                            <div class="col-lg-2 col-12 my-lg-0 my-2">
+                              <p class="card-text col-title mb-md-50 mb-0">Cantidad</p>
+                              <input type="number" class="form-control" value="{{detalle.cantidad}}" disabled />
+                            </div>
+                            <div class="col-lg-2 col-12 mt-lg-0 mt-2">
+                              <p class="card-text col-title mb-md-50 mb-0">Precio</p>
+                              <input type="text" class="form-control" value="{{detalle.precio}}" placeholder="24"
+                                disabled />
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </form>
+              </div>
+              <!-- Product Details ends -->
+              <hr class="invoice-spacing" />
+              <!-- Invoice Total starts -->
+              <div class="card-body invoice-padding">
+                <div class="row">
+                  <div class="col-md-7">
+                    <label for="salesperson" class="form-label">Persona de ventas:</label>
+                    <input type="text" class="form-control" id="salesperson" placeholder="Nombre vendedor"
+                      value="{{transaccion.nombreVendedor}}" disabled />
+                  </div>
+                  <div class="col-md-5 text-right">
+                    <div class="invoice-total-wrapper">
+                      <div class="invoice-total-item">
+                        <p class="invoice-total-title">Subtotal: ${{transaccion.subTotal}}</p>
+                      </div>
+                      <div class="invoice-total-item">
+                        <p class="invoice-total-title">Descuento: ${{transaccion.descuento}}</p>
+                      </div>
+                      <div class="invoice-total-item">
+                        <p class="invoice-total-title">IVA 12%: ${{transaccion.iva}}</p>
+                      </div>
+                      <hr class="my-50" />
+                      <div class="invoice-total-item">
+                        <p class="invoice-total-title text-primary font-weight-bold">Total: ${{transaccion.total}}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Invoice Total ends -->
+
+              <hr class="invoice-spacing mt-0" />
+
+              <div class="row p-2">
+                <div class="col-12">
+                  <button type="reset" class="btn btn-outline-secondary waves-effect"
+                    data-dismiss="modal">Cerrar</button>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
+    </div>
+  </section>
+  <!-- users list ends -->
+
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>

@@ -1,0 +1,563 @@
+<div class="card">
+    <div class="card-body">
+        <form class="auth-login-form mt-2" [formGroup]="datosParientesForm">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username"><b>Escoja el nombre para nuevo item</b></label>
+                        <select class="form-control" id="status" name="tipoPariente" formControlName="tipoPariente" [(ngModel)]="pariente.tipoPariente">
+              <option value="" selected>- Seleccionar -</option>
+              <option value="{{tipoParientesOp.valor}}" *ngFor="let tipoParientesOp of tipoParientesOpciones">
+                  {{tipoParientesOp.nombre}}
+                </option>
+          </select>
+                        <div *ngIf="submitted && f.tipoPariente.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.tipoPariente.errors.required">Tipo pariente requerido</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Número de cédula</label>
+                        <input type="text" class="form-control" name="cedula" formControlName="cedula" [(ngModel)]="pariente.cedula">
+                        <div *ngIf="submitted && f.cedula.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.cedula.errors.required">Cédula requerido</div>
+                            <div *ngIf="f.cedula.errors.pattern">Solo se aceptan números
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Nombres</label>
+                        <input type="text" class="form-control" name="nombres" formControlName="nombres" [(ngModel)]="pariente.nombres">
+                        <div *ngIf="submitted && f.nombres.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.nombres.errors.required">Nombres requeridos</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Apellidos</label>
+                        <input type="text" class="form-control" name="apellidos" formControlName="apellidos" [(ngModel)]="pariente.apellidos">
+                        <div *ngIf="submitted && f.apellidos.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.apellidos.errors.required">Apellidos requerido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Fecha de matrimonio <small>(opcional si aplica tipo de pariente)</small></label>
+                        <input type="text" mwlFlatpickr class="form-control flatpickr-basic flatpickr-input" [(ngModel)]="pariente.fechaMatrimonio" [ngModelOptions]="{standalone: true}">
+
+                    </div>
+                </div>
+
+                <div class=" col-md-4">
+                    <div class="form-group">
+                        <label for="username">Lugar de matrimonio <small>(opcional si aplica tipo de pariente)</small></label>
+                        <input type="text" class="form-control" [(ngModel)]="pariente.lugarMatrimonio" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+
+                <div class=" col-md-4">
+                    <div class="form-group">
+                        <label for="username">Género</label>
+                        <select class="form-control" id="status" name="genero" formControlName="genero" [(ngModel)]="pariente.genero"> 
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{generoOp.valor}}" *ngFor="let generoOp of generoOpciones">
+                            {{generoOp.nombre}}
+                          </option>
+                </select>
+                        <div *ngIf="submitted && f.genero.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.genero.errors.required">Género requerido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Nacionalidad</label>
+                        <select class="form-control select2" name="nacionalidad" formControlName="nacionalidad" [(ngModel)]="pariente.nacionalidad">
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{nacionalidadOp.valor}}" *ngFor="let nacionalidadOp of nacionalidadOpciones">
+                            {{nacionalidadOp.nombre}}
+                          </option>
+                </select>
+                        <div *ngIf="submitted && f.nacionalidad.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.nacionalidad.errors.required">Nacionalidad requerida</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Fecha de nacimiento</label>
+                        <input type="text" mwlFlatpickr class="form-control flatpickr-basic flatpickr-input" name="fechaNacimiento" formControlName="fechaNacimiento" [(ngModel)]="pariente.fechaNacimiento" (input)="calcularEdad()">
+                        <div *ngIf="submitted && f.fechaNacimiento.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.fechaNacimiento.errors.required">Fecha de Nacimiento requerida</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Edad</label>
+                        <input type="text" class="form-control" value="23" name="edad" formControlName="edad" [(ngModel)]="pariente.edad" disabled>
+                        <div *ngIf="submitted && f.edad.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.edad.errors.required">Edad requerida</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">País de nacimiento</label>
+                        <select class="form-control select2" name="paisNacimiento" formControlName="paisNacimiento" [(ngModel)]="pariente.paisNacimiento" (change)="obtenerProvinciasNacimiento()">
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{paisesOp.valor}}" *ngFor="let paisesOp of paisesOpciones">
+                            {{paisesOp.nombre}}
+                          </option>
+                </select>
+                        <div *ngIf="submitted && f.paisNacimiento.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.paisNacimiento.errors.required">País de Nacimiento requerido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="username">Lugar de nacimiento</label>
+                    <div class="input-group">
+                        <select class="custom-select" name="provinciaNacimiento" formControlName="provinciaNacimiento" [(ngModel)]="pariente.provinciaNacimiento" (change)="obtenerCiudadNacimiento()">
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{provinciaNacimientoOp.valor}}" *ngFor="let provinciaNacimientoOp of provinciaNacimientoOpciones">
+                            {{provinciaNacimientoOp.nombre}}
+                          </option>
+            </select>
+                        <select class="custom-select" name="ciudadNacimiento" formControlName="ciudadNacimiento" [(ngModel)]="pariente.ciudadNacimiento">
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{ciudadNacimientoOp.valor}}" *ngFor="let ciudadNacimientoOp of ciudadNacimientoOpciones">
+                            {{ciudadNacimientoOp.nombre}}
+                          </option>
+            </select>
+                        <div *ngIf="submitted && f.provinciaNacimiento.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.provinciaNacimiento.errors.required">Provincia de Nacimiento requerida</div>
+                        </div>
+                        <div *ngIf="submitted && f.ciudadNacimiento.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.ciudadNacimiento.errors.required">País de Nacimiento requerido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Estado civil</label>
+                        <select class="form-control" name="estadoCivil" formControlName="estadoCivil" [(ngModel)]="pariente.estadoCivil">
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{estadoCivilOp.valor}}" *ngFor="let estadoCivilOp of estadoCivilOpciones">
+                            {{estadoCivilOp.nombre}}
+                          </option>
+                </select>
+                        <div *ngIf="submitted && f.estadoCivil.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.estadoCivil.errors.required">Estado civil requerido</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">País de residencia</label>
+                        <select class="form-control select2" name="paisResidencia" formControlName="paisResidencia" [(ngModel)]="pariente.paisResidencia" (change)="obtenerProvinciasResidencia()">
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{paisesOp.valor}}" *ngFor="let paisesOp of paisesOpciones">
+                            {{paisesOp.nombre}}
+                          </option>
+                </select>
+                        <div *ngIf="submitted && f.paisResidencia.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.paisResidencia.errors.required">País de residencia requerido</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="username">Lugar de residencia</label>
+                    <div class="input-group">
+                        <select class="custom-select" name="provinciaResidencia" formControlName="provinciaResidencia" [(ngModel)]="pariente.provinciaResidencia" (change)="obtenerCiudadResidencia()">
+                        <option value="" selected>- Seleccionar -</option >
+                        <option value="{{provinciaResidenciaOp.valor}}" *ngFor="let provinciaResidenciaOp of provinciaResidenciaOpciones">
+                            {{provinciaResidenciaOp.nombre}}
+                          </option>
+            </select>
+                        <select class="custom-select" name="ciudadResidencia" formControlName="ciudadResidencia" [(ngModel)]="pariente.ciudadResidencia">
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{ciudadResidenciaOp.valor}}" *ngFor="let ciudadResidenciaOp of ciudadResidenciaOpciones">
+                            {{ciudadResidenciaOp.nombre}}
+                        </option>
+            </select>
+                        <div *ngIf="submitted && f.provinciaResidencia.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.provinciaResidencia.errors.required">Provincia de residencia requerida</div>
+                        </div>
+                        <div *ngIf="submitted && f.ciudadResidencia.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.ciudadResidencia.errors.required">Ciudad de residencia requerida</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mt-2">
+                    <h5 class="text-primary">Información de residencia</h5>
+                    <hr/>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Calle principal</label>
+                        <input type="text" class="form-control" name="callePrincipal" formControlName="callePrincipal" [(ngModel)]="pariente.callePrincipal">
+                        <div *ngIf="submitted && f.callePrincipal.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.callePrincipal.errors.required">Calle principal requerida</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Número</label>
+                        <input type="text" class="form-control" name="numero" formControlName="numero" [(ngModel)]="pariente.numero">
+                        <div *ngIf="submitted && f.numero.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.numero.errors.required">Número requerido</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Calle secundaria</label>
+                        <input type="text" class="form-control" name="calleSecundaria" formControlName="calleSecundaria" [(ngModel)]="pariente.calleSecundaria">
+                        <div *ngIf="submitted && f.calleSecundaria.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.calleSecundaria.errors.required">Calle secundaria requerida</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Edificio</label>
+                        <input type="text" class="form-control" name="edificio" formControlName="edificio" [(ngModel)]="pariente.edificio">
+                        <div *ngIf="submitted && f.edificio.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.edificio.errors.required">Edificio requerido</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Piso</label>
+                        <input type="text" class="form-control" name="piso" formControlName="piso" [(ngModel)]="pariente.piso">
+                        <div *ngIf="submitted && f.piso.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.piso.errors.required">Piso requerido</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Edificio / Departamento</label>
+                        <input type="text" class="form-control" name="departamento" formControlName="departamento" [(ngModel)]="pariente.departamento">
+                        <div *ngIf="submitted && f.departamento.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.departamento.errors.required">Departamento requerido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mt-2">
+                    <h5 class="text-primary">Información de contacto</h5>
+                    <hr/>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Teléfono domicilio</label>
+                        <input type="text" class="form-control" name="telefonoDomicilio" formControlName="telefonoDomicilio" [(ngModel)]="pariente.telefonoDomicilio">
+                        <div *ngIf="submitted && f.telefonoDomicilio.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.telefonoDomicilio.errors.required">Teléfono domicilioo requerido</div>
+                            <div *ngIf="f.telefonoDomicilio.errors.pattern">Solo se aceptan números
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Teléfono oficina</label>
+                        <input type="text" class="form-control" name="telefonoOficina" formControlName="telefonoOficina" [(ngModel)]="pariente.telefonoOficina">
+                        <div *ngIf="submitted && f.telefonoOficina.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.telefonoOficina.errors.required">Teléfono oficina requerido</div>
+                            <div *ngIf="f.telefonoOficina.errors.pattern">Solo se aceptan números
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Celular personal</label>
+                        <input type="text" class="form-control" name="celularPersonal" formControlName="celularPersonal" [(ngModel)]="pariente.celularPersonal">
+                        <div *ngIf="submitted && f.celularPersonal.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.celularPersonal.errors.required">Celular personal requerido</div>
+                            <div *ngIf="f.celularPersonal.errors.pattern">Solo se aceptan números
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Celular oficina</label>
+                        <input type="text" class="form-control" name="celularOficina" formControlName="celularOficina" [(ngModel)]="pariente.celularOficina">
+                        <div *ngIf="submitted && f.celularOficina.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.celularOficina.errors.required">Celular oficina requerido</div>
+                            <div *ngIf="f.celularOficina.errors.pattern">Solo se aceptan números
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">WhatsApp personal</label>
+                        <input type="text" class="form-control" name="whatsappPersonal" formControlName="whatsappPersonal" [(ngModel)]="pariente.whatsappPersonal">
+                        <div *ngIf="submitted && f.whatsappPersonal.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.whatsappPersonal.errors.required">WhatsApp personal requerido</div>
+                            <div *ngIf="f.whatsappPersonal.errors.pattern">Solo se aceptan números
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">WhatsApp secundario </label>
+                        <input type="text" class="form-control" name="whatsappSecundario" formControlName="whatsappSecundario" [(ngModel)]="pariente.whatsappSecundario">
+                        <div *ngIf="submitted && f.whatsappSecundario.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.whatsappSecundario.errors.required">WhatsApp secundario requerido</div>
+                            <div *ngIf="f.whatsappSecundario.errors.pattern">Solo se aceptan números
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Correo personal</label>
+                        <input type="text" class="form-control" name="correoPersonal" formControlName="correoPersonal" [(ngModel)]="pariente.correoPersonal">
+                        <div *ngIf="submitted && f.correoPersonal.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.correoPersonal.errors.required">Correo personal requerido</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Correo trabajo</label>
+                        <input type="text" class="form-control" name="correoTrabajo" formControlName="correoTrabajo" [(ngModel)]="pariente.correoTrabajo">
+                        <div *ngIf="submitted && f.correoTrabajo.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.correoTrabajo.errors.required">Correo trabajo requerido</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Dirección google plus</label>
+                        <input type="text" class="form-control" name="googlePlus" formControlName="googlePlus" [(ngModel)]="pariente.googlePlus">
+                        <div *ngIf="submitted && f.googlePlus.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.googlePlus.errors.required">Google Plus requerido</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Twitter</label>
+                        <input type="text" class="form-control" name="twitter" formControlName="twitter" [(ngModel)]="pariente.twitter">
+                        <div *ngIf="submitted && f.twitter.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.twitter.errors.required">Twitter requerido</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Facebook</label>
+                        <input type="text" class="form-control" name="facebook" formControlName="facebook" [(ngModel)]="pariente.facebook">
+                        <div *ngIf="submitted && f.facebook.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.facebook.errors.required">Facebook requerido</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Instagram</label>
+                        <input type="text" class="form-control" name="instagram" formControlName="instagram" [(ngModel)]="pariente.instagram">
+                        <div *ngIf="submitted && f.instagram.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.instagram.errors.required">Instagram requerido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mt-2">
+                    <h5 class="text-primary">Información académica y profesional</h5>
+                    <hr/>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Nivel de estudios</label>
+                        <select class="form-control" name="nivelEstudios" formControlName="nivelEstudios" [(ngModel)]="pariente.nivelEstudios">
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{nivelEstudiosOp.valor}}" *ngFor="let nivelEstudiosOp of nivelEstudiosOpciones">
+                            {{nivelEstudiosOp.nombre}}
+                        </option>
+                </select>
+                        <div *ngIf="submitted && f.nivelEstudios.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.nivelEstudios.errors.required">Nivel de estudios requerido</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Profesión</label>
+                        <select class="form-control select2" name="profesion" formControlName="profesion" [(ngModel)]="pariente.profesion">
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{profesionOp.valor}}" *ngFor="let profesionOp of profesionOpciones">
+                            {{profesionOp.nombre}}
+                        </option>
+                </select>
+                        <div *ngIf="submitted && f.profesion.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.profesion.errors.required">Profesión requerido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Lugar de trabajo</label>
+                        <input type="text" class="form-control" name="lugarTrabajo" formControlName="lugarTrabajo" [(ngModel)]="pariente.lugarTrabajo">
+                        <div *ngIf="submitted && f.lugarTrabajo.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.lugarTrabajo.errors.required">Lugar de trabajo requerido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">País de trabajo</label>
+                        <select class="form-control select2" name="paisTrabajo" formControlName="paisTrabajo" [(ngModel)]="pariente.paisTrabajo" (change)="obtenerProvinciasTrabajo()">
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{paisesOp.valor}}" *ngFor="let paisesOp of paisesOpciones">
+                            {{paisesOp.nombre}}
+                          </option>
+                </select>
+                        <div *ngIf="submitted && f.paisTrabajo.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.paisTrabajo.errors.required">País de trabajo requerido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="username">Ubicación lugar de trabajo</label>
+                    <div class="input-group">
+                        <select class="custom-select" name="provinciaTrabajo" formControlName="provinciaTrabajo" [(ngModel)]="pariente.provinciaTrabajo" (change)="obtenerCiudadTrabajo()">
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{provinciaTrabajoOp.valor}}" *ngFor="let provinciaTrabajoOp of provinciaTrabajoOpciones">
+                            {{provinciaTrabajoOp.nombre}}
+                          </option>
+            </select>
+                        <select class="custom-select" name="ciudadTrabajo" formControlName="ciudadTrabajo" [(ngModel)]="pariente.ciudadTrabajo">
+                        <option value="" selected>- Seleccionar -</option>
+                        <option value="{{ciudadTrabajoOp.valor}}" *ngFor="let ciudadTrabajoOp of ciudadTrabajoOpciones">
+                            {{ciudadTrabajoOp.nombre}}
+                          </option>
+            </select>
+                        <div *ngIf="submitted && f.provinciaTrabajo.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.provinciaTrabajo.errors.required">Provincia de trabajo requerida</div>
+                        </div>
+                        <div *ngIf="submitted && f.ciudadTrabajo.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.ciudadTrabajo.errors.required">Ciudad de trabajo requerida</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Antiguedad último trabajo <small>(meses)</small></label>
+                        <input type="text" class="form-control" name="mesesUltimoTrabajo" formControlName="mesesUltimoTrabajo" [(ngModel)]="pariente.mesesUltimoTrabajo">
+                        <div *ngIf="submitted && f.mesesUltimoTrabajo.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.mesesUltimoTrabajo.errors.required">Antigüedad en último trabajo requerida</div>
+                            <div *ngIf="f.mesesUltimoTrabajo.errors.pattern">Solo se aceptan números
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Meses total de trabajo</label>
+                        <input type="text" class="form-control" name="mesesTotalTrabajo" formControlName="mesesTotalTrabajo" [(ngModel)]="pariente.mesesTotalTrabajo">
+                        <div *ngIf="submitted && f.mesesTotalTrabajo.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.mesesTotalTrabajo.errors.required">Meses totales de trabajo requeridos</div>
+                            <div *ngIf="f.mesesTotalTrabajo.errors.pattern">Solo se aceptan números
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Ingresos promedio <small>mensual</small></label>
+                        <input type="text" class="form-control" name="ingresosPromedioMensual" formControlName="ingresosPromedioMensual" [(ngModel)]="pariente.ingresosPromedioMensual">
+                        <div *ngIf="submitted && f.ingresosPromedioMensual.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.ingresosPromedioMensual.errors.required">Promedio ingresos mensuales requerido</div>
+                            <div *ngIf="f.ingresosPromedioMensual.errors.pattern">Solo se aceptan números decimales
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Gastos promedio <small>mensual</small></label>
+                        <input type="text" class="form-control" name="gastosPromedioMensual" formControlName="gastosPromedioMensual" [(ngModel)]="pariente.gastosPromedioMensual">
+                        <div *ngIf="submitted && f.gastosPromedioMensual.errors" class="invalid-feedback" style="display: block;">
+                            <div *ngIf="f.gastosPromedioMensual.errors.required">Gastos mensuales requeridos</div>
+                            <div *ngIf="f.gastosPromedioMensual.errors.pattern">Solo se aceptan números decimales
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="username">Estado del cliente</label>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="estadoPariente" [(ngModel)]="estadoOpcion" (change)="cambiarEstado()" [ngModelOptions]="{standalone: true}">
+                            <label class="custom-control-label" for="estadoPariente"><b><span class="yellow">Activo</span> / <span class="grain">Inactivo</span></b></label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+
+                <button class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-float waves-light" (click)="guardarPariente()">
+                  <span>Guardar</span>
+              </button>
+                <button type="button" class="btn btn-outline-info mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-float waves-light" (click)="regresar()">Volver</button>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #mensajeModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Mensaje</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss( 'Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div [innerHTML]="mensaje"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="cerrarModal()">Cerrar</button>
+    </div>
+</ng-template>

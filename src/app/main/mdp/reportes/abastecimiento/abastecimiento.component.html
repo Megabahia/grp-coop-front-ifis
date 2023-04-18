@@ -1,0 +1,98 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <!-- users list start -->
+        <section class="app-user-list">
+            <!-- users filter start -->
+            <div class="card">
+                <h5 class="card-header">Filtros de búsqueda</h5>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input class="form-control invoice-edit-input date-picker" placeholder="Fecha de inicio" mwlFlatpickr type="text" [(ngModel)]="inicio">
+                        </div>
+                        <div class="col-md-2">
+                            <input class="form-control invoice-edit-input date-picker" placeholder="Fecha de fin" mwlFlatpickr type="text" [(ngModel)]="fin">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control form-control-sm" placeholder="Categoría" [(ngModel)]="categoria">
+                        </div>
+
+                        <div class="col-md-3">
+                            <input type="text" class="form-control form-control-sm" placeholder="Subcategoría" [(ngModel)]="subcategoria">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary" (click)="obtenerListaProductos()"><i data-feather='search'></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-datatable table-responsive pt-0">
+                    <div class="row m-75">
+                        <div class="col-lg-12 col-xl-6">
+                            <label>Mostrar</label>
+                            <select class="form-control-sm">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+
+                        </div>
+                        <div class="col-lg-12 col-xl-6 text-right">
+                            <button class="btn btn-success" type="button" (click)="exportarExcel()">
+                    Exportar a excel
+                </button>
+                        </div>
+                    </div>
+                    <table class="user-list-table table table-striped">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                        <label class="custom-control-label" for="customCheck2"></label>
+                                    </div>
+                                </th>
+                                <th>Código de barra</th>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Subcategoría</th>
+                                <th>Stock actual</th>
+                                <th>Avisos</th>
+                                <th>Cantidad sugerida de stock</th>
+                                <th>Fecha máxima de stock</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let producto of listaProductos">
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                        <label class="custom-control-label" for="customCheck2"></label>
+                                    </div>
+                                </td>
+                                <td>{{producto.codigoBarras}}</td>
+                                <td>{{producto.nombre}}</td>
+                                <td>{{producto.categoria}}</td>
+                                <td>{{producto.subCategoria}}</td>
+                                <td>{{producto.stock}}</td>
+                                <td><small>{{producto.alertaAbastecimiento}}</small>
+                                </td>
+                                <td>{{producto.cantidadSugeridaStock}}</td>
+                                <td>{{transformarFecha(producto.fechaMaximaStock)}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ngb-pagination #paginator [collectionSize]="collectionSize " [(page)]="page " [(pageSize)]="pageSize " [maxSize]="5 " [ellipses]="false " [boundaryLinks]="true "></ngb-pagination>
+
+            </div>
+        </section>
+        <!-- users list ends -->
+    </div>
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>

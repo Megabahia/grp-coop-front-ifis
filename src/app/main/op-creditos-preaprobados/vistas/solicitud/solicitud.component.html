@@ -1,0 +1,196 @@
+<div class="content-wrapper">
+    <div class="content-header row">
+        <div class="col-12 mb-2">
+            <div class="row breadcrumbs-top">
+                <div class="col-12">
+                    <h2 class="content-header-title float-left mb-0">Solicitud de créditos preaprobados</h2>
+                    <div class="breadcrumb-wrapper">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-primary" href="index.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-primary" href="mis-premios.html">Solicitud de
+                                    créditos preaprobados</a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content-body">
+        <!-- users list start -->
+        <section class="app-user-list">
+            <div class="card card-company-table">
+                <div class="row m-75">
+                    <div class="col-lg-12 col-xl-6">
+                        <label>Mostrar</label>
+                        <select class="form-control-sm" [(ngModel)]="page_size" (change)="obtenerListaSolicitudes()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+
+                    </div>
+                    <!--div class="col-lg-12 col-xl-6 text-right">
+                     <button class="btn btn-primary waves-effect waves-float waves-light" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-toggle="modal" data-target="#add-solicitud">
+                     Crear nuevo
+                   </button>
+                 </div-->
+                </div>
+                <div class="card-datatable table-responsive pt-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Fecha de solicitud de crédito</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Cédula</th>
+                                <th>Celular</th>
+                                <th>Detalle del crédito</th>
+                                <th>Casa comercial</th>
+                                <th>Logo casa comercial</th>
+                                <th>Concepto</th>
+                                <th>Nota de pedido</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let credito of listaCreditos">
+                                <td>{{credito.fechaAprobado}}</td>
+                                <td>{{credito.nombres}}</td>
+                                <td>{{credito.apellidos}}</td>
+                                <td>{{credito.identificacion}}</td>
+                                <td>{{credito.telefono}}</td>
+                                <td><a href="javascript:void(0)" class="text-info font-weight-bold" data-toggle="modal"
+                                        data-target="#detalle"
+                                        (click)="obtenerDetalles(credito._id)">{{credito._id}}</a></td>
+                                <td>{{credito.empresa_comercial}}</td>
+                                <td><img src="{{credito.imagen}}" width="100"></td>
+                                <td>{{credito.concepto}}</td>
+                                <td>2234</td>
+                                <td>
+                                    <div class="badge badge-light-success">{{credito.estado}}</div>
+                                </td>
+                                <td class="d-flex">
+                                    <a href="javascript:void(0)" class="avatar bg-info mr-1" data-target="#gestionar"
+                                        data-toggle="modal" (click)="toggleSidebar('actualizar-credito',credito._id)">
+                                        <div class="avatar-content" data-toggle="tooltip" data-placement="bottom"
+                                            title="" data-original-title="Aprobar/Rechazar">
+                                            <i data-feather='check-circle'></i>
+                                        </div>
+                                    </a>
+
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <ngb-pagination #paginator [collectionSize]="collectionSize" [(page)]="page" [(pageSize)]="page_size"
+                    [maxSize]="5" [ellipses]="false" [boundaryLinks]="true"></ngb-pagination>
+            </div>
+            <!-- list section end -->
+        </section>
+        <!-- users list ends -->
+    </div>
+</div>
+<core-sidebar class="modal modal-slide-in sidebar-todo-modal fade" name="actualizar-credito"
+    overlayClass="modal-backdrop">
+    <div class="slideout-content">
+        <!-- Modal to add new user starts-->
+        <div class="modalsd modal-slide-in sdfade new-user-modal" id="modals-slide-in">
+            <div class="modal-dialog">
+                <form class="add-new-user modal-content pt-0" [formGroup]="actualizarCreditoForm">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        (click)="toggleSidebar('actualizar-credito','')">
+                        ×
+                    </button>
+                    <div class="modal-header mb-1">
+                        <h5 class="modal-title" id="exampleModalLabel">Gestión de solicitud de crédito</h5>
+                    </div>
+                    <div class="modal-body flex-grow-1">
+                        <div class="form-group">
+                            <label>¿Desea tomar la solicitud de cliente?</label>
+                            <select class="form-control select2" name="tomarSolicitud" formControlName="tomarSolicitud"
+                                [(ngModel)]="actualizarCredito.tomarSolicitud">
+                                <option value="">- Seleccione -</option>
+                                <option>Si</option>
+                                <option>No</option>
+                            </select>
+                            <div *ngIf="submitted && tForm.tomarSolicitud.errors" class="invalid-feedback"
+                                style="display: block;">
+                                <div *ngIf="tForm.tomarSolicitud.errors.required">Requerido
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Estado de la solicitud</label>
+                            <select class="form-control select2" name="estado" formControlName="estado"
+                                [(ngModel)]="actualizarCredito.estado">
+                                <option value="">- Seleccione -</option>
+                                <option>Aprobado</option>
+                                <option>Preaprobado</option>
+                                <option>Rechazado</option>
+                            </select>
+                            <div *ngIf="submitted && tForm.estado.errors" class="invalid-feedback"
+                                style="display: block;">
+                                <div *ngIf="tForm.estado.errors.required">Requerido
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Observaciones:</label>
+                            <textarea class="form-control" rows="4" name="concepto" formControlName="concepto"
+                                placeholder="Detallar productos..." [(ngModel)]="actualizarCredito.concepto"></textarea>
+                            <div *ngIf="submitted && tForm.concepto.errors" class="invalid-feedback"
+                                style="display: block;">
+                                <div *ngIf="tForm.concepto.errors.required">Requerido
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary mr-1" (click)="actualizarSolicitudCredito()">Guardar</button>
+                        <button class="btn btn-outline-secondary" (click)="cerrarModal()"
+                            data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Modal to add new user Ends-->
+    </div>
+
+</core-sidebar>
+<ng-template #mensajeModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Mensaje</h5>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div [innerHTML]="mensaje"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="cerrarModal()">Cerrar</button>
+    </div>
+</ng-template>
+<ng-template #detalleCreditoMdl let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Detalle del crédito</h5>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div [innerHTML]="mensaje"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="cerrarModal()">Cerrar</button>
+    </div>
+</ng-template>

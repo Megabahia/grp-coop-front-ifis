@@ -1,0 +1,59 @@
+@import '@core/scss/base/pages/app-ecommerce-details.scss';
+@import '@core/scss/angular/libs/swiper.component.scss';
+@import '@core/scss/angular/libs/ratings.component.scss';
+.super-moneda-icon {
+    background: url(../../../../../assets/images/moneda.svg) no-repeat;
+    background-size: contain;
+}
+
+.iso-moneda {
+    background: url(../../../../../assets/images/moneda.svg) no-repeat;
+    background-size: contain;
+    height: 25px;
+    width: 25px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.sm-size-icon {
+    height: 30px;
+    width: 30px;
+}
+
+.card-congratulations {
+    background: linear-gradient( 118deg, #385e8c, rgba(115, 103, 240, 0.7));
+    color: #fff;
+}
+
+.text-primary {
+    color: #385e8c !important;
+}
+
+.btn-primary {
+    color: #385e8c !important;
+}
+
+.btn-primary:hover {
+    background-color: #385e8c !important;
+    box-shadow: 0 8px 25px -8px white !important;
+    color: white !important;
+    border-color: #385e8c !important;
+}
+.btn{
+    margin: 3px
+}
+.btn-info:hover:not(.disabled):not(:disabled) {
+    box-shadow: 0 8px 25px -8px #3c55f2;
+}
+
+.btn-info {
+    border-color: #3C55F2 !important;
+    background-color: #3C55F2 !important;
+    color: #fff !important;
+}
+
+.btn-info:focus, .btn-info:active, .btn-info.active {
+    color: #3C55F2 !important;
+    background-color: #fff !important;
+    border-color: #3C55F2;
+}

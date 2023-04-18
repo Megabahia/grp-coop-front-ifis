@@ -1,0 +1,54 @@
+@import '@core/scss/base/pages/page-profile.scss';
+#user-profile .profile-header .profile-img-container {
+    position: absolute;
+    bottom: 13px;
+    left: 2.14rem;
+    z-index: 2;
+    text-align: center;
+}
+
+.btn-info {
+    border-color: #3C55F2 !important;
+    background-color: #3C55F2 !important;
+    color: #fff !important;
+}
+
+.text-primary {
+    color: #385e8c !important;
+}
+
+.btn-primary {
+    color: #385e8c !important;
+}
+
+.btn-primary:hover {
+    background-color: #385e8c !important;
+    box-shadow: 0 8px 25px -8px white !important;
+    color: white !important;
+    border-color: #385e8c !important;
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: 100%;
+}
+
+.nav-pills .nav-link {
+    padding: 0.786rem 1rem;
+    font-size: 12px;
+    line-height: 1rem;
+    border: 1px solid transparent;
+    color: #5e5873;
+    letter-spacing: -0.1px;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #385e8c;
+}
+
+.nav-pills .nav-link.active {
+    border-color: #385e8c;
+    box-shadow: 0 4px 18px -4px rgb(115 103 240 / 65%);
+}

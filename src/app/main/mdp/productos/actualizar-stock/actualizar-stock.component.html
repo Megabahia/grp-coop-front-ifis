@@ -1,0 +1,31 @@
+<div class="content-wrapper">
+    <div class="content-header row">
+    </div>
+    <div class="content-body">
+        <!-- users list start -->
+        <section class="app-user-list">
+            <div class="card">
+                <h5 class="card-header justify-content-center">Cargar de productos desde un archivo XLSX</h5>
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="inputGroupFile02" (change)="cargarArchivo($event)">
+                                    <label class="custom-file-label" for="inputGroupFile02">Seleccionar archivo XLSX</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><a (click)="cargarStock()">Cargar</a></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- users list ends -->
+    </div>
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>

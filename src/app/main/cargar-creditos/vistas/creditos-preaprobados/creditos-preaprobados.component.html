@@ -1,0 +1,298 @@
+<div class="content-wrapper">
+    <div class="content-header row">
+        <div class="col-12 mb-2">
+            <div class="row breadcrumbs-top">
+                <div class="col-12">
+                    <h2 class="content-header-title float-left mb-0">Cargar créditos pre aprobados</h2>
+                    <div class="breadcrumb-wrapper">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-primary" href="index.html">Inicio</a>
+                            </li>
+                            <li class="breadcrumb-item"><a class="text-primary" href="mis-premios.html">Cargar créditos
+                                    pre aprobados</a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-body">
+        <!-- users list start -->
+        <section class="app-user-list">
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row justify-content-center p-2">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="inputGroupFile02"
+                                        (change)="cargarCreditos($event)">
+                                    <label class="custom-file-label" for="inputGroupFile02">{{nombreArchivo}}</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text font-weight-bold btn-primary" data-toggle="modal"
+                                        data-target="#cargado"><a class="text-primary" href="javascript:void(0)"
+                                            (click)="cargar()">Cargar</a></span>
+                                </div>
+                                <div *ngIf="submitted && !archivo" class="invalid-feedback" style="display: block;">
+                                    <div *ngIf="!archivo">Requerido
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-company-table">
+                <div class="row mx-1">
+                    <div class="col-md-12"><h5 class="mt-2 mb-1">Filtros de búsqueda</h5></div>
+                </div>
+                <div class="row mx-1">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <input type="text" mwlFlatpickr [(ngModel)]="inicio"
+                                   class="form-control form-control-sm flatpickr-basic flatpickr-input"
+                                   placeholder="- Fecha de inicio -">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <input type="text" mwlFlatpickr [(ngModel)]="fin"
+                                   class="form-control form-control-sm flatpickr-basic flatpickr-input"
+                                   placeholder="- Fecha fin -">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <button class="btn btn-primary" (click)="obtenerListaArchivosPreAprobados()">
+                                <i data-feather='search' class="edit-user"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row m-75">
+                    <div class="col-lg-12 col-xl-6">
+                        <label>Mostrar</label>
+                        <select class="form-control-sm">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+
+                    </div>
+                </div>
+                <div class="card-datatable table-responsive pt-0">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck2">
+                                    <label class="custom-control-label" for="customCheck2"></label>
+                                </div>
+                            </th>
+                            <th>Fecha de carga de archivo</th>
+                            <th># registros cargados</th>
+                            <th>Link de archivo</th>
+                            <th>Nombre de archivo</th>
+                            <th>Tamaño de archivo</th>
+                            <th>Usuario que cargó el archivo</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr *ngFor="let archivo of listaArchivosPreAprobados">
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck2">
+                                    <label class="custom-control-label" for="customCheck2"></label>
+                                </div>
+                            </th>
+                            <td>{{archivo.fechaCargaArchivo}}</td>
+                            <td>{{archivo.registrosCargados}}</td>
+                            <td><a [href]="archivo.linkArchivo">Link</a></td>
+                            <td>{{archivo.linkArchivo.split('/')[5]}}</td>
+                            <td>{{archivo.tamanioArchivo}}MB</td>
+                            <td>{{archivo.usuarioCargo}}</td>
+                            <td>{{archivo.estado}}</td>
+                            <td class="d-flex">
+                                <a href="javascript:void(0);" class="avatar bg-danger mr-1" data-target="#eliminar" data-toggle="modal"
+                                   (click)="eliminarArchivoPreAprobado(archivo.id)"
+                                   *ngIf="archivo.estado != 'Cargado'"
+                                >
+                                    <div class="avatar-content">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="feather feather-trash">
+                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </div>
+                                </a>
+                                <a href="javascript:void(0);" class="avatar bg-info mr-1" data-target="#gestionar" data-toggle="modal"
+                                   (click)="subirArchivoPreAprobado(archivo.id)"
+                                   *ngIf="archivo.estado != 'Cargado'"
+                                >
+                                    <div class="avatar-content" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Aprobar/Rechazar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                    </div>
+                                </a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal modal-slide-in new-user-modal fade" id="editar">
+                    <div class="modal-dialog">
+                        <div class="modal-content pt-0">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                            <div class="modal-header mb-1">
+                                <h5 class="modal-title" id="exampleModalLabel">Nueva línea de crédito</h5>
+                            </div>
+                            <div class="modal-body flex-grow-1">
+
+                                <div class="form-group">
+                                    <label>RUC</label>
+                                    <div class="position-relative"><select
+                                            class="form-control select2-size-sm select2-hidden-accessible" disabled=""
+                                            data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                        <option>- RUC -</option>
+                                        <option selected="" data-select2-id="3">18194511278001</option>
+                                        <option>18886411278001</option>
+                                        <option>18994511278001</option>
+                                        <option>17120511278001</option>
+                                        <option>17194222278001</option>
+                                        <option>17194511278001</option>
+                                    </select><span
+                                            class="select2 select2-container select2-container--default select2-container--disabled"
+                                            dir="ltr" data-select2-id="2" style="width: 100%;"><span
+                                            class="selection"><span
+                                            class="select2-selection select2-selection--single select-sm"
+                                            role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"
+                                            aria-disabled="true" aria-labelledby="select2-mawm-container"><span
+                                            class="select2-selection__rendered" id="select2-mawm-container"
+                                            role="textbox" aria-readonly="true"
+                                            title="18194511278001">18194511278001</span><span
+                                            class="select2-selection__arrow" role="presentation"><b
+                                            role="presentation"></b></span></span></span><span class="dropdown-wrapper"
+                                                                                               aria-hidden="true"></span></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nombre de la PYME</label>
+                                    <div class="position-relative"><select
+                                            class="form-control select2-size-sm select2-hidden-accessible" disabled=""
+                                            data-select2-id="4" tabindex="-1" aria-hidden="true">
+                                        <option>- Seleccionar -</option>
+                                        <option selected="" data-select2-id="6">Distribuidora NT</option>
+                                        <option>THINK</option>
+                                        <option>Ferrisariato</option>
+                                        <option>KFC</option>
+                                        <option>Pollo Campero</option>
+                                    </select><span
+                                            class="select2 select2-container select2-container--default select2-container--disabled"
+                                            dir="ltr" data-select2-id="5" style="width: 100%;"><span
+                                            class="selection"><span
+                                            class="select2-selection select2-selection--single select-sm"
+                                            role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"
+                                            aria-disabled="true" aria-labelledby="select2-0no5-container"><span
+                                            class="select2-selection__rendered" id="select2-0no5-container"
+                                            role="textbox" aria-readonly="true" title="Distribuidora NT">Distribuidora NT</span><span
+                                            class="select2-selection__arrow" role="presentation"><b
+                                            role="presentation"></b></span></span></span><span class="dropdown-wrapper"
+                                                                                               aria-hidden="true"></span></span>
+                                    </div>
+                                </div>
+                                <div class="card border border-info">
+                                    <h5 class="card-header text-primary">
+                                        Crédito para pago a proveedores
+                                    </h5>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label>Monto de crédito</label>
+                                            <input class="form-control" type="text">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Plazo (meses)</label>
+                                            <input class="form-control" type="number">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tasa de interés</label>
+                                            <input class="form-control" type="text">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Observaciones</label>
+                                            <textarea class="form-control" rows="3"
+                                                      placeholder="Escribir..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card border border-primary">
+                                    <h5 class="card-header text-primary">
+                                        Crédito para pago de nómina
+                                    </h5>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label>Monto de crédito</label>
+                                            <input class="form-control" type="text">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Plazo (meses)</label>
+                                            <input class="form-control" type="number">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tasa de interés</label>
+                                            <input class="form-control" type="text">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Observaciones</label>
+                                            <textarea class="form-control" rows="3"
+                                                      placeholder="Escribir..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary mr-1 waves-effect waves-float waves-light"
+                                        data-toggle="modal" data-target="#exito" data-dismiss="modal"
+                                        aria-label="Close">Guardar
+                                </button>
+                                <button type="reset" class="btn btn-outline-secondary waves-effect"
+                                        data-dismiss="modal">Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- list section end -->
+        </section>
+        <!-- users list ends -->
+    </div>
+
+</div>
+
+<ng-template #mensajeModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Mensaje</h5>
+        <button type="button" class="close" (click)="modal.dismiss('Cross click')" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body" tabindex="0" ngbAutofocus>
+        <div [innerHTML]="mensaje"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="cerrarModal()">Cerrar</button>
+    </div>
+</ng-template>

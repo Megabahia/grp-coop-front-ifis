@@ -1,0 +1,341 @@
+<div class="content-wrapper">
+
+    <div class="content-body">
+        <div id="user-profile">
+            <!-- profile header -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card profile-header mb-2">
+                        <!-- profile cover photo -->
+                        <img class="card-img-top" src="assets/images/default-head-profile.jpg" alt="User Profile Image" />
+                        <!--/ profile cover photo -->
+
+                        <div class="position-relative">
+                            <!-- profile picture -->
+                            <div class="profile-img-container d-flex align-items-center">
+                                <div class="profile-img">
+                                    <img src="{{imagenTemp ? imagenTemp: imagen ? imagen: '/assets/images/avatars/avatar.png' }}" class="rounded img-fluid" alt="Card image" />
+                                </div>
+                                <!-- profile title -->
+                                <div class="profile-title ml-3">
+                                    <h2>{{usuario.persona.nombres}} {{usuario.persona.apellidos}}</h2>
+                                    <div class="col-12 d-flex px-0">
+                                        <label class="btn btn-primary btn-sm mr-75 waves-effect waves-float waves-light" for="change-picture">
+                                            <span class="d-none d-sm-block">Cambiar foto</span>
+                                            <input class="form-control" type="file" id="change-picture" hidden="" (change)="subirImagen($event)"
+                                                accept="image/png, image/jpeg, image/jpg">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- tabs pill -->
+                        <div class="profile-header-nav">
+                            <!-- navbar -->
+                            <nav class="navbar navbar-expand-md navbar-light justify-content-end justify-content-md-between w-100">
+                                <button class="btn btn-icon navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                    <i data-feather="align-justify" class="font-medium-5"></i>
+                                </button>
+
+                                <!-- collapse  -->
+                                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                    <div class="d-flex justify-content-between flex-wrap mt-1 mt-md-0">
+                                        <ul ngbNav #nav="ngbNav" [(activeId)]="tab" class="nav nav-pills mb-0">
+                                            <li class="nav-item" [ngbNavItem]="1">
+                                                <a ngbNavLink class="d-flex align-items-center nav-link font-weight-bold"><span class="d-none d-sm-block">Información básica</span></a
+                                                    >
+                                            </li>
+                                            <li class="nav-item" [ngbNavItem]="2">
+                                                <a ngbNavLink class="d-flex align-items-center nav-link font-weight-bold"><span class="d-none d-sm-block">Datos de trabajo</span></a
+                                                    >
+                                            </li>
+                                            <li class="nav-item" [ngbNavItem]="3">
+                                                <a ngbNavLink class="d-flex align-items-center nav-link font-weight-bold"><span class="d-none d-sm-block">Historial laboral</span></a
+                                                    >
+                                            </li>
+                                        </ul>
+                                                                    </div>
+                                </div>
+                                <!--/ collapse  -->
+                            </nav>
+                            <!--/ navbar -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/ profile header -->
+
+            <!-- profile info section -->
+            <section>
+                <div class="tab-content">
+
+
+                    <div class="tab-pane {{tab == 1 ? 'active':''}}" aria-labelledby="account-tab" role="tabpanel">
+                        <div class="card">
+                            <div class="card-body">
+                                <form class="auth-login-form mt-2" [formGroup]="personaForm" (ngSubmit)="guardarInformacion()">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Fecha de creación</label>
+                                                <input type="text" formControlName="created_at" class="form-control" placeholder="escojer"  disabled />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Número de cédula</label>
+                                                <input type="text" formControlName="identificacion" class="form-control" value="1817284467" disabled>
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Nombres</label>
+                                                <input type="text" formControlName="nombres" class="form-control" value="Edgar" disabled>
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Apellidos</label>
+                                                <input type="text"  formControlName="apellidos" class="form-control" value="Flores" disabled>
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Género</label>
+                                                <select formControlName="genero" class="form-control" id="status">
+                                                    <option>- Seleccionar - </option>
+                                                    <option>Hombre</option>
+                                                    <option>Mujer</option>
+                                                    <option>No especificado</option>
+                                                </select>
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Fecha de nacimiento</label>
+                                                <ng2-flatpickr [setDate]="fecha" formControlName="fechaNacimiento" [config]="startDateOptions" (input)="calcularEdad()"></ng2-flatpickr>
+
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Edad</label>
+                                                <input formControlName="edad" type="text" class="form-control" value="30" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Ciudad</label>
+                                                <input formControlName="ciudad" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Correo</label>
+                                                <input formControlName="email" type="text" class="form-control" value="jasgg@gmail.com" value="30" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Correo adicional</label>
+                                                <input formControlName="emailAdicional" type="text" class="form-control" placeholder="micorreo@dominio.com">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Número Whats App</label>
+                                                <input formControlName="whatsapp" type="text" class="form-control" value="0992354776">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Perfil de facebook</label>
+                                                <input formControlName="facebook" type="text" class="form-control">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Perfil de instagram</label>
+                                                <input formControlName="instagram" type="text" class="form-control">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Perfil de twitter</label>
+                                                <input formControlName="twitter" type="text" class="form-control">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Perfil de TikTok</label>
+                                                <input formControlName="tiktok" type="text" class="form-control">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="username">Perfil de youtube</label>
+                                                <input formControlName="youtube" type="text" class="form-control">
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-12 d-flex flex-sm-row flex-column mt-2">
+                                            <a (click)="guardarInformacion()" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-float waves-light">Guardar
+                                                cambios</a>
+                                    </div>
+                                </div>
+                                </form>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane {{tab == 2 ? 'active':''}}" aria-labelledby="account-tab" role="tabpane2">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="username">Fecha de inicio</label>
+                                        <input type="text" class="form-control" placeholder="escojer" value="21-04-2021" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="username">Empresa</label>
+                                        <input type="text" class="form-control" value="Movistar" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="username">Tiempo de trabajo (meses)</label>
+                                        <input type="text" class="form-control" value="12" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="username">Cargo actual</label>
+                                        <input type="text" class="form-control" value="Diseñador gráfico">
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-12 d-flex flex-sm-row flex-column mt-2">
+                                    <a href="index.html" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-float waves-light">Guardar
+                                            cambios</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="tab-pane {{tab == 3 ? 'active':''}}" aria-labelledby="account-tab" role="tabpanel">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="mb-3">Historial laboral</h3>
+                            <ul class="timeline">
+                                <li class="timeline-item">
+                                    <span class="timeline-point timeline-point-info">
+                                            <i data-feather='trello'></i>
+                                        </span>
+                                    <div class="timeline-event">
+                                        <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                                            <h6><b>EMPRESA:</b> Telefónica Movistar</h6>
+                                        </div>
+                                        <p>Te encuentras actualmente trabajando en esta empresa</p>
+                                        <div class="d-flex justify-content-between flex-wrap flex-sm-row flex-column">
+                                            <div class="mt-sm-0 mt-1">
+                                                <p class="text-muted mb-50">Cargo</p>
+                                                <p class="mb-0">Diseñador web</p>
+                                            </div>
+                                            <div class="mt-sm-0 mt-1">
+                                                <p class="text-muted mb-50">Fecha de inicio</p>
+                                                <p class="mb-0">20 Dec 2020</p>
+                                            </div>
+                                            <div class="mt-sm-0 mt-1">
+                                                <p class="text-muted mb-50">Estado</p>
+                                                <p class="mb-0">Actualmente vinculado</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </li>
+                                <li class="timeline-item">
+                                    <span class="timeline-point timeline-point-info">
+                                            <i data-feather='trello'></i>
+                                        </span>
+                                    <div class="timeline-event">
+                                        <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                                            <h6><b>EMPRESA:</b> Centro Comercial El Bosque</h6>
+                                        </div>
+                                        <p>Desvinculado hace 6 meses</p>
+                                        <div class="d-flex justify-content-between flex-wrap flex-sm-row flex-column">
+                                            <div class="mt-sm-0 mt-1">
+                                                <p class="text-muted mb-50">Cargo</p>
+                                                <p class="mb-0">Comunicaciones</p>
+                                            </div>
+                                            <div class="mt-sm-0 mt-1">
+                                                <p class="text-muted mb-50">Fecha de inicio</p>
+                                                <p class="mb-0">15 sept 2019</p>
+                                            </div>
+                                            <div class="mt-sm-0 mt-1">
+                                                <p class="text-muted mb-50">Estado</p>
+                                                <p class="mb-0">Finalizo: 23/09/2020</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </li>
+                                <li class="timeline-item">
+                                    <span class="timeline-point timeline-point-secondary">
+                                            <i data-feather='trello'></i>
+                                        </span>
+                                    <div class="timeline-event">
+                                        <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                                            <h6><b>EMPRESA:</b> CNT</h6>
+                                        </div>
+                                        <p>Desvinculado hace 2 años</p>
+                                        <div class="d-flex justify-content-between flex-wrap flex-sm-row flex-column">
+                                            <div class="mt-sm-0 mt-1">
+                                                <p class="text-muted mb-50">Cargo</p>
+                                                <p class="mb-0">Marketing</p>
+                                            </div>
+                                            <div class="mt-sm-0 mt-1">
+                                                <p class="text-muted mb-50">Fecha de inicio</p>
+                                                <p class="mb-0">12 Ago 2018</p>
+                                            </div>
+                                            <div class="mt-sm-0 mt-1">
+                                                <p class="text-muted mb-50">Estado</p>
+                                                <p class="mb-0"> Terminó: 12/05/2019</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            </section>
+            <!--/ profile info section -->
+        </div>
+    </div>
+</div>

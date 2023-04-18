@@ -1,0 +1,94 @@
+<div class="auth-wrapper auth-v2">
+  <div class="auth-inner row m-0">
+    <!-- Brand logo-->
+    <a class="brand-logo" href="javascript:void(0);">
+      <img src="{{ coreConfig.app.appLogoImage }}" alt="brand-logo" width="200" />
+      <img src="../../../../assets/images/logo/san-jose.png" alt="brand-logo" width="200" />
+    </a>
+    <!-- /Brand logo-->
+    <!-- Left Text-->
+    <div class="d-none d-lg-flex col-lg-8 align-items-center p-5">
+      <div class="d-block">
+        <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+          <img [src]="
+                  coreConfig.layout.skin === 'dark'
+                    ? 'assets/images/pages/login-v2.svg'
+                    : 'assets/images/pages/login-v2.svg'
+                " alt="Super monedas" />
+        </div>
+
+      </div>
+    </div>
+    <!-- /Left Text-->
+    <!-- Login-->
+    <div class="d-flex col-lg-4 align-items-center auth-bg px-2 p-lg-5">
+      <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
+        <h2 class="card-title font-weight-bold mb-1">Bienvenido</h2>
+        <p class="card-text mb-2">Por favor ingresa con tus datos de cuenta</p>
+
+        <ngb-alert [type]="'danger'" [dismissible]="false" *ngIf="error">
+          <div class="alert-body">
+            <p>{{ error }}</p>
+          </div>
+        </ngb-alert>
+
+        <form class="auth-login-form mt-2" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email</label>
+            <input type="text" formControlName="email" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.email.errors }" placeholder="admin@demo.com"
+              aria-describedby="login-email" autofocus="" tabindex="1" />
+            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+              <div *ngIf="f.email.errors.required">Correo es requerido</div>
+              <div *ngIf="f.email.errors.email">Debe ingresar una dirección de correo válida </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="d-flex justify-content-between">
+              <label for="login-password">Contraseña</label><a class="text-primary"
+                routerLink="/grp/recuperarPass"><small>
+                  ¿Olvidaste tu contraseña?</small></a>
+            </div>
+            <div class="input-group input-group-merge form-password-toggle">
+              <input [type]="passwordTextType ? 'text' : 'password'" formControlName="password"
+                class="form-control form-control-merge"
+                [ngClass]="{ 'is-invalid error': submitted && f.password.errors }" placeholder="············"
+                aria-describedby="login-password" tabindex="2" />
+              <div class="input-group-append">
+                <span class="input-group-text cursor-pointer"><i class="feather font-small-4" [ngClass]="{
+                      'icon-eye-off': passwordTextType,
+                      'icon-eye': !passwordTextType
+                    }" (click)="togglePasswordTextType()"></i></span>
+              </div>
+            </div>
+            <div *ngIf="submitted && f.password.errors" class="invalid-feedback"
+              [ngClass]="{ 'd-block': submitted && f.password.errors }">
+              <div *ngIf="f.password.errors.required">Contraseña es requerida</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input" id="remember-me" type="checkbox" tabindex="3" />
+              <label class="custom-control-label" for="remember-me">Recuérdame</label>
+            </div>
+          </div>
+            <div class="form-group">
+                <div class="d-flex justify-content-center">
+                    <ngx-recaptcha2 [(ngModel)]="captcha" [ngModelOptions]="{standalone: true}" [siteKey]=" siteKey"
+                                    (success)="captchaValidado($event) ">
+                    </ngx-recaptcha2>
+
+                </div>
+                <div *ngIf="submitted && !captcha" style="display: block;" class="invalid-feedback">
+                    <div>Captcha requerido</div>
+                </div>
+            </div>
+          <button [disabled]="loading" class="btn btn-primary btn-block" tabindex="4" rippleEffect>
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>Iniciar
+          </button>
+        </form>
+      </div>
+    </div>
+    <!-- /Login-->
+  </div>
+</div>

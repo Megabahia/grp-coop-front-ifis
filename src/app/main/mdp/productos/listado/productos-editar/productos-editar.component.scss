@@ -1,0 +1,26 @@
+.div-imagenes-productos:hover .eliminar-imagen {
+    filter: blur(8px) !important;
+    z-index: 99;
+}
+
+.div-imagenes-productos {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.div-imagenes-productos:hover .fondo-eliminar-imagen {
+    display: inline;
+}
+
+.fondo-eliminar-imagen {
+    display: none;
+    position: absolute;
+    z-index: 99;
+    left: 50%;
+    margin-left: -50px;
+    top: 50%;
+    margin-top: -50px;
+    width: 100px;
+    height: 100px;
+}

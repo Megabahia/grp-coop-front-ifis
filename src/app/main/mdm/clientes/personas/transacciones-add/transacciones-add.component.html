@@ -1,0 +1,414 @@
+<div class="content-header row">
+</div>
+<div class="content-body">
+  <section class="invoice-add-wrapper">
+    <div class="row invoice-add">
+      <!-- Invoice Add Left starts -->
+      <form class="auth-login-form mt-2" [formGroup]="transaccionForm">
+        <div class="col-12">
+          <div class="card invoice-preview-card">
+            <!-- Header starts -->
+            <div class="card-body invoice-padding pb-0">
+              <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
+                <div>
+                  <div class="logo-wrapper">
+                    <h3 class="text-primary invoice-logo">LOGO</h3>
+                  </div>
+                  <p class="card-text mb-25">Oficina 149, conoco pichincha</p>
+                  <p class="card-text mb-25">Quito, Ecuador</p>
+                  <p class="card-text mb-0">(876) 543 2198</p>
+                </div>
+                <div class="invoice-number-date mt-md-0 mt-2">
+                  <div class="d-flex align-items-center justify-content-md-end mb-1">
+                    <h4 class="invoice-title">Factura</h4>
+                    <div class="input-group input-group-merge invoice-edit-input-group">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          <i data-feather="edit" name="hash" class="edit-user"></i>
+                        </div>
+                      </div>
+                      <input type="text" class="form-control invoice-edit-input" [(ngModel)]="ultimaFactura"
+                        [ngModelOptions]="{standalone: true}" disabled />
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center mb-1">
+                    <span class="title">Fecha:</span>
+                    <input class="form-control invoice-edit-input date-picker" name="fecha" formControlName="fecha"
+                      mwlFlatpickr type="text" [(ngModel)]="transaccion.fecha">
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- Header ends -->
+
+            <hr class="invoice-spacing" />
+
+            <!-- Address and Contact starts -->
+            <div class="card-body invoice-padding pt-0">
+              <h4 class="invoice-title mb-2">Datos para la factura</h4>
+              <div class="row">
+                <div class="col-3">
+                  <label>Tipo de identificación</label>
+                  <select id="user-role" class="form-control" name="tipoIdentificacion"
+                    formControlName="tipoIdentificacion" [(ngModel)]="transaccion.tipoIdentificacion">
+                    <option value="" selected>- Seleccionar -</option>
+                    <option value="{{tipoIdentificacionOp.valor}}"
+                      *ngFor="let tipoIdentificacionOp of tipoIdentificacionOpciones">
+                      {{tipoIdentificacionOp.nombre}}
+                    </option>
+                  </select>
+                  <div *ngIf="submittedTransaccionForm && tForm.tipoIdentificacion.errors" class="invalid-feedback"
+                    style="display: block;">
+                    <div *ngIf="tForm.tipoIdentificacion.errors.required">Tipo de identificación requerido
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <label>Identificación</label>
+                  <input class="form-control" type="text" name="identificacion" formControlName="identificacion"
+                    [(ngModel)]="transaccion.identificacion">
+                  <div *ngIf="submittedTransaccionForm && tForm.identificacion.errors" class="invalid-feedback"
+                    style="display: block;">
+                    <div *ngIf="tForm.identificacion.errors.required">Identificación requerido
+                    </div>
+                    <div *ngIf="tForm.identificacion.errors.pattern">Solo números
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <label>Nombres completos</label>
+                  <input class="form-control" type="text" name="razonSocial" formControlName="razonSocial"
+                    [(ngModel)]="transaccion.razonSocial">
+                  <div *ngIf="submittedTransaccionForm && tForm.razonSocial.errors" class="invalid-feedback"
+                    style="display: block;">
+                    <div *ngIf="tForm.razonSocial.errors.required">Nombres completos requeridos
+                    </div>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <label>Buscar:</label>
+                  <button class="form-control btn btn-primary" (click)="obtenerCliente()">
+                    <i data-feather="edit" name='search' class="edit-user"></i>
+                  </button>
+                </div>
+                <div class="col-4">
+                  <label>Dirección</label>
+                  <input class="form-control" type="text" name="telefono" formControlName="direccion"
+                    [(ngModel)]="transaccion.direccion">
+                  <div *ngIf="submittedTransaccionForm && tForm.direccion.errors" class="invalid-feedback"
+                    style="display: block;">
+                    <div *ngIf="tForm.direccion.errors.required">Dirección requerida
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <label>Teléfono</label>
+                  <input class="form-control" type="text" name="telefono" formControlName="telefono"
+                    [(ngModel)]="transaccion.telefono">
+                  <div *ngIf="submittedTransaccionForm && tForm.telefono.errors" class="invalid-feedback"
+                    style="display: block;">
+                    <div *ngIf="tForm.telefono.errors.required">Teléfono requerido
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <label>Correo</label>
+                  <input class="form-control" type="text" name="correo" formControlName="correo"
+                    placeholder="tucorreo@empresa.com" [(ngModel)]="transaccion.correo">
+                  <div *ngIf="submittedTransaccionForm && tForm.correo.errors" class="invalid-feedback"
+                    style="display: block;">
+                    <div *ngIf="tForm.correo.errors.required">Correo requerido
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <label>Canal de compra</label>
+                  <select class="select2 form-control" name="canal" formControlName="canal"
+                    [(ngModel)]="transaccion.canal">
+                    <option value="" selected>- Canal -</option>
+                    <option value="{{canalOp.valor}}" *ngFor="let canalOp of canalOpciones">
+                      {{canalOp.nombre}}
+                    </option>
+                  </select>
+                  <div *ngIf="submittedTransaccionForm && tForm.canal.errors" class="invalid-feedback"
+                    style="display: block;">
+                    <div *ngIf="tForm.canal.errors.required">Canal de compra requerida
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Address and Contact ends -->
+            <hr class="invoice-spacing" />
+            <div formArrayName="detalles">
+              <div *ngFor="let detalle of detalles; let i = index;" [formGroupName]="i">
+                <div class="card-body invoice-padding">
+                  <div class="row">
+                    <div class="col-12 pt-2 d-flex product-details-border position-relative pr-0">
+                      <div class="row w-100 pr-lg-0 pr-1 py-2">
+                        <div class="col-md-2 mb-lg-0 mb-2 mt-lg-0 mt-2">
+                          <p class="card-text col-title">Código</p>
+                          <input class="form-control" type="text" name="codigo" formControlName="codigo"
+                            [(ngModel)]="detalle.codigo" (change)="obtenerProducto(i)">
+                          <div *ngIf="submittedTransaccionForm && tForm.detalles.controls[i].controls.codigo.errors"
+                            class="invalid-feedback" style="display: block;">
+                            <div *ngIf="tForm.detalles.controls[i].controls.codigo.errors.required">Requerido
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3 mb-lg-0 mb-2 mt-lg-0 mt-2">
+                          <p class="card-text col-title">Producto</p>
+                          <input class="form-control" type="text" name="articulo" formControlName="articulo"
+                            [(ngModel)]="detalle.articulo" disabled>
+                          <div *ngIf="submittedTransaccionForm && tForm.detalles.controls[i].controls.articulo.errors"
+                            class="invalid-feedback" style="display: block;">
+                            <div *ngIf="tForm.detalles.controls[i].controls.articulo.errors.required">Requerido
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-2 mb-lg-0 mb-2 mt-lg-0 mt-2">
+                          <p class="card-text col-title">Valor Unitario</p>
+                          <input class="form-control" type="text" name="valorUnitario" formControlName="valorUnitario"
+                            [(ngModel)]="detalle.valorUnitario" disabled>
+                          <div
+                            *ngIf="submittedTransaccionForm && tForm.detalles.controls[i].controls.valorUnitario.errors"
+                            class="invalid-feedback" style="display: block;">
+                            <div *ngIf="tForm.detalles.controls[i].controls.valorUnitario.errors.required">Requerido
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-1 my-lg-0 my-2">
+                          <p class="card-text col-title">Cantidad</p>
+                          <input type="number" class="form-control" value="0" placeholder="0" name="cantidad"
+                            formControlName="cantidad" [(ngModel)]="detalle.cantidad" (change)="calcularSubtotal()" />
+                          <div *ngIf="submittedTransaccionForm && tForm.detalles.controls[i].controls.cantidad.errors"
+                            class="invalid-feedback" style="display: block;">
+                            <div *ngIf="tForm.detalles.controls[i].controls.cantidad.errors.required">Requerido
+                            </div>
+                            <div *ngIf="tForm.detalles.controls[i].controls.cantidad.errors.pattern">Solo números
+                            </div>
+                            <div *ngIf="tForm.detalles.controls[i].controls.cantidad.errors.min">Debe ser mayor a 0
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-md-2 my-lg-0 my-2">
+                          <p class="card-text col-title"><b>Precio:</b></p>
+                          <h5><b>${{detalle.precio}}</b></h5>
+                        </div>
+                        <div class="col-md-2">
+                          <img class="img-detalle" src="{{detalle.imagen}}">
+                        </div>
+                      </div>
+                      <div
+                        class="d-flex flex-column align-items-center justify-content-between border-left invoice-product-actions py-50 px-25">
+                        <i-feather name="x" class="cursor-pointer font-medium-3" data-repeater-delete
+                          (click)="removerItem(i)"></i-feather>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class=" row">
+                    <div class="col-12 pt-2">
+                      <div class="row w-100 pr-lg-0 pr-1 py-2">
+                        <div class="col-md-4 mb-lg-0 mb-2 mt-lg-0">
+                          <p class="card-text col-title">Información Adicional</p>
+                          <textarea class="form-control" rows="1" name="informacionAdicional"
+                            formControlName="informacionAdicional" [(ngModel)]="detalle.informacionAdicional"
+                            placeholder="Información adicional"></textarea>
+                          <div
+                            *ngIf="submittedTransaccionForm && tForm.detalles.controls[i].controls.informacionAdicional.errors"
+                            class="invalid-feedback" style="display: block;">
+                            <div *ngIf="tForm.detalles.controls[i].controls.informacionAdicional.errors.required">
+                              Requerido
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-2 my-lg-0 my-2">
+                          <p class="card-text col-title">% descuento</p>
+                          <input type="number" class="form-control" value="0" placeholder="0" name="descuento"
+                            formControlName="descuento" [(ngModel)]="detalle.descuento" (change)="calcularSubtotal()"
+                            [ngModelOptions]="{standalone: true}" />
+                          <div *ngIf="submittedTransaccionForm && tForm.detalles.controls[i].controls.descuento.errors"
+                            class="invalid-feedback" style="display: block;">
+                            <div *ngIf="tForm.detalles.controls[i].controls.descuento.errors.required">Requerido
+                            </div>
+                            <div *ngIf="tForm.detalles.controls[i].controls.descuento.errors.pattern">Solo números
+                              decimales
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-2 my-lg-0 my-2">
+                          <p class="card-text col-title">$ descuento:</p>
+                          <input type="number" class="form-control" value="0" placeholder="0" name="valorDescuento"
+                            formControlName="valorDescuento" [(ngModel)]="detalle.valorDescuento" disabled />
+                          <div
+                            *ngIf="submittedTransaccionForm && tForm.detalles.controls[i].controls.valorDescuento.errors"
+                            class="invalid-feedback" style="display: block;">
+                            <div *ngIf="tForm.detalles.controls[i].controls.valorDescuento.errors.required">
+                              Requerido
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <hr />
+
+            </div>
+            <!-- Product Details starts -->
+            <!-- <form [formGroup]="detallesForm">
+                                <div formArrayName="detalles" *ngFor="let detalle of detallesForm.get( 'detalles')[ 'controls']; let i=i ndex;">
+                                    <div class="card-body invoice-padding">
+
+                                        <div [formGroupName]="i">
+                                            <div class="row">
+                                                <div class="col-12 d-flex product-details-border position-relative pr-0">
+                                                    <div class="row w-100 pr-lg-0 pr-1 py-2">
+                                                        <div class="col-lg-5 col-12 mb-lg-0 mb-2 mt-lg-0 mt-2">
+                                                            <p class="card-text col-title mb-md-50 mb-0">Artículo/Producto</p>
+                                                            <input class="form-control" type="text" formControlName="articulo" [(ngModel)]="detalle.articulo">
+                                                            <textarea class="form-control mt-2" rows="1" formControlName="informacionAdicional" [(ngModel)]="detalle.informacionAdicional">Información adicional</textarea>
+                                                        </div>
+                                                        <div class="col-lg-3 col-12 my-lg-0 my-2">
+                                                            <p class="card-text col-title mb-md-2 mb-0">Valor unitario</p>
+                                                            <input type="number" class="form-control" value="0" placeholder="0" formControlName="valorUnitario" [(ngModel)]="detalle.valorUnitario" (keyup)="calcularSubtotal()" />
+                                                            <div class="mt-2">
+                                                                <span>Descuento:</span><span>%</span>
+                                                                <input type="number" class="form-control" value="0" placeholder="0" formControlName="descuento" [(ngModel)]="detalle.descuento" (keyup)="calcularSubtotal()" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-2 col-12 my-lg-0 my-2">
+                                                            <p class="card-text col-title mb-md-2 mb-0">Cantidad</p>
+                                                            <input type="number" class="form-control" value="0" placeholder="0" formControlName="cantidad" [(ngModel)]="detalle.cantidad" (keyup)="calcularSubtotal()" />
+                                                            <div class="mt-2">
+                                                                <span>Valor descuento:</span>
+                                                                <input type="number" class="form-control" value="{{redondeoValor(detalle.cantidad * detalle.valorUnitario* (((detalle.descuento ? detalle.descuento:0) )/100))}}" placeholder="0" disabled />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-2 col-12 mt-lg-0 mt-2">
+                                                            <p class="card-text col-title mb-md-50 mb-0">Precio</p>
+                                                            <input type="text" class="form-control" value="{{redondeoValor(detalle.cantidad * detalle.valorUnitario)}}" placeholder="0" formControlName="precio" [(ngModel)]="detalle.precio" disabled/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-column align-items-center justify-content-between border-left invoice-product-actions py-50 px-25">
+                                                        <i-feather name="x" class="cursor-pointer font-medium-3" data-repeater-delete (click)="removerItem(i)"></i-feather>
+                                                        <div class="dropdown edit-user">
+                                                            <i-feather class="cursor-pointer more-options-dropdown mr-0 edit-user" name="settings" (click)="collapse.toggle()" [attr.aria-expanded]="!isCollapsed[i]" aria-controls="collapseExample">
+                                                            </i-feather>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </form> -->
+            <div class="card-body invoice-padding">
+              <div class="row mt-1">
+                <div class="col-12 px-0">
+                  <button type="button" class="btn btn-primary btn-sm btn-add-new" data-repeater-create>
+                    <i data-feather="edit" name="plus" class="mr-25 edit-user"></i>
+                    <span class="align-middle" (click)="agregarItem()">Añadir producto</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <p>
+            </p>
+
+            <!-- Product Details ends -->
+
+            <!-- Invoice Total starts -->
+            <div class="card-body invoice-padding">
+              <div class="row invoice-sales-total-wrapper">
+                <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
+                  <div class="d-flex align-items-center mb-1">
+                    <label for="salesperson" class="form-label">Persona de ventas:</label>
+                    <input type="text" class="form-control ml-50" id="salesperson" placeholder="Nombre vendedor"
+                      name="nombreVendedor" formControlName="nombreVendedor" [(ngModel)]="transaccion.nombreVendedor"
+                      disabled />
+                  </div>
+                </div>
+                <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
+                  <div class="invoice-total-wrapper">
+                    <div class="invoice-total-item">
+                      <p class="invoice-total-title">Subtotal:</p>
+                      <p class="invoice-total-amount">${{transaccion.subTotal}}</p>
+                    </div>
+                    <div class="invoice-total-item">
+                      <p class="invoice-total-title">Descuento:</p>
+                      <p class="invoice-total-amount">${{transaccion.descuento}}</p>
+                    </div>
+                    <hr class="my-50" />
+                    <div class="invoice-total-item">
+                      <p class="invoice-total-title">Subtotal (con descuento):</p>
+                      <p class="invoice-total-amount">${{transaccion.subTotal-transaccion.descuento}}</p>
+                    </div>
+
+                    <div class="invoice-total-item">
+                      <p class="invoice-total-title">{{iva.descripcion}}:</p>
+                      <p class="invoice-total-amount">${{transaccion.iva}}</p>
+                    </div>
+                    <hr class="my-50" />
+                    <div class="invoice-total-item">
+                      <p class="invoice-total-title">Total:</p>
+                      <p class="invoice-total-amount">${{transaccion.total}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Invoice Total ends -->
+
+            <hr class="invoice-spacing mt-0" />
+
+            <div class="row p-2">
+              <div class="col-12">
+                <button class="btn btn-primary mr-1 waves-effect waves-float waves-light" type="button"
+                  data-toggle="modal" data-target="#confirmar" (click)="guardarTransaccion()">Guardar
+                  factura</button>
+                <button type=" reset" class="btn btn-outline-secondary waves-effect">Cancelar</button>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Add New Customer Sidebar -->
+
+    <!-- /Add New Customer Sidebar -->
+  </section>
+
+</div>
+<!-- END: Content-->
+<div class="sidenav-overlay"></div>
+<div class="drag-target"></div>
+
+<ng-template #mensajeModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Mensaje</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss( 'Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div [innerHTML]="mensaje"></div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="cerrarModal()">Cerrar</button>
+  </div>
+</ng-template>

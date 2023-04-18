@@ -1,0 +1,73 @@
+/*================================================================================
+	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+@import '@core/scss/angular/libs/flatpickr.component.scss';
+.main-menu.menu-light .navigation>li.active>a {
+    background: #152f4f;
+    box-shadow: none;
+}
+
+.main-menu.menu-light .navigation>li ul .active {
+    background: #152f4f;
+    box-shadow: none;
+}
+
+.navbar-brand {
+    margin-top: 0px !important;
+}
+
+.main-menu .navbar-header {
+    background: #f2d81d;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    color: #385e8c;
+    text-decoration: none;
+    background-color: rgba(115, 103, 240, 0.12);
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    color: #fff;
+    text-decoration: none;
+    background-color: #385e8c;
+}
+
+.form-control:focus {
+    color: #6e6b7b;
+    background-color: #fff;
+    border-color: #385e8c;
+    outline: 0;
+    box-shadow: 0 3px 10px 0 rgb(34 41 47 / 10%);
+}
+
+.flatpickr-calendar .flatpickr-day.today {
+    border-color: #385e8c;
+}
+
+.flatpickr-calendar .flatpickr-day.selected,
+.flatpickr-calendar .flatpickr-day.selected:hover {
+    background: #385e8c;
+    color: #fff;
+    border-color: #385e8c;
+}
+
+.flatpickr-input[readonly],
+.flatpickr-input~.form-control[readonly],
+.flatpickr-human-friendly[readonly] {
+    cursor: pointer;
+}
+
+.pagination {
+    display: flex !important;
+    float: right !important;
+}

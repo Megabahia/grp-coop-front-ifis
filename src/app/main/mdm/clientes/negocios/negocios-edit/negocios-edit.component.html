@@ -1,0 +1,1539 @@
+<div class="content-wrapper">
+    <div class="content-body">
+        <div id="user-profile">
+            <!-- profile header -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card profile-header mb-2">
+                        <!-- profile cover photo -->
+                        <img class="card-img-top" src="assets/images/default-head-profile.jpg" alt="User Profile Image" />
+                        <!--/ profile cover photo -->
+
+                        <div class="position-relative">
+                            <!-- profile picture -->
+                            <div class="profile-img-container d-flex align-items-center">
+                                <div class="profile-img">
+                                    <img style="width: 30%; height: 30%;" src="{{urlImagen ? urlImagen : '/assets/images/avatars/avatar.png'}}" class="rounded img-fluid" alt="Card image" />
+                                </div>
+                                <!-- profile title -->
+                                <div class="profile-title ml-3">
+                                    <h2>{{datosBasicos.nombreComercial}}</h2>
+                                    <div class="col-12 d-flex px-0">
+                                        <label class="btn btn-primary btn-sm mr-75" for="change-picture">
+                                            <span class="d-none d-sm-block">Cambiar foto</span>
+                                            <input class="form-control" type="file" id="change-picture" hidden
+                                                accept="image/png, image/jpeg, image/jpg"
+                                                (change)="guardarImagen($event)" />
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- tabs pill -->
+                        <div class="profile-header-nav">
+                            <!-- navbar -->
+                            <nav class="navbar navbar-expand-md navbar-light justify-content-end justify-content-md-between w-100">
+                                <button class="btn btn-icon navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                    <i data-feather="align-justify" [size]="24"></i>
+                                </button>
+
+                                <!-- collapse  -->
+                                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                    <div class="d-flex justify-content-between flex-wrap mt-1 mt-md-0">
+                                        <ul class="nav nav-pills mb-0" role="tablist">
+                                            <li class="nav-item">
+                                                <button class="nav-link font-weight-bold" (click)="cambiarTab('negocio')" #tab1 data-toggle="tab" aria-controls="account" role="tab" aria-selected="true">
+                                                    <span class="d-none d-md-block">Datos básicos</span>
+                                                    <i data-feather="info" [size]="24"></i>
+                                                </button>
+                                            </li>
+                                            <li class="nav-item">
+                                                <button class="nav-link font-weight-bold" (click)="cambiarTab('empleados')" #tab2 data-toggle="tab" aria-controls="account" role="tab" aria-selected="true">
+                                                    <span class="d-none d-md-block">Personal de la empresa</span>
+                                                    <i data-feather="image" [size]="24"></i>
+                                                </button>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <a class="nav-link font-weight-bold" (click)="cambiarTab('direccionEstablecimientos')" #tab3 data-toggle="tab" aria-controls="account" role="tab" aria-selected="true">
+                                                    <span class="d-none d-md-block">Dirección
+                                                        establecimientos</span>
+                                                    <i data-feather="image" [size]="24"></i>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link font-weight-bold" (click)="cambiarTab('indicadores')" data-toggle="tab" aria-controls="account" role="tab" aria-selected="true">
+                                                    <span class="d-none d-md-block">Transacciones</span>
+                                                    <i data-feather="image" [size]="24"></i>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link font-weight-bold" (click)="cambiarTab('calificaciones')" data-toggle="tab" aria-controls="account" role="tab" aria-selected="true">
+                                                    <span class="d-none d-md-block">Calificaciones</span>
+                                                    <i data-feather="users" [size]="24"></i>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link font-weight-bold" (click)="cambiarTab('transacciones')" data-toggle="tab" aria-controls="account" role="tab" aria-selected="true">
+                                                    <span class="d-none d-md-block">Indicadores</span>
+                                                    <i data-feather="image" [size]="24"></i>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!--/ collapse  -->
+                            </nav>
+                            <!--/ navbar -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/ profile header -->
+
+            <!-- profile info section -->
+            <section>
+                <div class="tab-content">
+
+
+                </div>
+
+            </section>
+            <!--/ profile info section -->
+        </div>
+
+    </div>
+</div>
+
+<div class="tab-pane" *ngIf="vista == 'negocio'" id="tab1" aria-labelledby="account-tab" role="tabpanel">
+    <div class="card">
+        <div class="card-body">
+            <form class="auth-login-form mt-2" [formGroup]="datosBasicosForm">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Tipo de negocio</label>
+                            <select class="form-control" id="status" name="tipoNegocio" formControlName="tipoNegocio" [(ngModel)]="datosBasicos.tipoNegocio">
+                                <option value="" selected>- Seleccionar -</option>
+                                <option value="{{tipoNegocioOp.valor}}"
+                                    *ngFor="let tipoNegocioOp of tipoNegocioOpciones">
+                                    {{tipoNegocioOp.nombre}}
+                                </option>
+                            </select>
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.tipoNegocio.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.tipoNegocio.errors.required">Tipo de Negocio requerido
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Fecha de creación</label>
+                            <input type="text" class="form-control" disabled [ngModelOptions]="{standalone: true}" [(ngModel)]="datosBasicos.created_at">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">RUC</label>
+                            <input type="text" class="form-control" name="ruc" formControlName="ruc" [(ngModel)]="datosBasicos.ruc">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.ruc.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.ruc.errors.required">Ruc requerido
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Razón social</label>
+                            <input type="text" class="form-control" name="razonSocial" formControlName="razonSocial" [(ngModel)]="datosBasicos.razonSocial">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.razonSocial.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.razonSocial.errors.required">Razon Social requerida
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Nombre comercial</label>
+                            <input type="text" class="form-control" name="nombreComercial" formControlName="nombreComercial" [(ngModel)]="datosBasicos.nombreComercial">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.nombreComercial.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.nombreComercial.errors.required">Nombre Comercial requerida
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Nacionalidad</label>
+                            <select class="form-control select2" name="nacionalidad" formControlName="nacionalidad" [(ngModel)]="datosBasicos.nacionalidad">
+                                <option value="" selected>- Seleccionar -</option>
+                                <option value="{{nacionalidadOp.valor}}"
+                                    *ngFor="let nacionalidadOp of nacionalidadOpciones">
+                                    {{nacionalidadOp.nombre}}
+                                </option>
+                            </select>
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.nacionalidad.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.nacionalidad.errors.required">Nacionalidad requerida
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Fecha de creación negocio</label>
+                            <input type="text" mwlFlatpickr name="fechaCreacionNegocio" formControlName="fechaCreacionNegocio" [(ngModel)]="datosBasicos.fechaCreacionNegocio" (input)="calcularEdadNegocio()" class="form-control form-control-sm flatpickr-basic flatpickr-input" placeholder="- Periodo de finalización -">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.fechaCreacionNegocio.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.fechaCreacionNegocio.errors.required">Fecha de creación requerida
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Edad de negocio</label>
+                            <input type="text" class="form-control" disabled name="edadNegocio" formControlName="edadNegocio" [(ngModel)]="datosBasicos.edadNegocio">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.edadNegocio.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.edadNegocio.errors.required">Edad de Negocio requerido
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">País de origen</label>
+                            <select class="form-control select2" name="paisOrigen" formControlName="paisOrigen" [(ngModel)]="datosBasicos.paisOrigen">
+                                <option value="" selected>- Seleccionar -</option>
+                                <option value="{{paisesOp.valor}}"
+                                    *ngFor="let paisesOp of paisesOpciones">
+                                    {{paisesOp.nombre}}
+                                </option>
+                            </select>
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.paisOrigen.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.paisOrigen.errors.required">Pais de origen requerido
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">País de residencia del negocio</label>
+                            <select class="form-control select2" name="paisResidencia" formControlName="paisResidencia" [(ngModel)]="datosBasicos.paisResidencia" (change)="obtenerProvinciasResidencia()">
+                                <option value="" selected>- Seleccionar -</option>
+                                <option value="{{paisesOp.valor}}"
+                                    *ngFor="let paisesOp of paisesOpciones">
+                                    {{paisesOp.nombre}}
+                                </option>
+                            </select>
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.paisResidencia.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.paisResidencia.errors.required">Pais de residencia requerido
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="username">Lugar recidencia negocio</label>
+                        <div class="input-group">
+                            <select class="custom-select" name="provinciaResidencia" formControlName="provinciaResidencia" [(ngModel)]="datosBasicos.provinciaResidencia" (change)="obtenerCiudadResidencia()">
+                                <option value="" selected>- Seleccionar -</option>
+                                <option value="{{provinciasResidenciaOp.valor}}"
+                                    *ngFor="let provinciasResidenciaOp of provinciasResidenciaOpciones">
+                                    {{provinciasResidenciaOp.nombre}}
+                                </option>
+                            </select>
+                            <select class="custom-select" name="ciudadResidencia" formControlName="ciudadResidencia" [(ngModel)]="datosBasicos.ciudadResidencia">
+                                <option value="" selected>- Seleccionar -</option>
+                                <option value="{{ciudadesResidenciaOp.valor}}"
+                                    *ngFor="let ciudadesResidenciaOp of ciudadesResidenciaOpciones">
+                                    {{ciudadesResidenciaOp.nombre}}
+                                </option>
+                            </select>
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.provinciaResidencia.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.provinciaResidencia.errors.required">
+                                    Provincia de residencia requerida
+                                </div>
+                            </div>
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.ciudadResidencia.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.ciudadResidencia.errors.required">Ciudad de residencia requerida
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Número de empleados</label>
+                            <input type="text" class="form-control" name="numeroEmpleados" formControlName="numeroEmpleados" [(ngModel)]="datosBasicos.numeroEmpleados">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.numeroEmpleados.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.numeroEmpleados.errors.required"> Nro de empleados requerido</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Segmento de actividad económica</label>
+                            <select class="form-control" name="segmentoActividadEconomica" formControlName="segmentoActividadEconomica" [(ngModel)]="datosBasicos.segmentoActividadEconomica">
+                                <option value="" selected>- Seleccionar -</option>
+                                <option value="{{segmentoActividadEconomicaOp.valor}}"
+                                    *ngFor="let segmentoActividadEconomicaOp of segmentoActividadEconomicaOpciones">
+                                    {{segmentoActividadEconomicaOp.nombre}}
+                                </option>
+                            </select>
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.segmentoActividadEconomica.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.segmentoActividadEconomica.errors.required"> Segmento de actividad económica requerido</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Profesión</label>
+                            <select class="form-control select2" name="profesion" formControlName="profesion" [(ngModel)]="datosBasicos.profesion">
+                                <option value="" selected>- Seleccionar -</option>
+                                <option value="{{profesionOp.valor}}"
+                                    *ngFor="let profesionOp of profesionOpciones">
+                                    {{profesionOp.nombre}}
+                                </option>
+                            </select>
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.profesion.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.profesion.errors.required"> Profesión requerida</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Actividad económica</label>
+                            <select class="form-control select2" name="actividadEconomica" formControlName="actividadEconomica" [(ngModel)]="datosBasicos.actividadEconomica">
+                                <option value="" selected>- Seleccionar -</option>
+                                <option value="{{actividadEconomicaOp.valor}}"
+                                    *ngFor="let actividadEconomicaOp of actividadEconomicaOpciones">
+                                    {{actividadEconomicaOp.nombre}}
+                                </option>
+                            </select>
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.actividadEconomica.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.actividadEconomica.errors.required"> Actividad económica requerida</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Obligado a llevar contabilidad</label>
+                            <select class="form-control select2" name="llevarContabilidad" formControlName="llevarContabilidad" [(ngModel)]="datosBasicos.llevarContabilidad">
+                                <option value="">- Seleccionar - </option>
+                                <option value="1">SI</option>
+                                <option value="0">NO</option>
+                            </select>
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.llevarContabilidad.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.llevarContabilidad.errors.required"> Llevar contabilidad requerida</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Ingresos promedio mensual</label>
+                            <input type="text" class="form-control" name="ingresosPromedioMensual" formControlName="ingresosPromedioMensual" [(ngModel)]="datosBasicos.ingresosPromedioMensual">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.ingresosPromedioMensual.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.ingresosPromedioMensual.errors.required"> Ingresos mensuales requeridos</div>
+                                <div *ngIf="dbForm.gastosPromedioMensual.errors.pattern">Solo se aceptan números decimales
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Gastos promedio mensual</label>
+                            <input type="text" class="form-control" name="gastosPromedioMensual" formControlName="gastosPromedioMensual" [(ngModel)]="datosBasicos.gastosPromedioMensual">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.gastosPromedioMensual.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.gastosPromedioMensual.errors.required"> Gastos mensuales requeridos</div>
+                                <div *ngIf="dbForm.gastosPromedioMensual.errors.pattern">Solo se aceptan números decimales
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username"># de establecimientos en el país</label>
+                            <input type="number" class="form-control" name="numeroEstablecimientos" formControlName="numeroEstablecimientos" [(ngModel)]="datosBasicos.numeroEstablecimientos">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.numeroEstablecimientos.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.numeroEstablecimientos.errors.required"> # de establecimientos en el país requerido</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-2">
+                        <h5 class="text-primary">Información de contacto</h5>
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Teléfono oficina</label>
+                            <input type="text" class="form-control" name="telefonoOficina" formControlName="telefonoOficina" [(ngModel)]="datosBasicos.telefonoOficina">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.telefonoOficina.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.telefonoOficina.errors.required"> Teléfono de oficina requerido</div>
+                                <div *ngIf="dbForm.telefonoOficina.errors.pattern">Solo se aceptan números
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Celular oficina</label>
+                            <input type="text" class="form-control" name="celularOficina" formControlName="celularOficina" [(ngModel)]="datosBasicos.celularOficina">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.celularOficina.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.celularOficina.errors.required"> Celular de oficina requerido</div>
+                                <div *ngIf="dbForm.celularOficina.errors.pattern">Solo se aceptan números
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Celular personal</label>
+                            <input type="text" class="form-control" name="celularPersonal" formControlName="celularPersonal" [(ngModel)]="datosBasicos.celularPersonal">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.celularPersonal.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.celularPersonal.errors.required"> Celular personal requerido</div>
+                                <div *ngIf="dbForm.celularPersonal.errors.pattern">Solo se aceptan números
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">WhatsApp personal</label>
+                            <input type="text" class="form-control" name="whatsappPersonal" formControlName="whatsappPersonal" [(ngModel)]="datosBasicos.whatsappPersonal">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.whatsappPersonal.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.whatsappPersonal.errors.required"> WhatsApp personal requerido</div>
+                                <div *ngIf="dbForm.whatsappPersonal.errors.pattern">Solo se aceptan números
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">WhatsApp secundario </label>
+                            <input type="text" class="form-control" name="whatsappSecundario" formControlName="whatsappSecundario" [(ngModel)]="datosBasicos.whatsappSecundario">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.whatsappSecundario.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.whatsappSecundario.errors.required"> WhatsApp secundario requerido</div>
+                                <div *ngIf="dbForm.whatsappSecundario.errors.pattern">Solo se aceptan números
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Correo personal</label>
+                            <input type="text" class="form-control" name="correoPersonal" formControlName="correoPersonal" [(ngModel)]="datosBasicos.correoPersonal">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.correoPersonal.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.correoPersonal.errors.required"> Correo personal requerido</div>
+                                <div *ngIf="dbForm.correoPersonal.errors.email">Debe ingresar una dirección de correo válida </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Correo oficina</label>
+                            <input type="text" class="form-control" name="correoOficina" formControlName="correoOficina" [(ngModel)]="datosBasicos.correoOficina">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.correoOficina.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.correoOficina.errors.required"> Correo oficina requerido</div>
+                                <div *ngIf="dbForm.correoOficina.errors.email">Debe ingresar una dirección de correo válida </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Dirección google plus</label>
+                            <input type="text" class="form-control" name="googlePlus" formControlName="googlePlus" [(ngModel)]="datosBasicos.googlePlus">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.googlePlus.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.googlePlus.errors.required"> Google plus requerido</div>
+                                <div *ngIf="dbForm.googlePlus.errors.email">Debe ingresar una dirección de correo válida </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Twitter</label>
+                            <input type="text" class="form-control" name="twitter" formControlName="twitter" [(ngModel)]="datosBasicos.twitter">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.twitter.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.twitter.errors.required"> Twitter requerido</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Facebook</label>
+                            <input type="text" class="form-control" name="facebook" formControlName="facebook" [(ngModel)]="datosBasicos.facebook">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.facebook.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.facebook.errors.required"> Facebook requerido</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Instagram</label>
+                            <input type="text" class="form-control" name="instagram" formControlName="instagram" [(ngModel)]="datosBasicos.instagram">
+                            <div *ngIf="submittedDatosBasicosForm && dbForm.instagram.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dbForm.instagram.errors.required"> Instagram requerido</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="username">Estado del cliente</label>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="estadoNegocio" [(ngModel)]="estadoOpcion" (change)="cambiarEstado()" [ngModelOptions]="{standalone: true}">
+                                <label class=" custom-control-label" for="estadoNegocio"><b><span class="yellow">Activo</span> /
+                                        <span class="grain">Inactivo</span></b></label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 d-flex flex-sm-row flex-column mt-2">
+                        <a class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-float waves-light" (click)="guardarDatosBasicos()">Guardar y continuar</a>
+                        <button type="reset" class="btn btn-outline-info mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-float waves-light">Borrar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="tab-pane" *ngIf="vista == 'empleados'" id="tab4" aria-labelledby="account-tab" role="tabpanel">
+    <div class="card invoice-repeater">
+        <div class="row m-75">
+            <div class="col-lg-12 col-xl-6">
+                <label>Mostrar</label>
+                <select class="form-control-sm" [(ngModel)]="pageSizePE" (change)="obtenerPersonalEmpresa()">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+
+            </div>
+            <div class="col-lg-12 col-xl-6 text-right">
+                <button class="btn btn-icon btn-primary" type="button" data-toggle="modal" data-target="#addempleado" (click)="crearPersonal('addempleado')">
+                    <i data-feather="plus" [size]="24"></i>
+                    <span>Añadir</span>
+                </button>
+
+            </div>
+        </div>
+        <div class="card-datatable table-responsive pt-0">
+            <table class="user-list-table table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                <label class="custom-control-label" for="customCheck2"></label>
+                            </div>
+                        </th>
+                        <th>Fecha registro</th>
+                        <th>Tipo de contacto</th>
+                        <th>Cédula</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Teléfono fijo</th>
+                        <th>Extensión</th>
+                        <th>Celular empresa</th>
+                        <th>WhatsApp empresa</th>
+                        <th>Celular personal</th>
+                        <th>WhatsApp personal</th>
+                        <th>Correo empresa</th>
+                        <th>Correo personal</th>
+                        <th>Estado del contacto</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody data-repeater-list="invoice">
+                    <tr data-repeater-item *ngFor="let personal of listaPersonal">
+                        <td>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                <label class="custom-control-label" for="customCheck2"></label>
+                            </div>
+                        </td>
+                        <td>{{transformarFecha(personal.created_at)}}</td>
+                        <td>{{personal.tipoContacto}}</td>
+                        <td>{{personal.cedula}}</td>
+                        <td>{{personal.nombres}}</td>
+                        <td>{{personal.apellidos}}</td>
+                        <td>{{personal.extension}} </td>
+                        <td> {{personal.extension}} </td>
+                        <td> {{personal.celularEmpresa}} </td>
+                        <td> {{personal.whatsappEmpresa}} </td>
+                        <td> {{personal.celularPersonal}} </td>
+                        <td> {{personal.whatsappPersonal}} </td>
+                        <td> {{personal.correoEmpresa}}</td>
+                        <td> {{personal.correoPersonal}}</td>
+                        <td><span class="text-info"> {{personal.estado}} </span></td>
+                        <td>
+                            <a (click)="editarPersonal(personal.id)" data-toggle="modal" data-target="#addempleado">
+                                <i data-feather="edit-2" [size]="24"></i>
+                            </a>
+                            <a (click)="eliminarPersonalModal(personal.id)" data-repeater-delete>
+                                <i data-feather="trash" [size]="24"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <ngb-pagination #paginatorPE [collectionSize]="collectionSizePE" [(page)]="pagePE" [(pageSize)]="pageSizePE" [maxSize]="5 " [ellipses]="false " [boundaryLinks]="true "></ngb-pagination>
+        <hr />
+        <div class="row">
+            <div class="col-12 m-2">
+                <a (click)="cambiarTab('direccionEstablecimientos')" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-float waves-light">Guardar y continuar</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="tab-pane" *ngIf="vista == 'calificaciones'" id="tab2" aria-labelledby="account-tab" role="tabpanel">
+    <div class="row match-height">
+        <div class="col-md-3">
+            <div class="card earnings-card">
+                <div class="card-body text-center">
+                    <div class="avatar bg-light-primary p-50 mb-1">
+                        <div class="avatar-content">
+                            <i data-feather="award" [size]="24"></i>
+                        </div>
+                    </div>
+                    <h6 class="mb-1">Calificación de negocio</h6>
+                    <h2 class="font-weight-bolder mt-1">8</h2>
+                    <p class="card-text text-muted font-small-2">
+                        <span>1 al 10</span>
+                    </p>
+                    <div id="earnings-chart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card earnings-card">
+                <div class="card-body text-center">
+                    <div class="avatar bg-light-success p-50 mb-1">
+                        <div class="avatar-content">
+                            <i data-feather="check" [size]="24"></i>
+
+                        </div>
+                    </div>
+                    <h6 class="mb-1">Calificación de la empresa</h6>
+                    <h2 class="font-weight-bolder mt-1">9</h2>
+                    <p class="card-text text-muted font-small-2">
+                        <span>1 al 10</span>
+                    </p>
+                    <div id="earnings-chart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card earnings-card">
+                <div class="card-body text-center">
+                    <div class="avatar bg-light-danger p-50 mb-1">
+                        <div class="avatar-content">
+                            <i data-feather="user" [size]="24"></i>
+                        </div>
+                    </div>
+                    <h6 class="mb-1">Perfil de negocio</h6>
+                    <h2 class="font-weight-bolder mt-1">valor calculado</h2>
+                    <p class="card-text text-muted font-small-2">
+                        <span>Lorem ipsum</span>
+                    </p>
+                    <div id="earnings-chart"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card earnings-card">
+                <div class="card-body text-center">
+                    <div class="avatar bg-light-info p-50 mb-1">
+                        <div class="avatar-content">
+                            <i data-feather="archive" [size]="24"></i>
+                        </div>
+                    </div>
+                    <h6 class="mb-1">Segmento de negocio</h6>
+                    <h2 class="font-weight-bolder mt-1">valor calculado</h2>
+                    <p class="card-text text-muted font-small-2">
+                        <span>Lorem ipsum</span>
+                    </p>
+                    <div id="earnings-chart"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="tab-pane" *ngIf="vista == 'transacciones'" id="tab3" aria-labelledby="account-tab" role="tabpanel">
+    <div class="card">
+        <h5 class="card-header">Filtros de búsqueda</h5>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control flatpickr-basic flatpickr-input" placeholder="- Periodo de inicio -">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control flatpickr-basic flatpickr-input" placeholder="- Periodo de finalización -">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card invoice-repeater">
+        <div class="card-datatable table-responsive pt-0">
+            <div class="row m-75">
+                <div class="col-lg-12 col-xl-6">
+                    <label>Mostrar</label>
+                    <select class="form-control-sm">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+
+                </div>
+
+            </div>
+            <table class="user-list-table table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                <label class="custom-control-label" for="customCheck2"></label>
+                            </div>
+                        </th>
+                        <th>Tipo de indicador</th>
+                        <th>Nombre del indicador</th>
+                        <th>Descripción</th>
+                        <th>Valor</th>
+                        <th>Gráfica</th>
+                    </tr>
+                </thead>
+
+                <tbody data-repeater-list="invoice">
+                    <tr data-repeater-item>
+                        <td>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                <label class="custom-control-label" for="customCheck2"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <select class="form-control">
+                                <option selected>- Seleccionar - </option>
+                                <option># de compras por canal mensual</option>
+                                <option>Monto compras promedio mensual</option>
+                                <option>Monto compras promedio mensual por canal</option>
+                                <option>Compras por categoría mensual</option>
+                            </select>
+                        </td>
+                        <td>Valor calculado</td>
+                        <td>Valor calculado</td>
+                        <td>Valor calculado</td>
+                        <td>Valor calculado</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-12 m-2">
+                <a href="clientes-listado2.html" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-float waves-light">Guardar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tab-pane" *ngIf="vista == 'direccionEstablecimientos'" id="tab5" aria-labelledby="account-tab" role="tabpanel">
+    <div class="card invoice-repeater">
+        <div class="row m-75">
+            <div class="col-lg-12 col-xl-6">
+                <label>Mostrar</label>
+                <select class="form-control-sm" [(ngModel)]="pageSizeDE" (change)="obtenerDireccionesEmpresa()">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+
+            </div>
+            <div class="col-lg-12 col-xl-6 text-right">
+                <button class="btn btn-icon btn-primary" type="button" data-toggle="modal" data-target="#addfisico" (click)="crearDireccion('addfisico')">
+                    <i data-feather="plus" [size]="24"></i>
+                    <span>Añadir</span>
+                </button>
+
+            </div>
+        </div>
+        <div class="card-datatable table-responsive pt-0">
+            <table class="user-list-table table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                <label class="custom-control-label" for="customCheck2"></label>
+                            </div>
+                        </th>
+                        <th>Fecha registro</th>
+                        <th>Tipo de dirección</th>
+                        <th>País</th>
+                        <th>Provincia</th>
+                        <th>Ciudad</th>
+                        <th>Calle principal</th>
+                        <th>Número</th>
+                        <th>Calle secundaria</th>
+                        <th>Edificio</th>
+                        <th>Piso</th>
+                        <th>Oficina/Departamento</th>
+                        <th>Referencia</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody data-repeater-list="invoice">
+                    <tr data-repeater-item *ngFor="let direccion of listaDirecciones">
+                        <td>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                <label class="custom-control-label" for="customCheck2"></label>
+                            </div>
+                        </td>
+                        <td>{{transformarFecha(direccion.created_at)}}</td>
+                        <td>{{direccion.tipoDireccion}}</td>
+                        <td>{{direccion.pais}}</td>
+                        <td>{{direccion.provincia}}</td>
+                        <td>{{direccion.ciudad}}</td>
+                        <td>{{direccion.callePrincipal}}</td>
+                        <td> {{direccion.numero}} </td>
+                        <td> {{direccion.calleSecundaria}} </td>
+                        <td> {{direccion.edificio}} </td>
+                        <td> {{direccion.piso}} </td>
+                        <td> {{direccion.oficina}} </td>
+                        <td> {{direccion.referencia}} </td>
+                        <td>
+                            <a (click)="editarDireccion(direccion.id)" data-toggle="modal" data-target="#addfisico">
+                                <i data-feather="edit-2" [size]="24"></i>
+                            </a>
+                            <a (click)="eliminarDireccionModal(direccion.id)" data-repeater-delete>
+                                <i data-feather="trash" [size]="24"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <ngb-pagination #paginatorDE [collectionSize]="collectionSizeDE" [(page)]="pageDE" [(pageSize)]="pageSizeDE" [maxSize]="5 " [ellipses]="false " [boundaryLinks]="true "></ngb-pagination>
+    </div>
+
+</div>
+
+<div class="tab-pane" *ngIf="vista == 'indicadores'" id="tab6" aria-labelledby="account-tab" role="tabpanel">
+    <div class="card">
+        <h5 class="card-header">Filtros de búsqueda</h5>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <input class="form-control" mwlFlatpickr type="text" [(ngModel)]="fechaInicioTransac" (input)="obtenerTransacciones()">
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control" mwlFlatpickr type="text" [(ngModel)]="fechaFinTransac" (input)="obtenerTransacciones()">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-sm-center align-items-start flex-sm-row flex-column">
+            <div class="header-left">
+                <h5>Gráfica de transacciones</h5>
+            </div>
+            <div class="header-right d-flex align-items-center mt-sm-0 mt-1">
+                <small>
+                    <i data-feather="calendar" [size]="24"></i>
+                    rango: <b>21-03-2021 / 21-04-2021</b>
+                </small>
+            </div>
+        </div>
+        <div class="card-body">
+            <canvas baseChart height="70vh" [colors]="barChartColors " [datasets]="barChartData " [labels]="barChartLabels " [options]="barChartOptions " [plugins]="barChartPlugins " [legend]="barChartLegend " [chartType]="barChartType ">
+            </canvas>
+        </div>
+    </div>
+    <div class="card invoice-repeater">
+        <div class="row m-75">
+            <div class="col-lg-12 col-xl-6">
+                <label>Mostrar</label>
+                <select class="form-control-sm" [(ngModel)]="pageSizeTA" (click)="obtenerTransacciones()">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+
+            </div>
+
+        </div>
+        <div class="modal modal-slide-in new-user-modal fade" id="addtransaccion">
+            <div class="modal-dialog">
+                <div class="modal-content pt-0">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                    <div class="modal-header mb-1">
+                        <h5 class="modal-title" id="exampleModalLabel">Nueva transacción</h5>
+                    </div>
+                    <div class="modal-body flex-grow-1">
+                        <div class="form-group">
+                            <label class="form-label">Fecha de compra:</label>
+                            <input type="text" class="form-control flatpickr-basic flatpickr-input" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Canal de compra:</label>
+                            <input type="text" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label"># de productos comprados:</label>
+                            <input type="text" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Monto:</label>
+                            <input type="text" class="form-control" />
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="customFile">Factura</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="customFile" />
+                                <label class="custom-file-label" for="customFile">Seleecionar
+                                </label>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary mr-1" data-toggle="modal" data-target="#exito" data-dismiss="modal" aria-label="Close">Guardar</button>
+                        <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-datatable table-responsive pt-0">
+            <table class="user-list-table table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                <label class="custom-control-label" for="customCheck2"></label>
+                            </div>
+                        </th>
+                        <th>Fecha de compra</th>
+                        <th>Canal de compra</th>
+                        <th># de productos comprados</th>
+                        <th>Monto</th>
+                        <th>Factura</th>
+                    </tr>
+                </thead>
+
+                <tbody data-repeater-list="invoice">
+                    <tr data-repeater-item *ngFor="let transaccion of listaTransacciones">
+                        <td>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                                <label class="custom-control-label" for="customCheck2"></label>
+                            </div>
+                        </td>
+                        <td>{{transformarFecha(transaccion.created_at)}}</td>
+                        <td>{{transaccion.canal}} </td>
+                        <td>{{transaccion.numeroProductosComprados}} </td>
+                        <td> ${{transaccion.total}} </td>
+                        <td>
+                            <a (click)="obtenerTransaccion(transaccion.id)" data-toggle="modal" data-target="#verfactura">factura-{{transaccion.numeroFactura}}</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-12 m-2">
+                <a href="clientes-listado2.html" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-float waves-light">Guardar</a>
+            </div>
+        </div>
+        <ngb-pagination #paginatorTA [collectionSize]="collectionSizeTA" [(page)]="pageTA" [(pageSize)]="pageSizeTA" [maxSize]="5 " [ellipses]="false " [boundaryLinks]="true "></ngb-pagination>
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="verfactura" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="card invoice-preview-card">
+                <!-- Header starts -->
+                <div class="card-body invoice-padding pb-0">
+                    <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
+                        <div>
+                            <div class="logo-wrapper">
+                                <h3 class="text-primary invoice-logo">LOGO</h3>
+                            </div>
+                            <p class="card-text mb-25">Oficina 149, conoco pichincha</p>
+                            <p class="card-text mb-25">Quito, Ecuador</p>
+                            <p class="card-text mb-0">(876) 543 2198</p>
+                        </div>
+                        <div class="invoice-number-date mt-md-0 mt-2">
+                            <div class="d-flex align-items-center justify-content-md-end mb-1">
+                                <h4 class="invoice-title mr-1">Factura</h4>
+                                <div class="input-group input-group-merge invoice-edit-input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i data-feather="hash" [size]="24"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control invoice-edit-input" [(ngModel)]="transaccion.numeroFactura" disabled />
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-1">
+                                <span class="title mr-1">Fecha:</span>
+                                <input type="text" class="form-control invoice-edit-input date-picker" [(ngModel)]="transaccion.created_at" disabled />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Header ends -->
+
+                <hr class="invoice-spacing" />
+
+                <!-- Address and Contact starts -->
+                <div class="card-body invoice-padding pt-0">
+                    <h4 class="invoice-title mb-2">Datos para la factura</h4>
+                    <div class="row">
+                        <div class="col-4">
+                            <label>Tipo de identificación</label>
+                            <input class="form-control" type="text" value="{{transaccion.tipoIdentificacion}}" disabled>
+                        </div>
+                        <div class="col-4">
+                            <label>Identificación</label>
+                            <input class="form-control" type="text" value="{{transaccion.identificacion}}" disabled>
+                        </div>
+                        <div class="col-4">
+                            <label>Razón social</label>
+                            <input class="form-control" type="text" value="{{transaccion.razonSocial}}" disabled>
+                        </div>
+                        <div class="col-4">
+                            <label>Dirección</label>
+                            <input class="form-control" type="text" value="{{transaccion.direccion}}" disabled>
+                        </div>
+                        <div class="col-4">
+                            <label>Teléfono</label>
+                            <input class="form-control" type="text" value="{{transaccion.telefono}}" disabled>
+                        </div>
+                        <div class="col-4">
+                            <label>Correo</label>
+                            <input class="form-control" type="text" value="{{transaccion.correo}}" disabled>
+                        </div>
+                        <div class="col-4">
+                            <label>Canal de compra</label>
+                            <input class="form-control" type="text" value="{{transaccion.canal}}" disabled>
+                        </div>
+                    </div>
+                </div>
+                <!-- Address and Contact ends -->
+                <hr class="invoice-spacing" />
+                <!-- Product Details starts -->
+                <div class="card-body invoice-padding">
+                    <form class="source-item" *ngFor="let detalle of transaccion.detalles">
+                        <div data-repeater-list="group-a">
+                            <div class="repeater-wrapper" data-repeater-item>
+                                <div class="row">
+                                    <div class="col-12 d-flex product-details-border position-relative pr-0">
+                                        <div class="row w-100 pr-lg-0 pr-1 py-2">
+                                            <div class="col-lg-5 col-12 mb-lg-0 mb-2 mt-lg-0 mt-2">
+                                                <p class="card-text col-title mb-md-50 mb-0">Artículo/Producto</p>
+                                                <input class="form-control" type="text" value="{{detalle.articulo}}" disabled>
+                                                <textarea class="form-control mt-2 " rows="2 " disabled>{{detalle.informacionAdicional}}</textarea>
+                                            </div>
+                                            <div class="col-lg-3 col-12 my-lg-0 my-2 ">
+                                                <p class="card-text col-title mb-md-50 mb-0 ">Valor unitario</p>
+                                                <input type="text " class="form-control " value="{{detalle.valorUnitario}} " disabled />
+                                                <div class="mt-2 ">
+                                                    <span>Descuento:</span><span>%</span>
+                                                    <input type="number " class="form-control " value="{{detalle.descuento}}" placeholder="0 " disabled />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-12 my-lg-0 my-2 ">
+                                                <p class="card-text col-title mb-md-50 mb-0 ">Cantidad</p>
+                                                <input type="number " class="form-control " value="{{detalle.cantidad}}" placeholder="1 " disabled />
+                                                <div class="mt-2 ">
+                                                    <span>Valor descuento:</span>
+                                                    <input type="number " class="form-control " placeholder="0 " disabled />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-12 mt-lg-0 mt-2 ">
+                                                <p class="card-text col-title mb-md-50 mb-0 ">Precio</p>
+                                                <input type="text " class="form-control " value="{{detalle.precio}}" placeholder="24 " disabled />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <!-- Product Details ends -->
+                <hr class="invoice-spacing " />
+                <!-- Invoice Total starts -->
+                <div class="card-body invoice-padding ">
+                    <div class="row ">
+                        <div class="col-md-7 ">
+                            <label for="salesperson " class="form-label ">Persona de ventas:</label>
+                            <input type="text " class="form-control " value="{{transaccion.nombreVendedor}}" disabled />
+                        </div>
+                        <div class="col-md-5 text-right ">
+                            <div class="invoice-total-wrapper ">
+                                <div class="invoice-total-item ">
+                                    <p class="invoice-total-title ">Subtotal: ${{transaccion.subTotal}}</p>
+                                </div>
+                                <div class="invoice-total-item ">
+                                    <p class="invoice-total-title ">Descuento: ${{transaccion.descuento}}</p>
+                                </div>
+                                <div class="invoice-total-item ">
+                                    <p class="invoice-total-title ">IVA 12%: ${{transaccion.iva}}</p>
+                                </div>
+                                <hr class="my-50 " />
+                                <div class="invoice-total-item ">
+                                    <p class="invoice-total-title text-primary font-weight-bold ">Total: ${{transaccion.total}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Invoice Total ends -->
+
+                <hr class="invoice-spacing mt-0 " />
+
+                <div class="row p-2 ">
+                    <div class="col-12 ">
+                        <button type="button" class="btn btn-outline-secondary waves-effect " data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #mensajeModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Mensaje</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss( 'Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+    </div>
+    <div class="modal-body">
+        <div [innerHTML]="mensaje"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="cerrarModal()">Cerrar</button>
+    </div>
+</ng-template>
+<ng-template #eliminarDireccionMdl let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Mensaje</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss( 'Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <p>Confirma eliminar</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="eliminarDireccion()">SI</button>
+    </div>
+</ng-template>
+<ng-template #eliminarPersonalMdl let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Mensaje</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss( 'Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <p>Confirma eliminar</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="eliminarPersonal()">SI</button>
+    </div>
+</ng-template>
+
+<core-sidebar class="modal modal-slide-in sidebar-todo-modal fade" name="addfisico"
+    overlayClass="modal-backdrop">
+    <div class="slideout-content">
+        <!-- Modal to add new user starts-->
+        <div class="modalsd modal-slide-in sdfade new-user-modal" id="modals-slide-in">
+          <div class="modal-dialog">
+              <div class="modal-content pt-0">
+                  <button type="button" class="close" data-dismiss="modal" 
+                  (click)="cerrarModalCore('addfisico')"
+                  aria-label="Close">×</button>
+                  <div class="modal-header mb-1">
+                      <h5 class="modal-title" id="exampleModalLabel">Nuevo dirección establecimientos</h5>
+                  </div>
+                  <div class="modal-body flex-grow-1">
+                    <form class="auth-login-form mt-2" [formGroup]="datosFisicosForm">
+                        <div class="form-group">
+                            <label class="form-label">Fecha de registro:</label>
+                            <input type="text" class="form-control dt-full-name" value="21-04-2021" [ngModelOptions]="{standalone: true}" disabled [(ngModel)]="datosDirecciones.created_at" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Tipo de dirección:</label>
+                            <select id="user-role" class="form-control" name="tipoDireccion" formControlName="tipoDireccion" [(ngModel)]="datosDirecciones.tipoDireccion">
+                            <option value="" selected>- Seleccionar -</option>
+                            <option value="{{tipoDireccionOp.valor}}"
+                                *ngFor="let tipoDireccionOp of tipoDireccionOpciones">
+                                {{tipoDireccionOp.nombre}}
+                            </option>
+                        </select>
+                            <div *ngIf="submittedDatosFisicosForm && dfForm.tipoDireccion.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dfForm.tipoDireccion.errors.required">Tipo de Dirección requerido
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">País:</label>
+                            <select class="form-control select2" (change)="obtenerProvinciasDirecciones()" name="pais" formControlName="pais" [(ngModel)]="datosDirecciones.pais">
+                            <option value="" selected>- Seleccionar -</option>
+                            <option value="{{paisesOp.valor}}"
+                                *ngFor="let paisesOp of paisesOpciones">
+                                {{paisesOp.nombre}}
+                            </option>
+                        </select>
+                            <div *ngIf="submittedDatosFisicosForm && dfForm.pais.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dfForm.pais.errors.required">País requerido
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Provincia:</label>
+                            <select class="form-control select2" (change)="obtenerCiudadDirecciones()" name="provincia" formControlName="provincia" [(ngModel)]="datosDirecciones.provincia">
+                            <option value="" selected>- Seleccionar -</option>
+                            <option value="{{provinciasDireccionOp.valor}}"
+                                *ngFor="let provinciasDireccionOp of provinciasDireccionOpciones">
+                                {{provinciasDireccionOp.nombre}}
+                            </option>
+                        </select>
+                            <div *ngIf="submittedDatosFisicosForm && dfForm.provincia.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dfForm.provincia.errors.required">Provincia requerida
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Ciudad:</label>
+                            <select class="form-control select2" name="ciudad" formControlName="ciudad" [(ngModel)]="datosDirecciones.ciudad">
+                            <option value="" selected>- Seleccionar -</option>
+                            <option value="{{ciudadesDireccionOp.valor}}"
+                                *ngFor="let ciudadesDireccionOp of ciudadesDireccionOpciones">
+                                {{ciudadesDireccionOp.nombre}}
+                            </option>
+                        </select>
+                            <div *ngIf="submittedDatosFisicosForm && dfForm.ciudad.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dfForm.ciudad.errors.required">Ciudad requerida
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Calle principal:</label>
+                            <input type="text" class="form-control" name="callePrincipal" formControlName="callePrincipal" [(ngModel)]="datosDirecciones.callePrincipal" />
+                            <div *ngIf="submittedDatosFisicosForm && dfForm.callePrincipal.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dfForm.callePrincipal.errors.required">Calle principal requerida
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Número:</label>
+                            <input type="text" class="form-control" name="numero" formControlName="numero" [(ngModel)]="datosDirecciones.numero" />
+                            <div *ngIf="submittedDatosFisicosForm && dfForm.numero.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dfForm.numero.errors.required">Número requerido
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Calle secundaria:</label>
+                            <input type="text" class="form-control" name="calleSecundaria" formControlName="calleSecundaria" [(ngModel)]="datosDirecciones.calleSecundaria" />
+                            <div *ngIf="submittedDatosFisicosForm && dfForm.calleSecundaria.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dfForm.calleSecundaria.errors.required">Calle secundaria requerida
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Edificio:</label>
+                            <input type="text" class="form-control" name="edificio" formControlName="edificio" [(ngModel)]="datosDirecciones.edificio" />
+                            <div *ngIf="submittedDatosFisicosForm && dfForm.edificio.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dfForm.edificio.errors.required">Edificio requerido
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Piso:</label>
+                            <input type="text" class="form-control" name="piso" formControlName="piso" [(ngModel)]="datosDirecciones.piso" />
+                            <div *ngIf="submittedDatosFisicosForm && dfForm.piso.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dfForm.piso.errors.required">Piso requerido
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Oficina/Departamento:</label>
+                            <input type="text" class="form-control" name="oficina" formControlName="oficina" [(ngModel)]="datosDirecciones.oficina" />
+                            <div *ngIf="submittedDatosFisicosForm && dfForm.oficina.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dfForm.oficina.errors.required">Oficina requerida
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Referencia:</label>
+                            <input type="text" class="form-control" name="referencia" formControlName="referencia" [(ngModel)]="datosDirecciones.referencia" />
+                            <div *ngIf="submittedDatosFisicosForm && dfForm.referencia.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dfForm.referencia.errors.required">Referencia requerida
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary mr-1" (click)="guardarDireccion()">Guardar</button>
+                        <button #dismissModalDF data-toggle="modal" data-target="#exito" data-dismiss="modal" style="display: none;"></button>
+                        <button type="reset" class="btn btn-outline-secondary"
+                        (click)="cerrarModalCore('addfisico')"
+                         data-dismiss="modal">Cancelar</button>
+                    </form>
+                </div>
+              </div>
+          </div>
+        </div>
+        <!-- Modal to add new user Ends-->
+    </div>
+
+</core-sidebar>
+<core-sidebar class="modal modal-slide-in sidebar-todo-modal fade" name="addempleado"
+    overlayClass="modal-backdrop">
+    <div class="slideout-content">
+        <!-- Modal to add new user starts-->
+        <div class="modalsd modal-slide-in sdfade new-user-modal" id="modals-slide-in">
+          <div class="modal-dialog">
+              <div class="modal-content pt-0">
+                  <button type="button" class="close" data-dismiss="modal"
+                  (click)="cerrarModalCore('addempleado')"
+                   aria-label="Close">×</button>
+                  <div class="modal-header mb-1">
+                      <h5 class="modal-title" id="exampleModalLabel">Nuevo empleado</h5>
+                  </div>
+                  <div class="modal-body flex-grow-1">
+                    <form class="auth-login-form mt-2" [formGroup]="datosPersonalForm">
+                        <div class="form-group">
+                            <label class="form-label">Fecha de registro:</label>
+                            <input type="text" class="form-control dt-full-name" value="21-04-2021" [ngModelOptions]="{standalone: true}" disabled [(ngModel)]="datosPersonal.created_at" />
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">Tipo de contacto:</label>
+                            <select id="user-role" class="form-control" name="tipoContacto" formControlName="tipoContacto" [(ngModel)]="datosPersonal.tipoContacto">
+                            <option value="" selected>- Seleccionar -</option>
+                            <option value="{{tipoContactoOp.valor}}"
+                                *ngFor="let tipoContactoOp of tipoContactoOpciones">
+                                {{tipoContactoOp.nombre}}
+                            </option>
+                        </select>
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.tipoContacto.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.tipoContacto.errors.required">Tipo de contacto requerido
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cédula:</label>
+                            <input type="text" class="form-control" name="cedula" formControlName="cedula" [(ngModel)]="datosPersonal.cedula" />
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.cedula.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.cedula.errors.required">Cédula requerida
+                                </div>
+                                <div *ngIf="dpForm.cedula.errors.pattern">Solo se aceptan números
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">Nombres:</label>
+                            <input type="text" class="form-control" name="nombres" formControlName="nombres" [(ngModel)]="datosPersonal.nombres" />
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.nombres.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.nombres.errors.required">Nombres requeridos
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">Apellidos:</label>
+                            <input type="text" class="form-control" name="apellidos" formControlName="apellidos" [(ngModel)]="datosPersonal.apellidos" />
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.apellidos.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.apellidos.errors.required">Apellidos requeridos
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">Teléfono fijo:</label>
+                            <input type="text" class="form-control" name="telefonoFijo" formControlName="telefonoFijo" [(ngModel)]="datosPersonal.telefonoFijo" />
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.telefonoFijo.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.telefonoFijo.errors.required">Teléfono fijo requerido
+                                </div>
+                                <div *ngIf="dpForm.telefonoFijo.errors.pattern">Solo se aceptan números
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">Extensión:</label>
+                            <input type="text" class="form-control" name="extension" formControlName="extension" [(ngModel)]="datosPersonal.extension" />
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.extension.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.extension.errors.required">Extensión requerida
+                                </div>
+                                <div *ngIf="dpForm.extension.errors.pattern">Solo se aceptan números
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">Celular empresa:</label>
+                            <input type="text" class="form-control" name="celularEmpresa" formControlName="celularEmpresa" [(ngModel)]="datosPersonal.celularEmpresa" />
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.celularEmpresa.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.celularEmpresa.errors.required">Celular empresa requerido
+                                </div>
+                                <div *ngIf="dpForm.celularEmpresa.errors.pattern">Solo se aceptan números
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">WhatsApp empresa:</label>
+                            <input type="text" class="form-control" name="whatsappEmpresa" formControlName="whatsappEmpresa" [(ngModel)]="datosPersonal.whatsappEmpresa" />
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.whatsappEmpresa.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.whatsappEmpresa.errors.required">Celular empresa requerido
+                                </div>
+                                <div *ngIf="dpForm.whatsappEmpresa.errors.pattern">Solo se aceptan números
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Celular personal:</label>
+                            <input type="text" class="form-control" name="celularPersonal" formControlName="celularPersonal" [(ngModel)]="datosPersonal.celularPersonal" />
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.celularPersonal.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.celularPersonal.errors.required">Celular empresa requerido
+                                </div>
+                                <div *ngIf="dpForm.celularPersonal.errors.pattern">Solo se aceptan números
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">WhatsApp personal:</label>
+                            <input type="text" class="form-control" name="whatsappPersonal" formControlName="whatsappPersonal" [(ngModel)]="datosPersonal.whatsappPersonal" />
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.whatsappPersonal.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.whatsappPersonal.errors.required">Whatsapp personal requerido
+                                </div>
+                                <div *ngIf="dpForm.whatsappPersonal.errors.pattern">Solo se aceptan números
+                                </div>
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">Correo empresa:</label>
+                            <input type="text" class="form-control" name="correoEmpresa" formControlName="correoEmpresa" [(ngModel)]="datosPersonal.correoEmpresa" />
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.correoEmpresa.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.correoEmpresa.errors.required">Correo de empresa requerido
+                                </div>
+                                <div *ngIf="dpForm.correoEmpresa.errors.email">Debe ingresar una dirección de correo válida </div>
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <label class="form-label">Correo personal:</label>
+                            <input type="text" class="form-control" name="correoPersonal" formControlName="correoPersonal" [(ngModel)]="datosPersonal.correoPersonal" />
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.correoPersonal.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.correoPersonal.errors.required">Correo personal requerido</div>
+                                <div *ngIf="dpForm.correoPersonal.errors.email">Debe ingresar una dirección de correo válida </div>
+                            </div>
+                        </div>
+                
+                
+                        <div class="form-group">
+                            <label class="form-label">Estado:</label>
+                            <select class="form-control" name="estado" formControlName="estado" [(ngModel)]="datosPersonal.estado">
+                            <option value="">- Seleccionar - </option>
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                        </select>
+                            <div *ngIf="submittedDatosPersonalForm && dpForm.estado.errors" class="invalid-feedback" style="display: block;">
+                                <div *ngIf="dpForm.estado.errors.required">Estado requerido
+                                </div>
+                            </div>
+                        </div>
+                
+                
+                        <button class="btn btn-primary mr-1" (click)="guardarPersonal()">Guardar</button>
+                        <button #dismissModalDP data-toggle="modal" data-target="#exito" data-dismiss="modal" style="display: none;"></button>
+                        <button type="reset" class="btn btn-outline-secondary"
+                        (click)="cerrarModalCore('addempleado')"
+                         data-dismiss="modal">Cancelar</button>
+                    </form>
+                </div>
+              </div>
+          </div>
+        </div>
+        <!-- Modal to add new user Ends-->
+    </div>
+
+</core-sidebar>
+
+

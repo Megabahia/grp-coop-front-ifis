@@ -1,0 +1,21 @@
+<!-- Error page-->
+<div class="misc-wrapper">
+    <a class="brand-logo" href="javascript:void(0);">
+        <img src="{{ coreConfig.app.appLogoImage }}" alt="brand-logo" height="28" />
+    </a>
+    <div class="misc-inner p-2 p-sm-3">
+        <div class="w-100 text-center">
+            <h2 class="mb-1">Página no encontrada 🕵🏻‍♀️</h2>
+            <p class="mb-2">Oops! 😖 Ha ocurrido un problema con su página</p>
+            <a class="btn btn-primary mb-2 btn-sm-block" routerLink="/" rippleEffect>Página Principal</a
+      ><img
+        class="img-fluid"
+        [src]="
+          coreConfig.layout.skin === 'dark' ? 'assets/images/pages/error-dark.svg' : 'assets/images/pages/error.svg'
+        "
+        alt="Error page"
+      />
+    </div>
+  </div>
+</div>
+<!-- / Error page-->
