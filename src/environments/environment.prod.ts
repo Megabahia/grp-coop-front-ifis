@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   hmr: false,
-  apiUrl: 'https://api-coopsanjose.crediventa.com'
+  apiUrl: 'https://api-coop.financieradevittoria.com'
 };
