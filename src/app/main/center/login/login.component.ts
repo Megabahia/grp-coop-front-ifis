@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
     private _router: Router,
     private _authenticationService: AuthenticationService
   ) {
-    this.siteKey = '6LfPwgAkAAAAAF6z9L1DEChrBeq7dMTigroN4eq_';
+    this.siteKey = '6Lf7Xp8lAAAAAOyt5MmhEXaZotVfKXO5VIngMMqe';
     this._unsubscribeAll = new Subject();
 
     // Configure the layout

@@ -42,7 +42,7 @@ export class RegistroComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router
   ) {
-    this.siteKey = '6LfPwgAkAAAAAF6z9L1DEChrBeq7dMTigroN4eq_';
+    this.siteKey = '6Lf7Xp8lAAAAAOyt5MmhEXaZotVfKXO5VIngMMqe';
     this._unsubscribeAll = new Subject();
 
     // Configure the layout
