@@ -5,7 +5,9 @@
 export const environment = {
   production: false,
   hmr: false,
-  apiUrl: 'http://209.145.61.41:8002'
+  apiUrl: 'http://209.145.61.41:8002',
+  setKey: '\n' +
+      '6LfOIaglAAAAAMMAYju5a6n-p3TThqbW-Hqf0t1a'
 };
 
 /*

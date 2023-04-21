@@ -6,6 +6,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {RegistroService} from './registro.service';
 import {Role} from '../../../auth/models/role';
+import {environment} from "../../../../environments/environment";
 
 
 @Component({
@@ -42,7 +43,7 @@ export class RegistroComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router
   ) {
-    this.siteKey = '6Lf7Xp8lAAAAAOyt5MmhEXaZotVfKXO5VIngMMqe';
+    this.siteKey = environment.setKey;
     this._unsubscribeAll = new Subject();
 
     // Configure the layout
