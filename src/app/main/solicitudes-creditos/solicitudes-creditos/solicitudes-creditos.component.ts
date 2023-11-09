@@ -11,6 +11,16 @@ import {DatePipe} from '@angular/common';
 import {FlatpickrOptions} from 'ng2-flatpickr';
 import moment from 'moment';
 
+/**
+ * COOP
+ * ifis
+ * Esta pantalla sirve para mostrar las solicitudes de creditos
+ * Rutas:
+ * `${environment.apiUrl}/corp/creditoPersonas/list/`,
+ * `${environment.apiUrl}/corp/creditoPersonas/listOne/${id}`
+ * `${environment.apiUrl}/corp/creditoPersonas/update/${datos.get('id')}`,
+ */
+
 @Component({
     selector: 'app-solicitudes-creditos',
     templateUrl: './solicitudes-creditos.component.html',

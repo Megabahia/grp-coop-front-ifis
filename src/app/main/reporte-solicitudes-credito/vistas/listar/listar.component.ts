@@ -10,6 +10,14 @@ import {SolicitudesCreditos} from '../../../solicitudes-creditos/models/solicitu
 import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
 import {FlatpickrOptions} from 'ng2-flatpickr';
 
+/**
+ * COOP
+ * ifis
+ * Esta pantalla sirve para generar los reportes de las solicitudes de credito
+ * Rutas:
+ * `${environment.apiUrl}/corp/creditoPersonas/list/`,
+ */
+
 
 @Component({
     selector: 'app-listar',
